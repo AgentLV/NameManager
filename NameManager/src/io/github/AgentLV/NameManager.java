@@ -180,6 +180,7 @@ public class NameManager extends JavaPlugin {
 	}
 
 	private FileConfiguration getFileConfiguration(String fileName) {
+		
         File file = new File(getDataFolder(), fileName + ".yml");
         FileConfiguration fileConfiguration = new YamlConfiguration();
 
