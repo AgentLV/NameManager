@@ -25,9 +25,6 @@ public class NameManager extends JavaPlugin {
 	static Objective objective;
 	String configVersion = "1.1";
 	
-	//Health below name
-	//Commands optional like rainbow
-	
 	@Override
 	public void onEnable() {
 		
