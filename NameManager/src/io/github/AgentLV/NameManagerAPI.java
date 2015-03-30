@@ -54,24 +54,28 @@ public class NameManagerAPI {
 	}
 	
 	public static String getNametag(OfflinePlayer p) {
-		NameManager.team = NameManager.board.getTeam(p.getName());
-		return NameManager.team.getPrefix() + p.getName() + NameManager.team.getSuffix();
+			NameManager.team = NameManager.board.getPlayerTeam(p);
+			return NameManager.team.getPrefix() + p.getName() + NameManager.team.getSuffix();
+		
 	}
 	
 	public static String getNametagPrefix(OfflinePlayer p) {
 			NameManager.team = NameManager.board.getPlayerTeam(p);
 			return NameManager.team.getPrefix();
+
 	}
 	
 	public static String getNametagSuffix(OfflinePlayer p) {
 			NameManager.team = NameManager.board.getPlayerTeam(p);
 			return NameManager.team.getSuffix();
+
 	}
 	
+	//Only works for custom prefixes and suffixes
 	public static void clearNametag(OfflinePlayer p) {
 		NameManager.team = NameManager.board.getTeam(p.getName());
 		if(NameManager.team != null)
-		NameManager.team.unregister();
+			NameManager.team.unregister();
 	}
 	
 	public static UUID getUUID(OfflinePlayer p) throws Exception {
