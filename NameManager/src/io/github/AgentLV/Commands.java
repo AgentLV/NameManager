@@ -48,9 +48,9 @@ public class Commands implements CommandExecutor {
 					sender.sendMessage("");
 					sender.sendMessage("  §3/nm prefix <player> <prefix>  §7»  §bSets a prefix");
 					sender.sendMessage("  §3/nm suffix <player> <suffix>  §7»  §bSets a suffix");
-					sender.sendMessage("  §3/nm clear <player>  §7»  §bResets a name");
+					sender.sendMessage("  §3/nm clear [player]  §7»  §bResets a name");
 					sender.sendMessage("  §3/nm rainbow [player]  §7»  §bRainbow name §c(could cause lag)");
-					sender.sendMessage("  §3/nm uuid <player>  §7»  §bShows the UUID of a player");
+					sender.sendMessage("  §3/nm uuid [player]  §7»  §bShows the UUID of a player");
 					sender.sendMessage("");
 					sender.sendMessage("§3All names are §ncase sensitive§r§3!");
 					sender.sendMessage("");
@@ -144,7 +144,17 @@ public class Commands implements CommandExecutor {
 				
 				if (sender.hasPermission("namemanager.clear")) {
 					
-					if (args.length == 2) {
+					if (args.length == 1) {
+						
+						if (sender instanceof Player) {
+							
+							NameManagerAPI.clearNametag(p);
+							sender.sendMessage("§3Your name was cleared.");
+							
+						} else {
+							sender.sendMessage("§3A player is required.");
+						}
+					} else if (args.length == 2) {
 						
 						offlinePlayer = NameManagerAPI.playerToOfflinePlayer(args[1]);
 						
@@ -171,8 +181,18 @@ public class Commands implements CommandExecutor {
 			if (args[0].equalsIgnoreCase("uuid")) {
 				
 				if (sender.hasPermission("namemanager.uuid")) {
-				
-					if (args.length == 2) {
+					
+					if (args.length == 1) {
+						
+						if (sender instanceof Player) {
+							
+							sender.sendMessage("§3Your UUID: §c" + p.getUniqueId());
+							
+						} else {
+							sender.sendMessage("§cA player is required.");
+						}
+						
+					} else if (args.length == 2) {
 						
 						offlinePlayer = NameManagerAPI.playerToOfflinePlayer(args[1]);
 						

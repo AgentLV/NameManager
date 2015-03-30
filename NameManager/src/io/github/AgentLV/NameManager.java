@@ -7,10 +7,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
@@ -19,10 +22,10 @@ public class NameManager extends JavaPlugin {
 	static Scoreboard board;
 	static Team team;
 	static Team rainbow;
-	String configVersion = "1.0";
+	static Objective objective;
+	String configVersion = "1.1";
 	
 	//Health below name
-	//Cache hinzufügen
 	//Commands optional like rainbow
 	
 	@Override
@@ -46,11 +49,22 @@ public class NameManager extends JavaPlugin {
 		getCommand("namemanager clear").setExecutor(new Commands(this));
 		getCommand("namemanager uuid").setExecutor(new Commands(this));
 		
+		if (getConfig().getBoolean("HealthBelowName")) {
+			
+			objective = board.registerNewObjective("showhealth", "health");
+			objective.setDisplaySlot(DisplaySlot.BELOW_NAME);
+			objective.setDisplayName(ChatColor.translateAlternateColorCodes('&', getConfig().getString("HealthFormat")));
+		}
+		
 	}
 	
 	@Override
 	public void onDisable() {
 		unregisterTeams();
+		
+		if (getConfig().getBoolean("HealthBelowName"))
+			objective.unregister();
+		
 	}
 	
 	private void initConfig() {
@@ -64,67 +78,67 @@ public class NameManager extends JavaPlugin {
 		
 		board.registerNewTeam("NM_black");
 		team = board.getTeam("NM_black");
-		team.setPrefix("ง0");
+		team.setPrefix("ยง0");
 		
 		board.registerNewTeam("NM_darkblue");
 		team = board.getTeam("NM_darkblue");
-		team.setPrefix("ง1");
+		team.setPrefix("ยง1");
 		
 		board.registerNewTeam("NM_darkgreen");
 		team = board.getTeam("NM_darkgreen");
-		team.setPrefix("ง2");
+		team.setPrefix("ยง2");
 		
 		board.registerNewTeam("NM_darkaqua");
 		team = board.getTeam("NM_darkaqua");
-		team.setPrefix("ง3");
+		team.setPrefix("ยง3");
 		
 		board.registerNewTeam("NM_darkred");
 		team = board.getTeam("NM_darkred");
-		team.setPrefix("ง4");
+		team.setPrefix("ยง4");
 		
 		board.registerNewTeam("NM_darkpurple");
 		team = board.getTeam("NM_darkpurple");
-		team.setPrefix("ง5");
+		team.setPrefix("ยง5");
 		
 		board.registerNewTeam("NM_gold");
 		team = board.getTeam("NM_gold");
-		team.setPrefix("ง6");
+		team.setPrefix("ยง6");
 		
 		board.registerNewTeam("NM_gray");
 		team = board.getTeam("NM_gray");
-		team.setPrefix("ง7");
+		team.setPrefix("ยง7");
 		
 		board.registerNewTeam("NM_darkgray");
 		team = board.getTeam("NM_darkgray");
-		team.setPrefix("ง8");
+		team.setPrefix("ยง8");
 		
 		board.registerNewTeam("NM_blue");
 		team = board.getTeam("NM_blue");
-		team.setPrefix("ง9");
+		team.setPrefix("ยง9");
 		
 		board.registerNewTeam("NM_green");
 		team = board.getTeam("NM_green");
-		team.setPrefix("งa");
+		team.setPrefix("ยงa");
 		
 		board.registerNewTeam("NM_aqua");
 		team = board.getTeam("NM_aqua");
-		team.setPrefix("งb");
+		team.setPrefix("ยงb");
 		
 		board.registerNewTeam("NM_red");
 		team = board.getTeam("NM_red");
-		team.setPrefix("งc");
+		team.setPrefix("ยงc");
 		
 		board.registerNewTeam("NM_lightpurple");
 		team = board.getTeam("NM_lightpurple");
-		team.setPrefix("งd");
+		team.setPrefix("ยงd");
 		
 		board.registerNewTeam("NM_yellow");
 		team = board.getTeam("NM_yellow");
-		team.setPrefix("งe");
+		team.setPrefix("ยงe");
 		
 		board.registerNewTeam("NM_white");
 		team = board.getTeam("NM_white");
-		team.setPrefix("งf");
+		team.setPrefix("ยงf");
 	}
 	
 	private void unregisterTeams() {
@@ -179,11 +193,11 @@ public class NameManager extends JavaPlugin {
 		team.unregister();
 	}
 
-	private FileConfiguration getFileConfiguration(String fileName) {
+	public FileConfiguration getFileConfiguration(String fileName) {
 		
-        File file = new File(getDataFolder(), fileName + ".yml");
+		File file = new File(getDataFolder(), fileName + ".yml");
         FileConfiguration fileConfiguration = new YamlConfiguration();
-
+    	
         try {
             fileConfiguration.load(file);
             String version = fileConfiguration.getString("version");
@@ -197,6 +211,7 @@ public class NameManager extends JavaPlugin {
             }
 
             if (file.renameTo(new File(getDataFolder(), "old-" + fileName + "-" + version + ".yml"))) {
+            	getLogger().info("Found outdated config, creating backup...");
                 getLogger().info("Created a backup for: " + fileName + ".yml");
             }
 
@@ -222,7 +237,7 @@ public class NameManager extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
             ex.printStackTrace();
         }
-
+        
         return fileConfiguration;
     }
 }

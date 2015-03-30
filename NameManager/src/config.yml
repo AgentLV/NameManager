@@ -6,5 +6,9 @@ CustomNameForMessages: false
 Join: '&a[+] %player%'
 Leave: '&c[-] %player%'
 
+# Should NameManager display the health of a player below their name?
+HealthBelowName: false
+HealthFormat: '&c❤'
+
 # Don't touch this!
-version: 1.0
+version: 1.1
