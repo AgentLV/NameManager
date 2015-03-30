@@ -90,8 +90,11 @@ public class EventListener implements Listener {
 	
 	@EventHandler
 	public void leave(PlayerQuitEvent e) {
+		
+		Player p = e.getPlayer();
+		
 		if(plugin.getConfig().getBoolean("Messages")) {
-			Player p = e.getPlayer();
+			
 			if(plugin.getConfig().getBoolean("CustomNameForMessages")) {
 				e.setQuitMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Leave").replaceAll("%player%", NameManagerAPI.getNametag(p))));
 			} else {
@@ -100,6 +103,11 @@ public class EventListener implements Listener {
 			
 			
 		}
+		if (NameManager.board.getTeam(p.getName()) == null) {
+			NameManager.team = NameManager.board.getPlayerTeam(p);
+			NameManager.team.removePlayer(p);
+		}
+			
 	}
 
 }

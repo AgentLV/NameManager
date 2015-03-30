@@ -8,11 +8,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Team;
 
 public class Commands implements CommandExecutor {
 
 	NameManager plugin;
-	Map<Player, String[]> map = new HashMap<Player, String[]>();
+	Map<Player, Team> map = new HashMap<Player, Team>();
 	
 	public Commands(NameManager plugin) {
 		this.plugin = plugin;
@@ -148,7 +149,7 @@ public class Commands implements CommandExecutor {
 						
 						if (sender instanceof Player) {
 							
-							NameManagerAPI.clearNametag(p);
+							NameManagerAPI.clearNametag(NameManagerAPI.playerToOfflinePlayer(p.getName()));
 							sender.sendMessage("§3Your name was cleared.");
 							
 						} else {
@@ -225,16 +226,21 @@ public class Commands implements CommandExecutor {
 							
 							if (!map.containsKey(p)) {
 								
-								String[] prefixAndSuffix = { NameManagerAPI.getNametagPrefix(p), NameManagerAPI.getNametagSuffix(p) };
-								map.put(p, prefixAndSuffix);
+								
+								map.put(p, NameManager.board.getPlayerTeam(p));
 								Rainbow.enableRainbow(p);
 								sender.sendMessage("§3Rainbow activated");
 								
 							} else {
 								
-								String[] stringlist = map.get(p);
+								Team team = map.get(p);
+								if (team != null) {
+									team.addPlayer(p);
+								} else {
+									NameManager.rainbow.removePlayer(p);
+								}
+								
 								Rainbow.disableRainbow(p);
-								NameManagerAPI.setNametag(stringlist[0], p, stringlist[1]);
 								map.remove(p);
 								sender.sendMessage("§cRainbow deactivated");
 							}
@@ -251,16 +257,20 @@ public class Commands implements CommandExecutor {
 								
 								if (!map.containsKey(targetPlayer)) {
 									
-									String[] prefixAndSuffix = { NameManagerAPI.getNametagPrefix(targetPlayer), NameManagerAPI.getNametagSuffix(targetPlayer) };
-									map.put(targetPlayer, prefixAndSuffix);
+									map.put(targetPlayer, NameManager.board.getPlayerTeam(targetPlayer));
 									Rainbow.enableRainbow(targetPlayer);
 									sender.sendMessage("§3Rainbow activated for §c" + targetPlayer.getName());
 								
 								} else {
 									
-									String[] stringlist = map.get(targetPlayer);
+									Team team = map.get(targetPlayer);
+									if (team != null) {
+										team.addPlayer(targetPlayer);
+									} else {
+										NameManager.rainbow.removePlayer(targetPlayer);
+									}
+									
 									Rainbow.disableRainbow(targetPlayer);
-									NameManagerAPI.setNametag(stringlist[0], targetPlayer, stringlist[1]);
 									map.remove(targetPlayer);
 									sender.sendMessage("§cRainbow deactivated for §c" + targetPlayer.getName());
 								}
