@@ -1,4 +1,7 @@
-package io.github.AgentLV;
+package io.github.AgentLV.NameManager.API;
+
+import io.github.AgentLV.NameManager.NameManager;
+import io.github.AgentLV.NameManager.UUIDFetcher;
 
 import java.util.UUID;
 
@@ -6,12 +9,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
-public class NameManagerAPI {
+public class API {
 	
 	static NameManager plugin;
 	
-	public NameManagerAPI(NameManager plugin) {
-		NameManagerAPI.plugin = plugin;
+	public API(NameManager plugin) {
+		API.plugin = plugin;
 	}
 	
 	public static void setNametag(String prefix, OfflinePlayer p, String suffix) {

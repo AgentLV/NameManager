@@ -1,4 +1,4 @@
-package io.github.AgentLV;
+package io.github.AgentLV.NameManager;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -6,11 +6,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import io.github.AgentLV.NameManager.API.API;
+import io.github.AgentLV.NameManager.API.GroupAPI;
+import io.github.AgentLV.NameManager.Files.FileHandler;
+import io.github.AgentLV.NameManager.Files.FileManager;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -19,25 +22,52 @@ import org.bukkit.scoreboard.Team;
 
 public class NameManager extends JavaPlugin {
 	
-	static Scoreboard board;
-	static Team team;
-	static Team rainbow;
+	public static Scoreboard board;
+	public static Team team;
+	public static Team rainbow;
 	static Objective objective;
-	String configVersion = "1.1";
 	
 	@Override
 	public void onEnable() {
-		
+
 		board = Bukkit.getScoreboardManager().getMainScoreboard();
 		team = null;
 		rainbow = null;
 		
 		new EventListener(this);
-		new NameManagerAPI(this);
+		new API(this);
+		new GroupAPI(this);
 		new Rainbow(this);
-
-		initConfig();
-		initTeams();
+		new FileManager(this);
+		new FileHandler(this);
+		
+		FileManager.getFileConfiguration("config");
+		FileManager.loadFromFile();
+		 try {
+	            if (!FileManager.groupFile.exists()) {
+	            	FileManager.groupFile.getParentFile().mkdirs();
+	                InputStream in = getResource("Groups.yml");
+	                OutputStream out = new FileOutputStream(FileManager.groupFile);
+	                byte[] buf = new byte[1024];
+	                int len;
+	                while ((len = in.read(buf)) > 0) out.write(buf, 0, len);
+	                out.close();
+	                in.close();
+	            }
+	            FileManager.groups.load(FileManager.groupFile);
+	        } catch(IOException|InvalidConfigurationException ex) {
+	            getLogger().severe("Plugin unable to write configuration file Groups.yml!");
+	            getLogger().severe("Disabling...");
+	            getServer().getPluginManager().disablePlugin(this);
+	            ex.printStackTrace();
+	        }
+		
+		try {
+			FileManager.groups.save(FileManager.groupFile);
+		} catch (IOException e) {
+			getLogger().warning("Unable to load Groups.yml");
+		}
+		initTeams(); 
 		
 		getCommand("namemanager").setExecutor(new Commands(this));
 		getCommand("namemanager help").setExecutor(new Commands(this));
@@ -58,19 +88,20 @@ public class NameManager extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		unregisterTeams();
+		FileManager.unloadFromFile();
 		
+		//Abarbeiten
 		if (getConfig().getBoolean("HealthBelowName"))
 			objective.unregister();
 		
+		File file = new File(getDataFolder(), "Groups.yml");
+		try {
+			FileManager.getFileConfiguration("Groups").save(file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
-	
-	private void initConfig() {
-		getFileConfiguration("config");
 
-		System.out.println("[NameManager] Successfully loaded config.yml");
-		
-	}
-	
 	private void initTeams() {
 		
 		board.registerNewTeam("NM_black");
@@ -190,51 +221,4 @@ public class NameManager extends JavaPlugin {
 		team.unregister();
 	}
 
-	public FileConfiguration getFileConfiguration(String fileName) {
-		
-		File file = new File(getDataFolder(), fileName + ".yml");
-        FileConfiguration fileConfiguration = new YamlConfiguration();
-    	
-        try {
-            fileConfiguration.load(file);
-            String version = fileConfiguration.getString("version");
-
-            if (version != null && version.equals(configVersion)) {
-                return fileConfiguration;
-            }
-
-            if (version == null) {
-                version = "backup";
-            }
-
-            if (file.renameTo(new File(getDataFolder(), "old-" + fileName + "-" + version + ".yml"))) {
-            	getLogger().info("Found outdated config, creating backup...");
-                getLogger().info("Created a backup for: " + fileName + ".yml");
-            }
-
-        } catch (IOException|InvalidConfigurationException e) {
-            getLogger().info("Generating fresh configuration file: " + fileName + ".yml");
-        }
-
-        try {
-            if (!file.exists()) {
-                file.getParentFile().mkdirs();
-                InputStream in = getResource(fileName + ".yml");
-                OutputStream out = new FileOutputStream(file);
-                byte[] buf = new byte[1024];
-                int len;
-                while ((len = in.read(buf)) > 0) out.write(buf, 0, len);
-                out.close();
-                in.close();
-            }
-            fileConfiguration.load(file);
-        } catch(IOException|InvalidConfigurationException ex) {
-            getLogger().severe("Plugin unable to write configuration file " + fileName + ".yml!");
-            getLogger().severe("Disabling...");
-            getServer().getPluginManager().disablePlugin(this);
-            ex.printStackTrace();
-        }
-        
-        return fileConfiguration;
-    }
 }

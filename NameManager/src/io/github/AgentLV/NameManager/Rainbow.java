@@ -1,4 +1,4 @@
-package io.github.AgentLV;
+package io.github.AgentLV.NameManager;
 
 import java.util.ArrayList;
 import java.util.Random;

@@ -1,4 +1,8 @@
-package io.github.AgentLV;
+package io.github.AgentLV.NameManager;
+
+import io.github.AgentLV.NameManager.API.API;
+import io.github.AgentLV.NameManager.API.GroupAPI;
+import io.github.AgentLV.NameManager.Files.FileHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,19 +16,25 @@ import org.bukkit.scoreboard.Team;
 
 public class Commands implements CommandExecutor {
 
-	NameManager plugin;
+	static NameManager plugin;
 	Map<Player, Team> map = new HashMap<Player, Team>();
 	
 	public Commands(NameManager plugin) {
-		this.plugin = plugin;
+		Commands.plugin = plugin;
+	}
+	
+	public static void pluginDescription(CommandSender sender) {
+		String mainAuthor = plugin.getDescription().getAuthors().get(0);
+		String pluginName = plugin.getDescription().getName();
+		String pluginVersion = plugin.getDescription().getVersion();
+		
+		sender.sendMessage("§3" + pluginName + "§7 v" + pluginVersion + " by §3" + mainAuthor);
+		sender.sendMessage("§7Commands: /nm help");
 	}
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		
-		String mainAuthor = plugin.getDescription().getAuthors().get(0);
-		String pluginName = plugin.getDescription().getName();
-		String pluginVersion = plugin.getDescription().getVersion();
 		String invalidPermission = "§cYou don't have permission.";
 		
 		//Sender -> Player
@@ -36,22 +46,21 @@ public class Commands implements CommandExecutor {
 		if (cmd.getName().equalsIgnoreCase("namemanager")) {
 			
 			if (args.length == 0) {
-				sender.sendMessage("§3" + pluginName + "§7 v" + pluginVersion + " by §3" + mainAuthor);
-				sender.sendMessage("§7Commands: /nm help");
-				return true;
+				pluginDescription(sender);
+				
 			}
 			
 			//Command /nm help
-			if (args[0].equalsIgnoreCase("help")) {
+			else if (args[0].equalsIgnoreCase("help")) {
 				if(sender.hasPermission("namemanager.help")) {
 					sender.sendMessage("");
-					sender.sendMessage("§r§3---- §b§lNameManager Commands §r§3----");
+					sender.sendMessage("§3---- §b§lNameManager commands §r§3----");
 					sender.sendMessage("");
-					sender.sendMessage("  §3/nm prefix <player> <prefix>  §7»  §bSets a prefix");
-					sender.sendMessage("  §3/nm suffix <player> <suffix>  §7»  §bSets a suffix");
-					sender.sendMessage("  §3/nm clear [player]  §7»  §bResets a name");
-					sender.sendMessage("  §3/nm rainbow [player]  §7»  §bRainbow name §c(could cause lag)");
-					sender.sendMessage("  §3/nm uuid [player]  §7»  §bShows the UUID of a player");
+					sender.sendMessage("§3/nm prefix <player> <prefix>  §7»  §bSets a prefix for a player");
+					sender.sendMessage("§3/nm suffix <player> <suffix>  §7»  §bSets a suffix for a player");
+					sender.sendMessage("§3/nm clear [player]  §7»  §bResets a name");
+					sender.sendMessage("§3/nm rainbow [player]  §7»  §bRainbow name §c(could cause lag)");
+					sender.sendMessage("§3/nm uuid [player]  §7»  §bShows the UUID of a player");
 					sender.sendMessage("");
 					sender.sendMessage("§3All names are §ncase sensitive§r§3!");
 					sender.sendMessage("");
@@ -63,13 +72,13 @@ public class Commands implements CommandExecutor {
 			
 			
 			//Command /nm prefix
-			if (args[0].equalsIgnoreCase("prefix")) {
+			else if (args[0].equalsIgnoreCase("prefix")) {
 				
 				if (sender.hasPermission("namemanager.prefix")) {
 				
 					if (args.length >= 3) {
 						
-						offlinePlayer = NameManagerAPI.playerToOfflinePlayer(args[1]);
+						offlinePlayer = API.playerToOfflinePlayer(args[1]);
 						
 						String prefix = args[2];
 						for(int i = 3; i < args.length; ++i) {
@@ -82,7 +91,7 @@ public class Commands implements CommandExecutor {
 						
 							if (offlinePlayer != null && offlinePlayer.hasPlayedBefore()) {
 								
-								NameManagerAPI.setNametagPrefix(offlinePlayer, prefix);
+								API.setNametagPrefix(offlinePlayer, prefix);
 								sender.sendMessage("§3Prefix '§c" + prefix + "§3' set for §c" + args[1]);
 								
 							} else {
@@ -104,13 +113,13 @@ public class Commands implements CommandExecutor {
 			
 			
 			//Command /nm suffix
-			if (args[0].equalsIgnoreCase("suffix")) {
+			else if (args[0].equalsIgnoreCase("suffix")) {
 				
 				if (sender.hasPermission("namemanager.suffix")) {
 				
 					if (args.length >= 3) {
 						
-						offlinePlayer = NameManagerAPI.playerToOfflinePlayer(args[1]);
+						offlinePlayer = API.playerToOfflinePlayer(args[1]);
 						
 						String suffix = args[2];
 						for(int i = 3; i < args.length; ++i) {
@@ -122,7 +131,7 @@ public class Commands implements CommandExecutor {
 						} else {
 							
 							if (offlinePlayer != null && offlinePlayer.hasPlayedBefore()) {
-								NameManagerAPI.setNametagSuffix(offlinePlayer, suffix);
+								API.setNametagSuffix(offlinePlayer, suffix);
 								sender.sendMessage("§3Suffix '§c" + suffix + "§3' set for §c" + args[1]);
 								
 							} else {
@@ -141,7 +150,7 @@ public class Commands implements CommandExecutor {
 			
 			
 			//Command /nm clear
-			if (args[0].equalsIgnoreCase("clear")) {
+			else if (args[0].equalsIgnoreCase("clear")) {
 				
 				if (sender.hasPermission("namemanager.clear")) {
 					
@@ -149,7 +158,7 @@ public class Commands implements CommandExecutor {
 						
 						if (sender instanceof Player) {
 							
-							NameManagerAPI.clearNametag(NameManagerAPI.playerToOfflinePlayer(p.getName()));
+							API.clearNametag(API.playerToOfflinePlayer(p.getName()));
 							sender.sendMessage("§3Your name was cleared.");
 							
 						} else {
@@ -157,10 +166,10 @@ public class Commands implements CommandExecutor {
 						}
 					} else if (args.length == 2) {
 						
-						offlinePlayer = NameManagerAPI.playerToOfflinePlayer(args[1]);
+						offlinePlayer = API.playerToOfflinePlayer(args[1]);
 						
 						if (offlinePlayer != null && offlinePlayer.hasPlayedBefore()) {
-							NameManagerAPI.clearNametag(offlinePlayer);
+							API.clearNametag(offlinePlayer);
 							sender.sendMessage("§3Name cleared for §c" + args[1]);
 							
 						} else {
@@ -179,7 +188,7 @@ public class Commands implements CommandExecutor {
 			
 			
 			//Command /nm uuid
-			if (args[0].equalsIgnoreCase("uuid")) {
+			else if (args[0].equalsIgnoreCase("uuid")) {
 				
 				if (sender.hasPermission("namemanager.uuid")) {
 					
@@ -195,7 +204,7 @@ public class Commands implements CommandExecutor {
 						
 					} else if (args.length == 2) {
 						
-						offlinePlayer = NameManagerAPI.playerToOfflinePlayer(args[1]);
+						offlinePlayer = API.playerToOfflinePlayer(args[1]);
 						
 						if (offlinePlayer != null) {
 							sender.sendMessage("§3UUID of §c" + args[1] + "§3: §c" + offlinePlayer.getUniqueId());
@@ -216,7 +225,7 @@ public class Commands implements CommandExecutor {
 			
 			
 			//Command /nm rainbow
-			if (args[0].equalsIgnoreCase("rainbow")) {
+			else if (args[0].equalsIgnoreCase("rainbow")) {
 				
 				if (sender.hasPermission("namemanager.rainbow")) {
 					
@@ -286,7 +295,63 @@ public class Commands implements CommandExecutor {
 					sender.sendMessage(invalidPermission);
 				}
 			}
+			
+			
+			//Group commands	
+				
+				
+			//Command /nm groups
+			else if (args[0].equalsIgnoreCase("group") || args[0].equalsIgnoreCase("groups")) {
+				
+				if (args.length == 1) {
+					
+					if(sender.hasPermission("namemanager.help")) {
+						sender.sendMessage("");
+						sender.sendMessage("§3---- §b§lNameManager group commands §r§3----");
+						sender.sendMessage("");
+						sender.sendMessage("§3/nm group prefix <group> <prefix>  §7»  §bSets a prefix for a group");
+						sender.sendMessage("§3/nm group suffix <group> <suffix>  §7»  §bSets a suffix for a group");
+						sender.sendMessage("§3/nm group clear <group>  §7»  §bRemoves a group");
+						sender.sendMessage("§3/nm group rainbow <group>  §7»  §bRainbow name for all group members §c(could cause lag)");
+						sender.sendMessage("");
+					} else {
+						sender.sendMessage(invalidPermission);
+					}
+					
+					//Command /nm group prefix
+				} else if(args[1].equalsIgnoreCase("prefix")) {
+					
+					if (sender.hasPermission("namemanager.group.prefix")) {
+						
+						if (args.length >= 3) {
+							
+							String prefix = args[3];
+							for(int i = 4; i < args.length; ++i) {
+							     prefix += " " + args[i];
+							}
+		
+							if (prefix.length() > 16) {
+								sender.sendMessage("§3The prefix can only contain 16 Characters.");
+							} else {
+								GroupAPI.setGroupNametagPrefix(args[2], prefix);
+								FileHandler.writeGroupPrefix(args[2], prefix);
+								sender.sendMessage("§3Set prefix '§c" + prefix + "§3' for group §c" + args[2]);
+							}
+						} else {
+							sender.sendMessage("§cUsage: /nm group prefix <group> <prefix>");
+						}
+						
+					} else {
+						sender.sendMessage(invalidPermission);
+					}
+				}
 
+			}
+			
+			
+			
+			
+			
 		}
 		
 		return true;
