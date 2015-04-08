@@ -22,6 +22,9 @@ static NameManager plugin;
 		
 		NameManager.team.setPrefix(ChatColor.translateAlternateColorCodes('&', prefix));
 		NameManager.team.setSuffix(ChatColor.translateAlternateColorCodes('&', suffix));
+		
+		FileHandler.writeGroupPrefix(group, prefix);
+		FileHandler.writeGroupSuffix(group, suffix);
 	}
 	
 	public static void setGroupNametagPrefix(String group, String prefix) {
@@ -73,6 +76,9 @@ static NameManager plugin;
 		NameManager.team = NameManager.board.getTeam(group);
 		if(NameManager.team != null)
 			NameManager.team.unregister();
+		
+		FileHandler.removeGroup(group);
 	}
+	
 	
 }

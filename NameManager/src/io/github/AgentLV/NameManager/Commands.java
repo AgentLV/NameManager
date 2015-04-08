@@ -2,7 +2,9 @@ package io.github.AgentLV.NameManager;
 
 import io.github.AgentLV.NameManager.API.API;
 import io.github.AgentLV.NameManager.API.GroupAPI;
+import io.github.AgentLV.NameManager.Files.FileManager;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +18,7 @@ import org.bukkit.scoreboard.Team;
 public class Commands implements CommandExecutor {
 
 	static NameManager plugin;
-	Map<Player, Team> map = new HashMap<Player, Team>();
+	Map<OfflinePlayer, Team> map = new HashMap<OfflinePlayer, Team>();
 	
 	public Commands(NameManager plugin) {
 		Commands.plugin = plugin;
@@ -37,7 +39,9 @@ public class Commands implements CommandExecutor {
 		String invalidPermission = "§cYou don't have permission.";
 		
 		//Sender -> Player
-		Player p = (Player) sender;
+		Player p = null;
+		if(sender instanceof Player)
+			p = (Player) sender;
 			
 		OfflinePlayer offlinePlayer = null;
 		
@@ -310,8 +314,10 @@ public class Commands implements CommandExecutor {
 						sender.sendMessage("");
 						sender.sendMessage("§3/nm group prefix <group> <prefix>  §7»  §bSets a prefix for a group");
 						sender.sendMessage("§3/nm group suffix <group> <suffix>  §7»  §bSets a suffix for a group");
-						sender.sendMessage("§3/nm group clear <group>  §7»  §bRemoves a group");
-						sender.sendMessage("§3/nm group rainbow <group>  §7»  §bRainbow name for all group members §c(could cause lag)");
+						sender.sendMessage("§3/nm group remove <group>  §7»  §bRemoves a group");
+						sender.sendMessage("§3/nm group list  §7»  §bDisplays all valid groups");
+						sender.sendMessage("§3/nm group rainbow <group>  §7»  §bToggles rainbow name for all group members §c(could cause lag)");
+						sender.sendMessage("§3/nm group reload  §7»  §bReloads groups from Groups.yml");
 						sender.sendMessage("");
 					} else {
 						sender.sendMessage(invalidPermission);
@@ -322,7 +328,7 @@ public class Commands implements CommandExecutor {
 					
 					if (sender.hasPermission("namemanager.group.prefix")) {
 						
-						if (args.length >= 3) {
+						if (args.length >= 4) {
 							
 							String prefix = args[3];
 							for(int i = 4; i < args.length; ++i) {
@@ -342,11 +348,13 @@ public class Commands implements CommandExecutor {
 					} else {
 						sender.sendMessage(invalidPermission);
 					}
+					
+					//Command /nm group suffix
 				} else if(args[1].equalsIgnoreCase("suffix")) {
 					
 					if (sender.hasPermission("namemanager.group.suffix")) {
 						
-						if (args.length >= 3) {
+						if (args.length >= 4) {
 							
 							String suffix = args[3];
 							for(int i = 4; i < args.length; ++i) {
@@ -366,15 +374,93 @@ public class Commands implements CommandExecutor {
 					} else {
 						sender.sendMessage(invalidPermission);
 					}
+				
+				//nm remove reload
+			} else if (args[1].equalsIgnoreCase("reload")) {
+				
+				if (sender.hasPermission("namemanager.reload")) {
+					FileManager.loadFromFile();
+					sender.sendMessage("§3Reloaded NameManager!");
+				} else {
+					sender.sendMessage(invalidPermission);
 				}
-
+			
+				//nm group remove
+			} else if (args[1].equalsIgnoreCase("remove")) {
+				
+				if (sender.hasPermission("namemanager.group.remove")) {
+					GroupAPI.removeGroup(args[2]);
+					sender.sendMessage("§3Succesfully removed group '§c" + args[2] + "§3'");
+				} else {
+					sender.sendMessage(invalidPermission);
+				}
+			
+			//nm group list
+			} else if (args[1].equalsIgnoreCase("list")) {
+				
+				if (sender.hasPermission("namemanager.group.list")) {
+					for (String s : FileManager.allGroups) {
+			        	sender.sendMessage("§3" + s);
+			        }
+				} else {
+					sender.sendMessage(invalidPermission);
+				}
+			
+			//nm group rainbow
+			} else if (args[1].equalsIgnoreCase("rainbow")) {
+				
+				if (sender.hasPermission("namemanager.group.rainbow")) {
+				
+					if (args.length == 3) {
+						
+						if (NameManager.board.getTeam(args[2]) != null) {
+							
+							ArrayList<String> groups = new ArrayList<String>();
+							
+							for (OfflinePlayer of : NameManager.board.getTeam(args[2]).getPlayers()) {
+								
+								if (!groups.contains(args[2])) {
+									
+									map.put(of, NameManager.board.getPlayerTeam(of));
+									Rainbow.enableRainbow(of);
+									groups.add(args[2]);
+									sender.sendMessage("§3Rainbow activated");
+									
+								} else {
+									
+									Team team = map.get(of);
+									if (team != null) {
+										team.addPlayer(of);
+									} else {
+										NameManager.rainbow.removePlayer(of);
+									}
+									
+									Rainbow.disableRainbow(of);
+									map.remove(of);
+									groups.remove(args[2]);
+									sender.sendMessage("§cRainbow deactivated");
+								}
+							}
+							
+						} else {
+							sender.sendMessage("§3Group '§c" + args[2] + "§3' is not a valid group.");
+						}
+						
+					} else {
+						sender.sendMessage("§cUsage: /nm rainbow <group>");
+					}
+				
+				} else {
+					sender.sendMessage(invalidPermission);
+				}
+				
 			}
-			
-			
-			
-			
-			
+
+		} else {
+			pluginDescription(sender);
 		}
+			
+	}
 		
 		return true;
 	}

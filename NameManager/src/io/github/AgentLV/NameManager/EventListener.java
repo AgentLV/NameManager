@@ -19,19 +19,21 @@ public class EventListener implements Listener {
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 	
+	private String playerGroupChecker(Player p) {
+		
+		for(String s : FileManager.getFileConfiguration("Groups").getStringList("GroupList")) {
+			if(p.hasPermission("NameManager." + s)) {
+				return s;
+			}
+			
+		}
+		return null;
+	}
+	
 	@EventHandler
 	public void join(PlayerJoinEvent e) {
 		
 		Player p = e.getPlayer();
-		String playerGroup = null;
-		
-		for(String s : FileManager.getFileConfiguration("Groups").getStringList("GroupList")) {
-			if(p.hasPermission("NameManager." + s)) {
-				playerGroup = s;
-				break;
-			}
-			
-		}
 		
 		if (plugin.getConfig().getBoolean("HealthBelowName"))
 			p.setScoreboard(NameManager.board);
@@ -39,8 +41,8 @@ public class EventListener implements Listener {
 		if( NameManager.board.getPlayerTeam(p) != null ) {
 			NameManager.team = NameManager.board.getPlayerTeam(p);
 			NameManager.team.addPlayer(p);
-		} else if (playerGroup != null) {
-			NameManager.team = NameManager.board.getTeam(playerGroup);
+		} else if (playerGroupChecker(p) != null) {
+			NameManager.team = NameManager.board.getTeam(playerGroupChecker(p));
 			NameManager.team.addPlayer(p);
 		} else if( p.hasPermission("NameManager.black") ) {
 		    NameManager.team = NameManager.board.getTeam("NM_black");
@@ -118,10 +120,9 @@ public class EventListener implements Listener {
 			
 			
 		}
-		if (NameManager.board.getTeam(p.getName()) == null) {
-			NameManager.team = NameManager.board.getPlayerTeam(p);
-			NameManager.team.removePlayer(p);
-		}
+		
+		if (NameManager.board.getPlayerTeam(p) != null)
+			NameManager.board.getPlayerTeam(p).removePlayer(p);
 			
 	}
 

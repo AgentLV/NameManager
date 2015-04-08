@@ -3,13 +3,13 @@ package io.github.AgentLV.NameManager;
 import java.util.ArrayList;
 import java.util.Random;
 
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.scheduler.BukkitTask;
 
 public class Rainbow {
 	
 	static NameManager plugin;
-	static ArrayList<Player> rainbowPlayers = new ArrayList<Player>();
+	static ArrayList<OfflinePlayer> rainbowPlayers = new ArrayList<OfflinePlayer>();
 	static BukkitTask rainbowTask;
 	
 	
@@ -17,16 +17,16 @@ public class Rainbow {
 		Rainbow.plugin = plugin;
 	}
 	
-	public static void enableRainbow(final Player p) {
+	public static void enableRainbow(final OfflinePlayer of) {
 		
-		rainbowPlayers.add(p);
+		rainbowPlayers.add(of);
 		
 		if(rainbowPlayers.size() == 1)
 			startScheduleTasks();
 	}
 	
-	public static void disableRainbow(Player p) {
-		rainbowPlayers.remove(p);
+	public static void disableRainbow(OfflinePlayer of) {
+		rainbowPlayers.remove(of);
 		
 		if (rainbowPlayers.size() == 0) 
 			plugin.getServer().getScheduler().cancelTask(rainbowTask.getTaskId());
@@ -43,7 +43,7 @@ public class Rainbow {
 			@Override
 			public void run() {
 					
-					for(Player rainbowPlayer : rainbowPlayers) {
+					for(OfflinePlayer rainbowPlayer : rainbowPlayers) {
 						NameManager.rainbow = NameManager.board.getTeam("NM_" + colors[random.nextInt(15)]);
 						NameManager.rainbow.addPlayer(rainbowPlayer);
 					}
