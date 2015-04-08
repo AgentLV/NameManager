@@ -28,7 +28,7 @@ public class FileManager {
 	
 	public static FileConfiguration getFileConfiguration(String fileName) {
 		
-		File file = new File("plugins/NameManager/" + fileName + ".yml");
+		File file = new File(plugin.getDataFolder(), fileName + ".yml");
         FileConfiguration fileConfiguration = new YamlConfiguration();
     	
         try {
@@ -82,52 +82,30 @@ public class FileManager {
 	
     private static List<String> allGroups = new ArrayList<>();
     public static File groupFile = new File("plugins/NameManager/Groups.yml");
-    public static FileConfiguration groups;
+    public static FileConfiguration groups = YamlConfiguration.loadConfiguration(groupFile);
     
     public static void loadFromFile() {
     	
-    	groups = getFileConfiguration("Groups");
+    	FileConfiguration groupsFile = getFileConfiguration("Groups");
         allGroups.clear();
-        allGroups = groups.getStringList("GroupList");
+        allGroups = groupsFile.getStringList("GroupList");
 
         for (String s : allGroups) {
         	NameManager.team = NameManager.board.registerNewTeam(s);
-        	NameManager.team.setPrefix(ChatColor.translateAlternateColorCodes('&', groups.getString("Groups." + s + ".Prefix")));
-            NameManager.team.setSuffix(ChatColor.translateAlternateColorCodes('&', groups.getString("Groups." + s + ".Suffix")));
+        	NameManager.team.setPrefix(ChatColor.translateAlternateColorCodes('&', groupsFile.getString("Groups." + s + ".Prefix")));
+            NameManager.team.setSuffix(ChatColor.translateAlternateColorCodes('&', groupsFile.getString("Groups." + s + ".Suffix")));
         }
     }
     
     public static void unloadFromFile() {
     	
-        allGroups = groups.getStringList("GroupList");
+    	FileConfiguration groupsFile = getFileConfiguration("Groups");
+        allGroups = groupsFile.getStringList("GroupList");
 
         for (String s : allGroups) {
-        	NameManager.board.getTeam(s).unregister();
+        	NameManager.team = NameManager.board.getTeam(s);
+        	NameManager.team.unregister();
         }
-    }
-    
-    public static void initGroupsFile() {
-   	 try {
-         if (!FileManager.groupFile.exists()) {
-         	FileManager.groupFile.getParentFile().mkdirs();
-             InputStream in = plugin.getResource("Groups.yml");
-             OutputStream out = new FileOutputStream(FileManager.groupFile);
-             byte[] buf = new byte[1024];
-             int len;
-             while ((len = in.read(buf)) > 0) out.write(buf, 0, len);
-             out.close();
-             in.close();
-         }
-         FileManager.groups.load(FileManager.groupFile);
-     } catch(IOException|InvalidConfigurationException ex) {
-         plugin.getLogger().warning("Unable to load Groups.yml");
-     }
-	
-	try {
-		FileManager.groups.save(FileManager.groupFile);
-	} catch (IOException e) {
-		plugin.getLogger().warning("Unable to load Groups.yml");
-	}
     }
 	
 	

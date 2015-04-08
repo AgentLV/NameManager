@@ -1,8 +1,5 @@
 # Only groups listed here are valid!
 # After setting a group, give the group the permission "namemanager.group". If you are unsure, just use the ingame commands /nm group
-# Example: You create a group called Admin, the permission would be namemanager.admin
-# The order should be ascending!
-# lowest group at the bottom, highest group at the top.
 GroupList:
 - Developer
 Groups:
