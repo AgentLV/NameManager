@@ -25,6 +25,16 @@ public class FileHandler {
 	}
 	
 	public static void writeGroupSuffix(String group, String suffix) {
-
+		
+		FileManager.groups.set("Groups." + group + ".Suffix", suffix);
+		try {
+			FileManager.groups.save(FileManager.groupFile);
+		} catch (IOException e) {
+			plugin.getLogger().warning("Cannot save Groups.yml");
+		}
+	}
+	
+	public static void removeGroup(String group) {
+		
 	}
 }

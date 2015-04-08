@@ -7,24 +7,6 @@ commands:
     aliases: nm
     usage: /namemanager
     description: Shows the author and the version of the plugin.
-  namemanager help:
-    usage: /namemanager
-    description: Lists the commands.
-  namemanager prefix:
-    usage: /namemanager prefix <player> <name>
-    description: Sets the prefix of a player.
-  namemanager suffix:
-    usage: /namemanager suffix <player> <name>
-    description: Sets the suffix of a player.
-  namemanager clear:
-    usage: /namemanager clear <player>
-    description: Clears the name of a player.
-  namemanager uuid:
-    usage: /namemanager uuid <player>
-    description: Gets the UUID of a player.
-  namemanager rainbow:
-    usage: /namemanager rainbow [player]
-    description: Turns your name into a rainbow.
 
 permissions:
   NameManager.help:

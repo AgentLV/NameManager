@@ -3,6 +3,7 @@ package io.github.AgentLV.NameManager.API;
 import org.bukkit.ChatColor;
 
 import io.github.AgentLV.NameManager.NameManager;
+import io.github.AgentLV.NameManager.Files.FileHandler;
 
 public class GroupAPI {
 
@@ -31,6 +32,7 @@ static NameManager plugin;
 		}
 		
 		NameManager.team.setPrefix(ChatColor.translateAlternateColorCodes('&', prefix));
+		FileHandler.writeGroupPrefix(group, prefix);
 	}
 	
 	public static void setGroupNametagSuffix(String group, String suffix) {
@@ -41,6 +43,7 @@ static NameManager plugin;
 		}
 		
 		NameManager.team.setSuffix(ChatColor.translateAlternateColorCodes('&', suffix));
+		FileHandler.writeGroupSuffix(group, suffix);
 	}
 	
 	public static String getGroupNametag(String group) {

@@ -2,7 +2,6 @@ package io.github.AgentLV.NameManager;
 
 import io.github.AgentLV.NameManager.API.API;
 import io.github.AgentLV.NameManager.API.GroupAPI;
-import io.github.AgentLV.NameManager.Files.FileHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -334,11 +333,34 @@ public class Commands implements CommandExecutor {
 								sender.sendMessage("§3The prefix can only contain 16 Characters.");
 							} else {
 								GroupAPI.setGroupNametagPrefix(args[2], prefix);
-								FileHandler.writeGroupPrefix(args[2], prefix);
 								sender.sendMessage("§3Set prefix '§c" + prefix + "§3' for group §c" + args[2]);
 							}
 						} else {
 							sender.sendMessage("§cUsage: /nm group prefix <group> <prefix>");
+						}
+						
+					} else {
+						sender.sendMessage(invalidPermission);
+					}
+				} else if(args[1].equalsIgnoreCase("suffix")) {
+					
+					if (sender.hasPermission("namemanager.group.suffix")) {
+						
+						if (args.length >= 3) {
+							
+							String suffix = args[3];
+							for(int i = 4; i < args.length; ++i) {
+								suffix += " " + args[i];
+							}
+		
+							if (suffix.length() > 16) {
+								sender.sendMessage("§3The suffix can only contain 16 Characters.");
+							} else {
+								GroupAPI.setGroupNametagSuffix(args[2], suffix);
+								sender.sendMessage("§3Set suffix '§c" + suffix + "§3' for group §c" + args[2]);
+							}
+						} else {
+							sender.sendMessage("§cUsage: /nm group suffix <group> <prefix>");
 						}
 						
 					} else {
