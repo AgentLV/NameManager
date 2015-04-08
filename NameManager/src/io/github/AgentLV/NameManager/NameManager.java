@@ -1,7 +1,10 @@
 package io.github.AgentLV.NameManager;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import io.github.AgentLV.NameManager.API.API;
 import io.github.AgentLV.NameManager.API.GroupAPI;
@@ -10,6 +13,7 @@ import io.github.AgentLV.NameManager.Files.FileManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -39,7 +43,30 @@ public class NameManager extends JavaPlugin {
 		
 		FileManager.getFileConfiguration("config");
 		FileManager.loadFromFile();
-		FileManager.initGroupsFile();
+		 try {
+	            if (!FileManager.groupFile.exists()) {
+	            	FileManager.groupFile.getParentFile().mkdirs();
+	                InputStream in = getResource("Groups.yml");
+	                OutputStream out = new FileOutputStream(FileManager.groupFile);
+	                byte[] buf = new byte[1024];
+	                int len;
+	                while ((len = in.read(buf)) > 0) out.write(buf, 0, len);
+	                out.close();
+	                in.close();
+	            }
+	            FileManager.groups.load(FileManager.groupFile);
+	        } catch(IOException|InvalidConfigurationException ex) {
+	            getLogger().severe("Plugin unable to write configuration file Groups.yml!");
+	            getLogger().severe("Disabling...");
+	            getServer().getPluginManager().disablePlugin(this);
+	            ex.printStackTrace();
+	        }
+		
+		try {
+			FileManager.groups.save(FileManager.groupFile);
+		} catch (IOException e) {
+			getLogger().warning("Unable to load Groups.yml");
+		}
 		initTeams(); 
 		
 		getCommand("namemanager").setExecutor(new Commands(this));
@@ -49,7 +76,7 @@ public class NameManager extends JavaPlugin {
 		getCommand("namemanager clear").setExecutor(new Commands(this));
 		getCommand("namemanager uuid").setExecutor(new Commands(this));
 		
-		if (getConfig().getBoolean("HealthBelowName") && board.getObjective("showhealth") == null) {
+		if (getConfig().getBoolean("HealthBelowName")) {
 			
 			objective = board.registerNewObjective("showhealth", "health");
 			objective.setDisplaySlot(DisplaySlot.BELOW_NAME);
@@ -63,10 +90,9 @@ public class NameManager extends JavaPlugin {
 		unregisterTeams();
 		FileManager.unloadFromFile();
 		
-		if (board.getObjective("showhealth") != null) {
-			objective = board.getObjective("showhealth");
+		//Abarbeiten
+		if (getConfig().getBoolean("HealthBelowName"))
 			objective.unregister();
-		}
 		
 		File file = new File(getDataFolder(), "Groups.yml");
 		try {

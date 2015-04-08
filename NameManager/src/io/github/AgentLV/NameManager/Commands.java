@@ -2,10 +2,6 @@ package io.github.AgentLV.NameManager;
 
 import io.github.AgentLV.NameManager.API.API;
 import io.github.AgentLV.NameManager.API.GroupAPI;
-<<<<<<< HEAD
-=======
-import io.github.AgentLV.NameManager.Files.FileManager;
->>>>>>> parent of 37667af... Revert "1.8 release"
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,10 +37,7 @@ public class Commands implements CommandExecutor {
 		String invalidPermission = "§cYou don't have permission.";
 		
 		//Sender -> Player
-		Player p = null;
-		if(sender instanceof Player) {
-			p = (Player) sender;
-		}
+		Player p = (Player) sender;
 			
 		OfflinePlayer offlinePlayer = null;
 		
@@ -92,7 +85,7 @@ public class Commands implements CommandExecutor {
 						}
 	
 						if (prefix.length() > 16) {
-							sender.sendMessage("§3The prefix can only contain 16 characters.");
+							sender.sendMessage("§3The prefix can only contain 16 Characters.");
 						} else {
 						
 							if (offlinePlayer != null && offlinePlayer.hasPlayedBefore()) {
@@ -133,7 +126,7 @@ public class Commands implements CommandExecutor {
 						}
 						
 						if (suffix.length() > 16) {
-							sender.sendMessage("§3The suffix can only contain 16 characters.");
+							sender.sendMessage("§3The suffix can only contain 16 Characters.");
 						} else {
 							
 							if (offlinePlayer != null && offlinePlayer.hasPlayedBefore()) {
@@ -324,12 +317,12 @@ public class Commands implements CommandExecutor {
 						sender.sendMessage(invalidPermission);
 					}
 					
-				//Command /nm group prefix
-				} else if (args[1].equalsIgnoreCase("prefix")) {
+					//Command /nm group prefix
+				} else if(args[1].equalsIgnoreCase("prefix")) {
 					
 					if (sender.hasPermission("namemanager.group.prefix")) {
 						
-						if (args.length >= 4) {
+						if (args.length >= 3) {
 							
 							String prefix = args[3];
 							for(int i = 4; i < args.length; ++i) {
@@ -337,7 +330,7 @@ public class Commands implements CommandExecutor {
 							}
 		
 							if (prefix.length() > 16) {
-								sender.sendMessage("§3The prefix can only contain 16 characters.");
+								sender.sendMessage("§3The prefix can only contain 16 Characters.");
 							} else {
 								GroupAPI.setGroupNametagPrefix(args[2], prefix);
 								sender.sendMessage("§3Set prefix '§c" + prefix + "§3' for group §c" + args[2]);
@@ -349,27 +342,16 @@ public class Commands implements CommandExecutor {
 					} else {
 						sender.sendMessage(invalidPermission);
 					}
-<<<<<<< HEAD
 				} else if(args[1].equalsIgnoreCase("suffix")) {
 					
 					if (sender.hasPermission("namemanager.group.suffix")) {
 						
 						if (args.length >= 3) {
-=======
-					
-				//Command /nm group suffix	
-				} else if (args[1].equalsIgnoreCase("suffix")) {
-					
-					if (sender.hasPermission("namemanager.group.suffix")) {
-						
-						if (args.length >= 4) {
->>>>>>> parent of 37667af... Revert "1.8 release"
 							
 							String suffix = args[3];
 							for(int i = 4; i < args.length; ++i) {
 								suffix += " " + args[i];
 							}
-<<<<<<< HEAD
 		
 							if (suffix.length() > 16) {
 								sender.sendMessage("§3The suffix can only contain 16 Characters.");
@@ -381,36 +363,11 @@ public class Commands implements CommandExecutor {
 							sender.sendMessage("§cUsage: /nm group suffix <group> <prefix>");
 						}
 						
-=======
-							
-							if (suffix.length() > 16) {
-								sender.sendMessage("§3The suffix can only contain 16 characters.");
-							} else {
-								GroupAPI.setGroupNametagSuffix(args[2], suffix);
-								sender.sendMessage("§3Set suffix '§c" + suffix + "§3' for group §c" + args[2]);
-								
-							}
-						} else {
-							sender.sendMessage("§cUsage: /nm group suffix <group> <suffix>");
-						}
->>>>>>> parent of 37667af... Revert "1.8 release"
 					} else {
 						sender.sendMessage(invalidPermission);
 					}
 				}
 
-			//nm reload
-			} else if (args[0].equalsIgnoreCase("reload")) {
-				
-				if (sender.hasPermission("namemanager.reload")) {
-					FileManager.loadFromFile();
-					sender.sendMessage("§3Reloaded NameManager!");
-				} else {
-					sender.sendMessage(invalidPermission);
-				}
-				
-			} else {
-				pluginDescription(sender);
 			}
 			
 			
