@@ -21,7 +21,7 @@ public class Rainbow {
 		
 		rainbowPlayers.add(of);
 		
-		if(rainbowPlayers.size() == 1)
+		if(rainbowTask == null || !plugin.getServer().getScheduler().isCurrentlyRunning(rainbowTask.getTaskId()))
 			startScheduleTasks();
 	}
 	

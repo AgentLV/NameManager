@@ -9,10 +9,26 @@ import io.github.AgentLV.NameManager.NameManager;
 public class FileHandler {
 
 	private static NameManager plugin;
-	private static List<String> ex = FileManager.groups.getStringList("GroupList");
+	private static List<String> ex;
 	
 	public FileHandler(NameManager plugin) {
 		FileHandler.plugin = plugin;
+	}
+	
+	private static void saveConfig() {
+		try {
+			FileManager.groups.save(FileManager.groupFile);
+		} catch (IOException e) {
+			plugin.getLogger().warning("Cannot save Groups.yml");
+		}
+	}
+	
+	private static void createGroup(String group) {
+		
+		if (FileManager.groups.get("Groups." + group) == null) {
+			FileManager.groups.set("Groups." + group + ".Prefix", "");
+			FileManager.groups.set("Groups." + group + ".Suffix", "");
+		}
 	}
 	
 	private static void addToGroupList(String group) {
@@ -28,24 +44,17 @@ public class FileHandler {
 	public static void writeGroupPrefix(String group, String prefix) {
 
 		addToGroupList(group);
+		createGroup(group);
 		FileManager.groups.set("Groups." + group + ".Prefix", prefix);
-		try {
-			FileManager.groups.save(FileManager.groupFile);
-		} catch (IOException e) {
-			plugin.getLogger().warning("Cannot save Groups.yml");
-		}
-
+		saveConfig();
 	}
 	
 	public static void writeGroupSuffix(String group, String suffix) {
 		
 		addToGroupList(group);
+		createGroup(group);
 		FileManager.groups.set("Groups." + group + ".Suffix", suffix);
-		try {
-			FileManager.groups.save(FileManager.groupFile);
-		} catch (IOException e) {
-			plugin.getLogger().warning("Cannot save Groups.yml");
-		}
+		saveConfig();
 	}
 	
 	public static void removeGroup(String group) {
@@ -57,5 +66,10 @@ public class FileHandler {
 			FileManager.groups.set("GroupList", ex);
 		}
 		
+		if (FileManager.groups.contains("Groups." + group)) {
+			FileManager.groups.set("Groups." + group, null);
+		}
+		
+		saveConfig();
 	}
 }

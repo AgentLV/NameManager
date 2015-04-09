@@ -21,6 +21,20 @@ permissions:
     description: Allows the usage of /nm uuid.
   NameManager.rainbow:
     description: Allows the usage of /nm rainbow.
+  NameManager.group.help:
+    description: Allows the usage of /nm group.
+  NameManager.group.prefix:
+    description: Allows the usage of /nm group prefix.
+  NameManager.group.suffix:
+    description: Allows the usage of /nm group suffix.
+  NameManager.group.reload:
+    description: Allows the usage of /nm group reload.
+  NameManager.group.remove:
+    description: Allows the usage of /nm group remove.
+  NameManager.group.list:
+    description: Allows the usage of /nm group list.
+  NameManager.group.rainbow:
+    description: Allows the usage of /nm group rainbow.
   NameManager.black:
     description: Changes the displayname to black.
   NameManager.darkblue:

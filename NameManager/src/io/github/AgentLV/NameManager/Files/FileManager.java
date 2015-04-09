@@ -14,6 +14,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.scoreboard.Team;
 
 public class FileManager {
 	
@@ -91,18 +92,22 @@ public class FileManager {
         allGroups = groups.getStringList("GroupList");
 
         for (String s : allGroups) {
-        	NameManager.team = NameManager.board.registerNewTeam(s);
-        	NameManager.team.setPrefix(ChatColor.translateAlternateColorCodes('&', groups.getString("Groups." + s + ".Prefix")));
-            NameManager.team.setSuffix(ChatColor.translateAlternateColorCodes('&', groups.getString("Groups." + s + ".Suffix")));
+        	if (NameManager.board.getTeam(s) == null) {
+	        	NameManager.team = NameManager.board.registerNewTeam(s);
+	        	NameManager.team.setPrefix(ChatColor.translateAlternateColorCodes('&', groups.getString("Groups." + s + ".Prefix")));
+	            NameManager.team.setSuffix(ChatColor.translateAlternateColorCodes('&', groups.getString("Groups." + s + ".Suffix")));
+        	} else {
+        		plugin.getLogger().warning("§cCould not initalize group " + s);
+        	}
         }
     }
     
     public static void unloadFromFile() {
-    	
-    	allGroups = groups.getStringList("GroupList");
 
-        for (String s : allGroups) {
-        	NameManager.board.getTeam(s).unregister();
+        for (Team team : NameManager.board.getTeams()) {
+        	if (!team.getName().startsWith("NM_")) {
+        		team.unregister();
+        	}
         }
     }
     
@@ -120,13 +125,13 @@ public class FileManager {
             }
             FileManager.groups.load(FileManager.groupFile);
         } catch(IOException|InvalidConfigurationException ex) {
-            plugin.getLogger().warning("Unable to load Groups.yml");
+            plugin.getLogger().warning("§cUnable to load Groups.yml");
         }
    	
 	   	try {
 	   		FileManager.groups.save(FileManager.groupFile);
 	   	} catch (IOException e) {
-	   		plugin.getLogger().warning("Unable to load Groups.yml");
+	   		plugin.getLogger().warning("§cUnable to load Groups.yml");
 	   	}
     }
 	

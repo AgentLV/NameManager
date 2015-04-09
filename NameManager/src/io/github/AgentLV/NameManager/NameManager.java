@@ -43,11 +43,6 @@ public class NameManager extends JavaPlugin {
 		initTeams(); 
 		
 		getCommand("namemanager").setExecutor(new Commands(this));
-		getCommand("namemanager help").setExecutor(new Commands(this));
-		getCommand("namemanager prefix").setExecutor(new Commands(this));
-		getCommand("namemanager suffix").setExecutor(new Commands(this));
-		getCommand("namemanager clear").setExecutor(new Commands(this));
-		getCommand("namemanager uuid").setExecutor(new Commands(this));
 		
 		if (getConfig().getBoolean("HealthBelowName") && board.getObjective("showhealth") == null) {
 			
@@ -72,7 +67,7 @@ public class NameManager extends JavaPlugin {
 		try {
 			FileManager.getFileConfiguration("Groups").save(file);
 		} catch (IOException e) {
-			e.printStackTrace();
+			getLogger().warning("§cGroups.yml could not be saved!");
 		}
 	}
 
