@@ -3,8 +3,8 @@ package io.github.AgentLV.NameManager;
 import java.io.File;
 import java.io.IOException;
 
-import io.github.AgentLV.NameManager.API.API;
-import io.github.AgentLV.NameManager.API.GroupAPI;
+import io.github.AgentLV.NameManager.API.NameManagerAPI;
+import io.github.AgentLV.NameManager.API.NameManagerGroupAPI;
 import io.github.AgentLV.NameManager.Files.FileHandler;
 import io.github.AgentLV.NameManager.Files.FileManager;
 
@@ -31,8 +31,8 @@ public class NameManager extends JavaPlugin {
 		rainbow = null;
 		
 		new EventListener(this);
-		new API(this);
-		new GroupAPI(this);
+		new NameManagerAPI(this);
+		new NameManagerGroupAPI(this);
 		new Rainbow(this);
 		new FileManager(this);
 		new FileHandler(this);

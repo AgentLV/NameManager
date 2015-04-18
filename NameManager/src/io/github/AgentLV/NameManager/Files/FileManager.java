@@ -11,10 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.scoreboard.Team;
 
 public class FileManager {
 	
@@ -92,10 +92,45 @@ public class FileManager {
         allGroups = groups.getStringList("GroupList");
 
         for (String s : allGroups) {
+        	
         	if (NameManager.board.getTeam(s) == null) {
+        		
 	        	NameManager.team = NameManager.board.registerNewTeam(s);
-	        	NameManager.team.setPrefix(ChatColor.translateAlternateColorCodes('&', groups.getString("Groups." + s + ".Prefix")));
-	            NameManager.team.setSuffix(ChatColor.translateAlternateColorCodes('&', groups.getString("Groups." + s + ".Suffix")));
+	        	
+	        	try {
+		        	NameManager.team.setPrefix(ChatColor.translateAlternateColorCodes('&', groups.getString("Groups." + s + ".Prefix")));
+		            NameManager.team.setSuffix(ChatColor.translateAlternateColorCodes('&', groups.getString("Groups." + s + ".Suffix")));
+		            
+	        	} catch(NullPointerException e) {
+	        		plugin.getLogger().warning("Could not load group '" + s + "', did you set a prefix and a suffix?");
+	        	}
+	        	
+        	} else {
+        		plugin.getLogger().warning("§cCould not initalize group " + s);
+        	}
+        }
+    }
+    
+    public static void loadFromFile(CommandSender sender) {
+    	
+    	groups = getFileConfiguration("Groups");
+        allGroups.clear();
+        allGroups = groups.getStringList("GroupList");
+
+        for (String s : allGroups) {
+        	
+        	if (NameManager.board.getTeam(s) == null) {
+        		
+	        	NameManager.team = NameManager.board.registerNewTeam(s);
+	        	
+	        	try {
+		        	NameManager.team.setPrefix(ChatColor.translateAlternateColorCodes('&', groups.getString("Groups." + s + ".Prefix")));
+		            NameManager.team.setSuffix(ChatColor.translateAlternateColorCodes('&', groups.getString("Groups." + s + ".Suffix")));
+		            
+	        	} catch(NullPointerException e) {
+        			sender.sendMessage("§cCould not load group '§3" + s + "§4', did you set a prefix and a suffix?");
+	        	}
+	        	
         	} else {
         		plugin.getLogger().warning("§cCould not initalize group " + s);
         	}
@@ -103,12 +138,11 @@ public class FileManager {
     }
     
     public static void unloadFromFile() {
-
-        for (Team team : NameManager.board.getTeams()) {
-        	if (!team.getName().startsWith("NM_")) {
-        		team.unregister();
-        	}
-        }
+        
+         for (String s : allGroups) {
+        	 NameManager.team = NameManager.board.getTeam(s);
+             NameManager.team.unregister();
+         }
     }
     
     public static void initGroupsFile() {

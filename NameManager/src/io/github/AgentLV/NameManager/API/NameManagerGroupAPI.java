@@ -5,12 +5,12 @@ import org.bukkit.ChatColor;
 import io.github.AgentLV.NameManager.NameManager;
 import io.github.AgentLV.NameManager.Files.FileHandler;
 
-public class GroupAPI {
+public class NameManagerGroupAPI {
 
 static NameManager plugin;
 	
-	public GroupAPI(NameManager plugin) {
-		API.plugin = plugin;
+	public NameManagerGroupAPI(NameManager plugin) {
+		NameManagerAPI.plugin = plugin;
 	}
 	
 	public static void setGroupNametag(String prefix, String group, String suffix) {

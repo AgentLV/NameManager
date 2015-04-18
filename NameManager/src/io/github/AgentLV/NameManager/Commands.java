@@ -1,7 +1,7 @@
 package io.github.AgentLV.NameManager;
 
-import io.github.AgentLV.NameManager.API.API;
-import io.github.AgentLV.NameManager.API.GroupAPI;
+import io.github.AgentLV.NameManager.API.NameManagerAPI;
+import io.github.AgentLV.NameManager.API.NameManagerGroupAPI;
 import io.github.AgentLV.NameManager.Files.FileManager;
 
 import java.util.ArrayList;
@@ -9,10 +9,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+
+
+
+
+
+import org.bukkit.Bukkit;
+//import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+//import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Team;
 
@@ -84,7 +92,7 @@ public class Commands implements CommandExecutor {
 				
 					if (args.length >= 3) {
 						
-						offlinePlayer = API.playerToOfflinePlayer(args[1]);
+						offlinePlayer = NameManagerAPI.playerToOfflinePlayer(args[1]);
 						
 						String prefix = args[2];
 						for(int i = 3; i < args.length; ++i) {
@@ -97,7 +105,7 @@ public class Commands implements CommandExecutor {
 						
 							if (offlinePlayer != null && offlinePlayer.hasPlayedBefore()) {
 								
-								API.setNametagPrefix(offlinePlayer, prefix);
+								NameManagerAPI.setNametagPrefix(offlinePlayer, prefix);
 								sender.sendMessage("§3Prefix '§c" + prefix + "§3' set for §c" + args[1]);
 								
 							} else {
@@ -125,7 +133,7 @@ public class Commands implements CommandExecutor {
 				
 					if (args.length >= 3) {
 						
-						offlinePlayer = API.playerToOfflinePlayer(args[1]);
+						offlinePlayer = NameManagerAPI.playerToOfflinePlayer(args[1]);
 						
 						String suffix = args[2];
 						for(int i = 3; i < args.length; ++i) {
@@ -137,7 +145,7 @@ public class Commands implements CommandExecutor {
 						} else {
 							
 							if (offlinePlayer != null && offlinePlayer.hasPlayedBefore()) {
-								API.setNametagSuffix(offlinePlayer, suffix);
+								NameManagerAPI.setNametagSuffix(offlinePlayer, suffix);
 								sender.sendMessage("§3Suffix '§c" + suffix + "§3' set for §c" + args[1]);
 								
 							} else {
@@ -164,7 +172,7 @@ public class Commands implements CommandExecutor {
 						
 						if (sender instanceof Player) {
 							
-							API.clearNametag(API.playerToOfflinePlayer(p.getName()));
+							NameManagerAPI.clearNametag(NameManagerAPI.playerToOfflinePlayer(p.getName()));
 							sender.sendMessage("§3Your name was cleared.");
 							
 						} else {
@@ -172,10 +180,10 @@ public class Commands implements CommandExecutor {
 						}
 					} else if (args.length == 2) {
 						
-						offlinePlayer = API.playerToOfflinePlayer(args[1]);
+						offlinePlayer = NameManagerAPI.playerToOfflinePlayer(args[1]);
 						
 						if (offlinePlayer != null && offlinePlayer.hasPlayedBefore()) {
-							API.clearNametag(offlinePlayer);
+							NameManagerAPI.clearNametag(offlinePlayer);
 							sender.sendMessage("§3Name cleared for §c" + args[1]);
 							
 						} else {
@@ -210,7 +218,7 @@ public class Commands implements CommandExecutor {
 						
 					} else if (args.length == 2) {
 						
-						offlinePlayer = API.playerToOfflinePlayer(args[1]);
+						offlinePlayer = NameManagerAPI.playerToOfflinePlayer(args[1]);
 						
 						if (offlinePlayer != null) {
 							sender.sendMessage("§3UUID of §c" + args[1] + "§3: §c" + offlinePlayer.getUniqueId());
@@ -342,7 +350,7 @@ public class Commands implements CommandExecutor {
 							if (prefix.length() > 16) {
 								sender.sendMessage("§3The prefix can only contain 16 Characters.");
 							} else {
-								GroupAPI.setGroupNametagPrefix(args[2], prefix);
+								NameManagerGroupAPI.setGroupNametagPrefix(args[2], prefix);
 								sender.sendMessage("§3Set prefix '§c" + prefix + "§3' for group §c" + args[2]);
 							}
 						} else {
@@ -368,7 +376,7 @@ public class Commands implements CommandExecutor {
 							if (suffix.length() > 16) {
 								sender.sendMessage("§3The suffix can only contain 16 Characters.");
 							} else {
-								GroupAPI.setGroupNametagSuffix(args[2], suffix);
+								NameManagerGroupAPI.setGroupNametagSuffix(args[2], suffix);
 								sender.sendMessage("§3Set suffix '§c" + suffix + "§3' for group §c" + args[2]);
 							}
 						} else {
@@ -379,14 +387,27 @@ public class Commands implements CommandExecutor {
 						sender.sendMessage(invalidPermission);
 					}
 				
-				//nm remove reload
+				//nm group reload
 			} else if (args[1].equalsIgnoreCase("reload")) {
 				
 				if (sender.hasPermission("namemanager.group.reload")) {
+					Map<Player, Team> reloadMap = new HashMap<Player, Team>();
+					for (Player reloadPlayer : Bukkit.getOnlinePlayers()) {
+						reloadMap.put(reloadPlayer, NameManager.board.getPlayerTeam(reloadPlayer));
+					}
 					FileManager.unloadFromFile();
-					FileManager.loadFromFile();
-					sender.sendMessage("§3Reloaded NameManager!");
-					System.out.println("§3Reloaded Groups.yml");
+					FileManager.loadFromFile(sender);
+					
+					for(Entry<Player, Team> entry : reloadMap.entrySet()) {
+						Player key = entry.getKey();
+					    Team value = entry.getValue();
+					    
+					    if (key != null && key.isOnline() && value != null) {
+					    	value.addPlayer(key);
+					    }
+					}
+					
+					sender.sendMessage("§3Reloaded Groups!");
 				} else {
 					sender.sendMessage(invalidPermission);
 				}
@@ -395,7 +416,7 @@ public class Commands implements CommandExecutor {
 			} else if (args[1].equalsIgnoreCase("remove")) {
 				
 				if (sender.hasPermission("namemanager.group.remove")) {
-					GroupAPI.removeGroup(args[2]);
+					NameManagerGroupAPI.removeGroup(args[2]);
 					sender.sendMessage("§3Succesfully removed group '§c" + args[2] + "§3'");
 				} else {
 					sender.sendMessage(invalidPermission);

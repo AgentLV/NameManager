@@ -1,6 +1,6 @@
 package io.github.AgentLV.NameManager;
 
-import io.github.AgentLV.NameManager.API.API;
+import io.github.AgentLV.NameManager.API.NameManagerAPI;
 import io.github.AgentLV.NameManager.Files.FileManager;
 
 import org.bukkit.ChatColor;
@@ -96,7 +96,7 @@ public class EventListener implements Listener {
 			
 		if(plugin.getConfig().getBoolean("Messages")) {
 			if(plugin.getConfig().getBoolean("CustomNameForMessages")) {
-				e.setJoinMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Join").replaceAll("%player%", API.getNametag(p))));
+				e.setJoinMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Join").replaceAll("%player%", NameManagerAPI.getNametag(p))));
 			} else {
 				e.setJoinMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Join").replaceAll("%player%", p.getDisplayName())));
 			}
@@ -113,7 +113,7 @@ public class EventListener implements Listener {
 		if(plugin.getConfig().getBoolean("Messages")) {
 			
 			if(plugin.getConfig().getBoolean("CustomNameForMessages")) {
-				e.setQuitMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Leave").replaceAll("%player%", API.getNametag(p))));
+				e.setQuitMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Leave").replaceAll("%player%", NameManagerAPI.getNametag(p))));
 			} else {
 				e.setQuitMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Leave").replaceAll("%player%", p.getDisplayName())));
 			}

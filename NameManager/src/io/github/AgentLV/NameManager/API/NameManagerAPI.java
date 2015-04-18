@@ -9,12 +9,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
-public class API {
+public class NameManagerAPI {
 	
 	static NameManager plugin;
 	
-	public API(NameManager plugin) {
-		API.plugin = plugin;
+	public NameManagerAPI(NameManager plugin) {
+		NameManagerAPI.plugin = plugin;
 	}
 	
 	public static void setNametag(String prefix, OfflinePlayer p, String suffix) {
