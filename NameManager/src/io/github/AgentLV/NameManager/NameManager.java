@@ -22,7 +22,6 @@ public class NameManager extends JavaPlugin {
 	public static Team team;
 	public static Team rainbow;
 	static Objective objective;
-	public static boolean healthNumber = true;
 	
 	@Override
 	public void onEnable() {
