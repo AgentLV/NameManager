@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.scoreboard.Team;
 
 public class EventListener implements Listener {
 	
@@ -35,12 +36,12 @@ public class EventListener implements Listener {
 		
 		Player p = e.getPlayer();
 		
-		if (plugin.getConfig().getBoolean("HealthBelowName"))
+		if (plugin.getConfig().getBoolean("HealthBelowName")) 
 			p.setScoreboard(NameManager.board);
+			
 	
-		if( NameManager.board.getPlayerTeam(p) != null ) {
-			NameManager.team = NameManager.board.getPlayerTeam(p);
-			NameManager.team.addPlayer(p);
+		if( NameManager.board.getTeam(p.getName()) != null ) {
+			NameManager.board.getTeam(p.getName()).addPlayer(p);
 		} else if (playerGroupChecker(p) != null) {
 			NameManager.team = NameManager.board.getTeam(playerGroupChecker(p));
 			NameManager.team.addPlayer(p);
@@ -102,6 +103,7 @@ public class EventListener implements Listener {
 			}
 			
 		}
+		
 	}
 	
 	
@@ -121,9 +123,22 @@ public class EventListener implements Listener {
 			
 		}
 		
+		if (Commands.map.containsKey(p) || Commands.teams.contains(NameManager.board.getPlayerTeam(p))) {
+			
+			Rainbow.disableRainbow(p);
+			Team team = Commands.map.get(p);
+			
+			if (team != null) {
+				team.addPlayer(p);
+			} else {
+				NameManager.rainbow.removePlayer(p);
+			}
+			
+			Commands.map.remove(p);
+		}
+		
 		if (NameManager.board.getPlayerTeam(p) != null)
 			NameManager.board.getPlayerTeam(p).removePlayer(p);
-			
 	}
 
 }

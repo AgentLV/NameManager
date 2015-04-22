@@ -22,6 +22,7 @@ public class NameManager extends JavaPlugin {
 	public static Team team;
 	public static Team rainbow;
 	static Objective objective;
+	public static boolean healthNumber = true;
 	
 	@Override
 	public void onEnable() {
@@ -40,15 +41,14 @@ public class NameManager extends JavaPlugin {
 		FileManager.getFileConfiguration("config");
 		FileManager.loadFromFile();
 		FileManager.initGroupsFile();
-		initTeams(); 
+		initTeams();
 		
 		getCommand("namemanager").setExecutor(new Commands(this));
 		
 		if (getConfig().getBoolean("HealthBelowName") && board.getObjective("showhealth") == null) {
-			
-			objective = board.registerNewObjective("showhealth", "health");
-			objective.setDisplaySlot(DisplaySlot.BELOW_NAME);
-			objective.setDisplayName(ChatColor.translateAlternateColorCodes('&', getConfig().getString("HealthFormat")));
+				objective = board.registerNewObjective("showhealth", "health");
+				objective.setDisplaySlot(DisplaySlot.BELOW_NAME);
+				objective.setDisplayName(ChatColor.translateAlternateColorCodes('&', getConfig().getString("HealthIcon")));
 		}
 		
 	}

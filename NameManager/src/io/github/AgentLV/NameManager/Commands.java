@@ -27,8 +27,8 @@ import org.bukkit.scoreboard.Team;
 public class Commands implements CommandExecutor {
 
 	static NameManager plugin;
-	Map<OfflinePlayer, Team> map = new HashMap<OfflinePlayer, Team>();
-	ArrayList<Team> teams = new ArrayList<Team>();
+	static Map<OfflinePlayer, Team> map = new HashMap<OfflinePlayer, Team>();
+	static ArrayList<Team> teams = new ArrayList<Team>();
 	
 	public Commands(NameManager plugin) {
 		Commands.plugin = plugin;
