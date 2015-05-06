@@ -73,120 +73,91 @@ public class NameManager extends JavaPlugin {
 	private void initTeams() {
 		
 		board.registerNewTeam("NM_black");
-		team = board.getTeam("NM_black");
-		team.setPrefix("§0");
+		board.getTeam("NM_black").setPrefix("§0");
 		
 		board.registerNewTeam("NM_darkblue");
-		team = board.getTeam("NM_darkblue");
-		team.setPrefix("§1");
+		board.getTeam("NM_darkblue").setPrefix("§1");
 		
 		board.registerNewTeam("NM_darkgreen");
-		team = board.getTeam("NM_darkgreen");
-		team.setPrefix("§2");
+		board.getTeam("NM_darkgreen").setPrefix("§2");
 		
 		board.registerNewTeam("NM_darkaqua");
-		team = board.getTeam("NM_darkaqua");
-		team.setPrefix("§3");
+		board.getTeam("NM_darkaqua").setPrefix("§3");
 		
 		board.registerNewTeam("NM_darkred");
-		team = board.getTeam("NM_darkred");
-		team.setPrefix("§4");
+		board.getTeam("NM_darkred").setPrefix("§4");
 		
 		board.registerNewTeam("NM_darkpurple");
-		team = board.getTeam("NM_darkpurple");
-		team.setPrefix("§5");
+		board.getTeam("NM_darkpurple").setPrefix("§5");
 		
 		board.registerNewTeam("NM_gold");
-		team = board.getTeam("NM_gold");
-		team.setPrefix("§6");
+		board.getTeam("NM_gold").setPrefix("§6");
 		
 		board.registerNewTeam("NM_gray");
-		team = board.getTeam("NM_gray");
-		team.setPrefix("§7");
+		board.getTeam("NM_gray").setPrefix("§7");
 		
 		board.registerNewTeam("NM_darkgray");
-		team = board.getTeam("NM_darkgray");
-		team.setPrefix("§8");
+		board.getTeam("NM_darkgray").setPrefix("§8");
 		
 		board.registerNewTeam("NM_blue");
-		team = board.getTeam("NM_blue");
-		team.setPrefix("§9");
+		board.getTeam("NM_blue").setPrefix("§9");
 		
 		board.registerNewTeam("NM_green");
-		team = board.getTeam("NM_green");
-		team.setPrefix("§a");
-		
+		board.getTeam("NM_green").setPrefix("§a");
+	
 		board.registerNewTeam("NM_aqua");
-		team = board.getTeam("NM_aqua");
-		team.setPrefix("§b");
+		board.getTeam("NM_aqua").setPrefix("§b");
 		
 		board.registerNewTeam("NM_red");
-		team = board.getTeam("NM_red");
-		team.setPrefix("§c");
+		board.getTeam("NM_red").setPrefix("§c");
 		
 		board.registerNewTeam("NM_lightpurple");
-		team = board.getTeam("NM_lightpurple");
-		team.setPrefix("§d");
+		board.getTeam("NM_lightpurple").setPrefix("§d");
 		
 		board.registerNewTeam("NM_yellow");
-		team = board.getTeam("NM_yellow");
-		team.setPrefix("§e");
+		board.getTeam("NM_yellow").setPrefix("§e");
 		
 		board.registerNewTeam("NM_white");
-		team = board.getTeam("NM_white");
-		team.setPrefix("§f");
+		board.getTeam("NM_white").setPrefix("§f");
+		
+		board.registerNewTeam("ZZZZZZZZZZZZZZZZ");
 	}
 	
 	private void unregisterTeams() {
-
 		
-		team = board.getTeam("NM_black");
-		team.unregister();
+		board.getTeam("NM_black").unregister();
 		
-		team = board.getTeam("NM_darkblue");
-		team.unregister();
+		board.getTeam("NM_darkblue").unregister();
 		
-		team = board.getTeam("NM_darkgreen");
-		team.unregister();
+		board.getTeam("NM_darkgreen").unregister();
 		
-		team = board.getTeam("NM_darkaqua");
-		team.unregister();
+		board.getTeam("NM_darkaqua").unregister();
 		
-		team = board.getTeam("NM_darkred");
-		team.unregister();
+		board.getTeam("NM_darkred").unregister();
 		
-		team = board.getTeam("NM_darkpurple");
-		team.unregister();
+		board.getTeam("NM_darkpurple").unregister();
 		
-		team = board.getTeam("NM_gold");
-		team.unregister();
+		board.getTeam("NM_gold").unregister();
 		
-		team = board.getTeam("NM_gray");
-		team.unregister();
+		board.getTeam("NM_gray").unregister();
 		
-		team = board.getTeam("NM_darkgray");
-		team.unregister();
+		board.getTeam("NM_darkgray").unregister();
 		
-		team = board.getTeam("NM_blue");
-		team.unregister();
+		board.getTeam("NM_blue").unregister();
 		
-		team = board.getTeam("NM_green");
-		team.unregister();
+		board.getTeam("NM_green").unregister();
 		
-		team = board.getTeam("NM_aqua");
-		team.unregister();
+		board.getTeam("NM_aqua").unregister();
 		
-		team = board.getTeam("NM_red");
-		team.unregister();
+		board.getTeam("NM_red").unregister();
 		
-		team = board.getTeam("NM_lightpurple");
-		team.unregister();
+		board.getTeam("NM_lightpurple").unregister();
 		
-		team = board.getTeam("NM_yellow");
-		team.unregister();
+		board.getTeam("NM_yellow").unregister();
 		
-		team = board.getTeam("NM_white");
-		team.unregister();
+		board.getTeam("NM_white").unregister();
+		
+		board.getTeam("ZZZZZZZZZZZZZZZZ").unregister();
 	}
 
 }

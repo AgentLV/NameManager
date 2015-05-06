@@ -90,12 +90,14 @@ public class FileManager {
     	groups = getFileConfiguration("Groups");
         allGroups.clear();
         allGroups = groups.getStringList("GroupList");
-
+        int i = 0;
+        
         for (String s : allGroups) {
         	
         	if (NameManager.board.getTeam(s) == null) {
         		
-	        	NameManager.team = NameManager.board.registerNewTeam(s);
+	        	NameManager.team = NameManager.board.registerNewTeam(i + s);
+	        	++i;
 	        	
 	        	try {
 		        	NameManager.team.setPrefix(ChatColor.translateAlternateColorCodes('&', groups.getString("Groups." + s + ".Prefix")));
@@ -109,6 +111,7 @@ public class FileManager {
         		plugin.getLogger().warning("§cCould not initalize group " + s);
         	}
         }
+        
     }
     
     public static void loadFromFile(CommandSender sender) {
@@ -116,12 +119,14 @@ public class FileManager {
     	groups = getFileConfiguration("Groups");
         allGroups.clear();
         allGroups = groups.getStringList("GroupList");
+        int i = 0;
 
         for (String s : allGroups) {
         	
         	if (NameManager.board.getTeam(s) == null) {
         		
-	        	NameManager.team = NameManager.board.registerNewTeam(s);
+	        	NameManager.team = NameManager.board.registerNewTeam(i + s);
+	        	++i;
 	        	
 	        	try {
 		        	NameManager.team.setPrefix(ChatColor.translateAlternateColorCodes('&', groups.getString("Groups." + s + ".Prefix")));
@@ -139,9 +144,12 @@ public class FileManager {
     
     public static void unloadFromFile() {
         
+    	int i = 0;
+    	
          for (String s : allGroups) {
-        	 NameManager.team = NameManager.board.getTeam(s);
+        	 NameManager.team = NameManager.board.getTeam(i + s);
              NameManager.team.unregister();
+             ++i;
          }
     }
     

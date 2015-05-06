@@ -14,6 +14,7 @@ import org.bukkit.scoreboard.Team;
 public class EventListener implements Listener {
 	
 	NameManager plugin;
+	int i;
 	
 	public EventListener(NameManager plugin) {
 		this.plugin = plugin;
@@ -21,12 +22,12 @@ public class EventListener implements Listener {
 	}
 	
 	private String playerGroupChecker(Player p) {
-		
-		for(String s : FileManager.getFileConfiguration("Groups").getStringList("GroupList")) {
+		i = 0;
+		for(String s : FileManager.allGroups) {
 			if(p.hasPermission("NameManager." + s)) {
 				return s;
 			}
-			
+			++i;
 		}
 		return null;
 	}
@@ -43,56 +44,75 @@ public class EventListener implements Listener {
 		if( NameManager.board.getTeam(p.getName()) != null ) {
 			NameManager.board.getTeam(p.getName()).addPlayer(p);
 		} else if (playerGroupChecker(p) != null) {
-			NameManager.team = NameManager.board.getTeam(playerGroupChecker(p));
-			NameManager.team.addPlayer(p);
+			NameManager.board.getTeam(i + playerGroupChecker(p)).addPlayer(p);
 		} else if( p.hasPermission("NameManager.black") ) {
-		    NameManager.team = NameManager.board.getTeam("NM_black");
-	        NameManager.team.addPlayer(p);
+			
+		    NameManager.board.getTeam("NM_black").addPlayer(p);
+		    
         } else if( p.hasPermission("NameManager.darkblue") ) {
-        	NameManager.team = NameManager.board.getTeam("NM_darkblue");
-			NameManager.team.addPlayer(p);
+        	
+        	NameManager.board.getTeam("NM_darkblue").addPlayer(p);
+        	
         } else if( p.hasPermission("NameManager.darkgreen") ) {
-        	NameManager.team = NameManager.board.getTeam("NM_darkgreen");
-			NameManager.team.addPlayer(p);
+        	
+        	NameManager.board.getTeam("NM_darkgreen").addPlayer(p);
+        	
         } else if( p.hasPermission("NameManager.darkaqua") ) {
-        	NameManager.team = NameManager.board.getTeam("NM_darkaqua");
-			NameManager.team.addPlayer(p);
+        	
+        	NameManager.board.getTeam("NM_darkaqua").addPlayer(p);
+        	
         } else if( p.hasPermission("NameManager.darkred") ) {
-        	NameManager.team = NameManager.board.getTeam("NM_darkred");
-			NameManager.team.addPlayer(p);
+        	
+        	NameManager.board.getTeam("NM_darkred").addPlayer(p);
+        	
         } else if( p.hasPermission("NameManager.darkpurple") ) {
-        	NameManager.team = NameManager.board.getTeam("NM_darkpurple");
-			NameManager.team.addPlayer(p);
+        	
+        	NameManager.board.getTeam("NM_darkpurple").addPlayer(p);
+        	
         } else if( p.hasPermission("NameManager.gold") ) {
-        	NameManager.team = NameManager.board.getTeam("NM_gold");
-			NameManager.team.addPlayer(p);
+        	
+        	NameManager.board.getTeam("NM_gold").addPlayer(p);
+        	
         } else if( p.hasPermission("NameManager.gray") ) {
-        	NameManager.team = NameManager.board.getTeam("NM_gray");
-			NameManager.team.addPlayer(p);
+        	
+        	NameManager.board.getTeam("NM_gray").addPlayer(p);
+        	
         } else if( p.hasPermission("NameManager.darkgray") ) {
-        	NameManager.team = NameManager.board.getTeam("NM_darkgray");
-			NameManager.team.addPlayer(p);
+        	
+        	NameManager.board.getTeam("NM_darkgray").addPlayer(p);
+        	
         } else if( p.hasPermission("NameManager.blue") ) {
-        	NameManager.team = NameManager.board.getTeam("NM_blue");
-			NameManager.team.addPlayer(p);
+        	
+        	NameManager.board.getTeam("NM_blue").addPlayer(p);
+        	
         } else if( p.hasPermission("NameManager.green") ) {
-        	NameManager.team = NameManager.board.getTeam("NM_green");
-			NameManager.team.addPlayer(p);
+        	
+        	NameManager.board.getTeam("NM_green").addPlayer(p);
+        	
         } else if( p.hasPermission("NameManager.aqua") ) {
-        	NameManager.team = NameManager.board.getTeam("NM_aqua");
-			NameManager.team.addPlayer(p);
+        	
+        	NameManager.board.getTeam("NM_aqua").addPlayer(p);
+        	
         } else if( p.hasPermission("NameManager.red") ) {
-        	NameManager.team = NameManager.board.getTeam("NM_red");
-			NameManager.team.addPlayer(p);
+        	
+        	NameManager.board.getTeam("NM_red").addPlayer(p);
+        	
         } else if( p.hasPermission("NameManager.lightpurple") ) {
-        	NameManager.team = NameManager.board.getTeam("NM_lightpurple");
-			NameManager.team.addPlayer(p);
+        	
+        	NameManager.board.getTeam("NM_lightpurple").addPlayer(p);
+        	
         } else if( p.hasPermission("NameManager.yellow") ) {
-        	NameManager.team = NameManager.board.getTeam("NM_yellow");
-			NameManager.team.addPlayer(p);
+        	
+        	NameManager.board.getTeam("NM_yellow").addPlayer(p);
+        	
         } else if( p.hasPermission("NameManager.white") ) {
-        	NameManager.team = NameManager.board.getTeam("NM_white");
-			NameManager.team.addPlayer(p);
+        	
+        	NameManager.board.getTeam("NM_white").addPlayer(p);
+        	
+        } else {
+        	
+        	NameManager.board.getTeam("ZZZZZZZZZZZZZZZZ").addPlayer(p);
+        	
         }
 			
 		if(plugin.getConfig().getBoolean("Messages")) {

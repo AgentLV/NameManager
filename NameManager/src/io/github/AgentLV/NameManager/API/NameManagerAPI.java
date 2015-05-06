@@ -57,9 +57,17 @@ public class NameManagerAPI {
 	}
 	
 	public static String getNametag(OfflinePlayer p) {
-			NameManager.team = NameManager.board.getPlayerTeam(p);
-			return NameManager.team.getPrefix() + p.getName() + NameManager.team.getSuffix();
+		String prefix = "";
+		String suffix = "";
+		NameManager.team = NameManager.board.getPlayerTeam(p);
 		
+		if (NameManager.team.getPrefix() != null) {
+			prefix = NameManager.team.getPrefix();
+		}
+		if (NameManager.team.getSuffix() != null) {
+			suffix = NameManager.team.getSuffix();
+		}
+		return prefix + p.getName() + suffix;
 	}
 	
 	public static String getNametagPrefix(OfflinePlayer p) {
