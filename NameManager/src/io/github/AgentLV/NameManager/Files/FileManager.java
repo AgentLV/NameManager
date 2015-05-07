@@ -92,6 +92,9 @@ public class FileManager {
         allGroups = groups.getStringList("GroupList");
         int i = 0;
         
+        if ( allGroups.isEmpty() )
+        	return;
+        
         for (String s : allGroups) {
         	
         	if (NameManager.board.getTeam(s) == null) {
@@ -121,6 +124,9 @@ public class FileManager {
         allGroups = groups.getStringList("GroupList");
         int i = 0;
 
+        if ( allGroups.isEmpty() )
+        	return;
+        
         for (String s : allGroups) {
         	
         	if (NameManager.board.getTeam(s) == null) {
@@ -145,6 +151,9 @@ public class FileManager {
     public static void unloadFromFile() {
         
     	int i = 0;
+    	
+    	if ( allGroups.isEmpty() )
+        	return;
     	
          for (String s : allGroups) {
         	 NameManager.team = NameManager.board.getTeam(i + s);

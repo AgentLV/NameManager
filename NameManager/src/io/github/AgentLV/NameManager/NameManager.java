@@ -47,7 +47,7 @@ public class NameManager extends JavaPlugin {
 		if (getConfig().getBoolean("HealthBelowName") && board.getObjective("showhealth") == null) {
 				objective = board.registerNewObjective("showhealth", "health");
 				objective.setDisplaySlot(DisplaySlot.BELOW_NAME);
-				objective.setDisplayName(ChatColor.translateAlternateColorCodes('&', getConfig().getString("HealthIcon")));
+				objective.setDisplayName(ChatColor.translateAlternateColorCodes('&', getConfig().getString("HealthFormat")));
 		}
 		
 	}
