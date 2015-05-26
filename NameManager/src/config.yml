@@ -1,14 +1,8 @@
 # Should NameManager handle join and leave messages?
+# For more information visit: http://www.spigotmc.org/resources/namemanager.5147/
 Messages: false
-
-# Should NameManager include the prefixes and suffixes in the join & leave messages?
 CustomNameForMessages: false
 Join: '&a[+] %player%'
 Leave: '&c[-] %player%'
-
-# Should NameManager display the health of a player below their name?
 HealthBelowName: false
 HealthFormat: '&c❤'
-
-# Don't touch this!
-version: 1.1

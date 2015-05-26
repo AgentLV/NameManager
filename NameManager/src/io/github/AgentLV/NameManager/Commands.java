@@ -9,18 +9,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-
-
-
-
-
 import org.bukkit.Bukkit;
-//import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-//import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Team;
 
@@ -54,18 +47,17 @@ public class Commands implements CommandExecutor {
 			p = (Player) sender;
 			
 		OfflinePlayer offlinePlayer = null;
-		
+	
 		//Command /namemanager
 		if (cmd.getName().equalsIgnoreCase("namemanager")) {
 			
 			if (args.length == 0) {
 				pluginDescription(sender);
 				
-			}
-			
-			//Command /nm help
-			else if (args[0].equalsIgnoreCase("help")) {
+			} else if (args[0].equalsIgnoreCase("help")) {
+				
 				if(sender.hasPermission("namemanager.help")) {
+					
 					sender.sendMessage("");
 					sender.sendMessage("§3---- §b§lNameManager commands §r§3----");
 					sender.sendMessage("");
@@ -82,11 +74,8 @@ public class Commands implements CommandExecutor {
 				} else {
 					sender.sendMessage(invalidPermission);
 				} 
-			}
-			
-			
-			//Command /nm prefix
-			else if (args[0].equalsIgnoreCase("prefix")) {
+				
+			} else if (args[0].equalsIgnoreCase("prefix")) {
 				
 				if (sender.hasPermission("namemanager.prefix")) {
 				
@@ -122,12 +111,7 @@ public class Commands implements CommandExecutor {
 					sender.sendMessage(invalidPermission);
 				}
 				
-			}
-			
-			
-			
-			//Command /nm suffix
-			else if (args[0].equalsIgnoreCase("suffix")) {
+			} else if (args[0].equalsIgnoreCase("suffix")) {
 				
 				if (sender.hasPermission("namemanager.suffix")) {
 				
@@ -160,11 +144,7 @@ public class Commands implements CommandExecutor {
 					sender.sendMessage(invalidPermission);
 				}
 					
-			}
-			
-			
-			//Command /nm clear
-			else if (args[0].equalsIgnoreCase("clear")) {
+			} else if (args[0].equalsIgnoreCase("clear")) {
 				
 				if (sender.hasPermission("namemanager.clear")) {
 					
@@ -198,11 +178,7 @@ public class Commands implements CommandExecutor {
 					sender.sendMessage(invalidPermission);
 				}
 				
-			}
-			
-			
-			//Command /nm uuid
-			else if (args[0].equalsIgnoreCase("uuid")) {
+			} else if (args[0].equalsIgnoreCase("uuid")) {
 				
 				if (sender.hasPermission("namemanager.uuid")) {
 					
@@ -234,12 +210,7 @@ public class Commands implements CommandExecutor {
 					sender.sendMessage(invalidPermission);
 				}
 				
-			}
-			
-			
-			
-			//Command /nm rainbow
-			else if (args[0].equalsIgnoreCase("rainbow")) {
+			} else if (args[0].equalsIgnoreCase("rainbow")) {
 				
 				if (sender.hasPermission("namemanager.rainbow")) {
 					
@@ -248,7 +219,6 @@ public class Commands implements CommandExecutor {
 						if (sender instanceof Player) {
 							
 							if (!map.containsKey(p) && !teams.contains(NameManager.board.getPlayerTeam(p))) {
-								
 								
 								map.put(p, NameManager.board.getPlayerTeam(p));
 								Rainbow.enableRainbow(p);
@@ -314,8 +284,6 @@ public class Commands implements CommandExecutor {
 			
 			//Group commands	
 				
-				
-			//Command /nm groups
 			else if (args[0].equalsIgnoreCase("group") || args[0].equalsIgnoreCase("groups")) {
 				
 				if (args.length == 1) {

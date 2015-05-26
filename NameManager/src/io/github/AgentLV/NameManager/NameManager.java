@@ -1,10 +1,8 @@
 package io.github.AgentLV.NameManager;
 
-import java.io.File;
-import java.io.IOException;
-
 import io.github.AgentLV.NameManager.API.NameManagerAPI;
 import io.github.AgentLV.NameManager.API.NameManagerGroupAPI;
+import io.github.AgentLV.NameManager.Files.ConfigAccessor;
 import io.github.AgentLV.NameManager.Files.FileHandler;
 import io.github.AgentLV.NameManager.Files.FileManager;
 
@@ -21,25 +19,27 @@ public class NameManager extends JavaPlugin {
 	public static Scoreboard board;
 	public static Team team;
 	public static Team rainbow;
-	static Objective objective;
+	private static Objective objective;
+	public static ConfigAccessor cConfig;
+	public static ConfigAccessor cGroups;
 	
 	@Override
 	public void onEnable() {
-
+		
 		board = Bukkit.getScoreboardManager().getMainScoreboard();
 		team = null;
 		rainbow = null;
+		
+		initConfigs();
 		
 		new EventListener(this);
 		new NameManagerAPI(this);
 		new NameManagerGroupAPI(this);
 		new Rainbow(this);
 		new FileManager(this);
-		new FileHandler(this);
+		new FileHandler(cGroups);
 		
-		FileManager.getFileConfiguration("config");
 		FileManager.loadFromFile();
-		FileManager.initGroupsFile();
 		initTeams();
 		
 		getCommand("namemanager").setExecutor(new Commands(this));
@@ -52,6 +52,17 @@ public class NameManager extends JavaPlugin {
 		
 	}
 	
+	private void initConfigs() {
+		cConfig = new ConfigAccessor(this, "config.yml");
+		cConfig.saveDefaultConfig();
+		cConfig.reloadConfig();
+		cConfig.saveConfig();
+		
+		cGroups = new ConfigAccessor(this, "Groups.yml");
+		cGroups.reloadConfig();
+		cGroups.saveConfig();
+	}
+	
 	@Override
 	public void onDisable() {
 		unregisterTeams();
@@ -62,12 +73,7 @@ public class NameManager extends JavaPlugin {
 			objective.unregister();
 		}
 		
-		File file = new File(getDataFolder(), "Groups.yml");
-		try {
-			FileManager.getFileConfiguration("Groups").save(file);
-		} catch (IOException e) {
-			getLogger().warning("§cGroups.yml could not be saved!");
-		}
+		cGroups.saveConfig();
 	}
 
 	private void initTeams() {

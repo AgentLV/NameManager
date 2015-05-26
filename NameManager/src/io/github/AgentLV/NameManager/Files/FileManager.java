@@ -1,190 +1,109 @@
 package io.github.AgentLV.NameManager.Files;
 
 import io.github.AgentLV.NameManager.NameManager;
+import io.github.AgentLV.NameManager.API.NameManagerGroupAPI;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 public class FileManager {
 	
 	static NameManager plugin;
-	private static String configVersion = "1.1";
+	static ConfigAccessor cGroups;
 	
 	public FileManager(NameManager plugin) {
 		FileManager.plugin = plugin;
+		cGroups = NameManager.cGroups;
 	}
-
-	//config.yml
-	
-	public static FileConfiguration getFileConfiguration(String fileName) {
-		
-		File file = new File("plugins/NameManager/" + fileName + ".yml");
-        FileConfiguration fileConfiguration = new YamlConfiguration();
-    	
-        try {
-            fileConfiguration.load(file);
-            
-            if (fileName == "config") {
-	            String version = fileConfiguration.getString("version");
-	
-	            if (version != null && version.equals(configVersion)) {
-	                return fileConfiguration;
-	            }
-	
-	            if (version == null) {
-	                version = "backup";
-	            }
-	
-	            if (file.renameTo(new File(plugin.getDataFolder(), "old-" + fileName + "-" + version + ".yml"))) {
-	            	plugin.getLogger().info("Found outdated config, creating backup...");
-	                plugin.getLogger().info("Created a backup for: " + fileName + ".yml");
-	            }
-            } else {
-            	return fileConfiguration;
-            }
-        } catch (IOException|InvalidConfigurationException e) {
-            plugin.getLogger().info("Generating fresh configuration file: " + fileName + ".yml");
-        }
-
-        try {
-            if (!file.exists()) {
-                file.getParentFile().mkdirs();
-                InputStream in = plugin.getResource(fileName + ".yml");
-                OutputStream out = new FileOutputStream(file);
-                byte[] buf = new byte[1024];
-                int len;
-                while ((len = in.read(buf)) > 0) out.write(buf, 0, len);
-                out.close();
-                in.close();
-            }
-            fileConfiguration.load(file);
-        } catch(IOException|InvalidConfigurationException ex) {
-            plugin.getLogger().severe("Plugin unable to write configuration file " + fileName + ".yml!");
-            plugin.getLogger().severe("Disabling...");
-            plugin.getServer().getPluginManager().disablePlugin(plugin);
-            ex.printStackTrace();
-        }
-        
-        return fileConfiguration;
-    }
 	
 	//Groups.yml
 	
     public static List<String> allGroups = new ArrayList<>();
-    public static File groupFile = new File("plugins/NameManager/Groups.yml");
-    public static FileConfiguration groups;
+    public static FileConfiguration configGroups;
     
     public static void loadFromFile() {
     	
-    	groups = getFileConfiguration("Groups");
+    	configGroups = cGroups.getConfig();
         allGroups.clear();
-        allGroups = groups.getStringList("GroupList");
-        int i = 0;
+        allGroups = cGroups.getConfig().getStringList("GroupList");
         
         if ( allGroups.isEmpty() )
         	return;
         
         for (String s : allGroups) {
         	
-        	if (NameManager.board.getTeam(s) == null) {
+        	if (NameManager.board.getTeam(s) != null) {
         		
-	        	NameManager.team = NameManager.board.registerNewTeam(i + s);
-	        	++i;
-	        	
-	        	try {
-		        	NameManager.team.setPrefix(ChatColor.translateAlternateColorCodes('&', groups.getString("Groups." + s + ".Prefix")));
-		            NameManager.team.setSuffix(ChatColor.translateAlternateColorCodes('&', groups.getString("Groups." + s + ".Suffix")));
-		            
-	        	} catch(NullPointerException e) {
-	        		plugin.getLogger().warning("Could not load group '" + s + "', did you set a prefix and a suffix?");
-	        	}
-	        	
-        	} else {
-        		plugin.getLogger().warning("§cCould not initalize group " + s);
+        		plugin.getLogger().info("§cCould not initalize group " + s);
+        		plugin.getLogger().info("§cTrying to unregister group " + s + "...");
+        		NameManager.board.getTeam(s).unregister();
+        		
         	}
-        }
-        
+        	
+    		NameManagerGroupAPI.groups.put(s, NameManagerGroupAPI.groups.size());
+        	NameManager.team = NameManager.board.registerNewTeam(NameManagerGroupAPI.groups.get( s ) + s);
+        	
+        	try {
+	        	NameManager.team.setPrefix(ChatColor.translateAlternateColorCodes('&', configGroups.getString("Groups." + s + ".Prefix")));
+	            NameManager.team.setSuffix(ChatColor.translateAlternateColorCodes('&', configGroups.getString("Groups." + s + ".Suffix")));
+	            
+        	} catch(NullPointerException e) {
+        		plugin.getLogger().warning("Could not load group '" + s + "', did you set a prefix and a suffix?");
+        	}
+    	}
     }
     
     public static void loadFromFile(CommandSender sender) {
     	
-    	groups = getFileConfiguration("Groups");
+    	configGroups = cGroups.getConfig();
         allGroups.clear();
-        allGroups = groups.getStringList("GroupList");
-        int i = 0;
-
+        allGroups = cGroups.getConfig().getStringList("GroupList");
+        
         if ( allGroups.isEmpty() )
         	return;
         
         for (String s : allGroups) {
         	
-        	if (NameManager.board.getTeam(s) == null) {
+        	if (NameManager.board.getTeam(s) != null) {
         		
-	        	NameManager.team = NameManager.board.registerNewTeam(i + s);
-	        	++i;
-	        	
-	        	try {
-		        	NameManager.team.setPrefix(ChatColor.translateAlternateColorCodes('&', groups.getString("Groups." + s + ".Prefix")));
-		            NameManager.team.setSuffix(ChatColor.translateAlternateColorCodes('&', groups.getString("Groups." + s + ".Suffix")));
-		            
-	        	} catch(NullPointerException e) {
-        			sender.sendMessage("§cCould not load group '§3" + s + "§4', did you set a prefix and a suffix?");
-	        	}
-	        	
-        	} else {
-        		plugin.getLogger().warning("§cCould not initalize group " + s);
+        		plugin.getLogger().info("§cCould not initalize group " + s);
+        		plugin.getLogger().info("§cTrying to unregister group " + s + "...");
+        		NameManager.board.getTeam(s).unregister();
+        		
         	}
-        }
+        	
+    		NameManagerGroupAPI.groups.put(s, NameManagerGroupAPI.groups.size());
+        	NameManager.team = NameManager.board.registerNewTeam(NameManagerGroupAPI.groups.get( s ) + s);
+        	
+        	try {
+	        	NameManager.team.setPrefix(ChatColor.translateAlternateColorCodes('&', configGroups.getString("Groups." + s + ".Prefix")));
+	            NameManager.team.setSuffix(ChatColor.translateAlternateColorCodes('&', configGroups.getString("Groups." + s + ".Suffix")));
+	            
+        	} catch(NullPointerException e) {
+        		sender.sendMessage("§cCould not load group '" + s + "', did you set a prefix and a suffix?");
+        	}
+    	}
     }
     
     public static void unloadFromFile() {
         
-    	int i = 0;
+    	allGroups.clear();
+        allGroups = configGroups.getStringList("GroupList");
     	
     	if ( allGroups.isEmpty() )
         	return;
     	
          for (String s : allGroups) {
-        	 NameManager.team = NameManager.board.getTeam(i + s);
-             NameManager.team.unregister();
-             ++i;
+        	 try {
+        		 NameManager.board.getTeam(NameManagerGroupAPI.groups.get( s ) + s).unregister();
+        	 } catch(NullPointerException e) {
+        		 plugin.getLogger().warning("§cCould not unregister group '" + s + "', if you are not using this group, you can ignore this. ");
+        	 }
          }
+         NameManagerGroupAPI.groups.clear();
     }
-    
-    public static void initGroupsFile() {
-    	try {
-            if (!FileManager.groupFile.exists()) {
-            	FileManager.groupFile.getParentFile().mkdirs();
-                InputStream in = plugin.getResource("Groups.yml");
-                OutputStream out = new FileOutputStream(FileManager.groupFile);
-                byte[] buf = new byte[1024];
-                int len;
-                while ((len = in.read(buf)) > 0) out.write(buf, 0, len);
-                out.close();
-                in.close();
-            }
-            FileManager.groups.load(FileManager.groupFile);
-        } catch(IOException|InvalidConfigurationException ex) {
-            plugin.getLogger().warning("§cUnable to load Groups.yml");
-        }
-   	
-	   	try {
-	   		FileManager.groups.save(FileManager.groupFile);
-	   	} catch (IOException e) {
-	   		plugin.getLogger().warning("§cUnable to load Groups.yml");
-	   	}
-    }
-	
-	
 }

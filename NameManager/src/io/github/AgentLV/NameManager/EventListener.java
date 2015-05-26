@@ -1,6 +1,7 @@
 package io.github.AgentLV.NameManager;
 
 import io.github.AgentLV.NameManager.API.NameManagerAPI;
+import io.github.AgentLV.NameManager.Files.ConfigAccessor;
 import io.github.AgentLV.NameManager.Files.FileManager;
 
 import org.bukkit.ChatColor;
@@ -8,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scoreboard.Team;
 
@@ -15,16 +17,18 @@ public class EventListener implements Listener {
 	
 	NameManager plugin;
 	int i;
+	ConfigAccessor cConfig;
 	
 	public EventListener(NameManager plugin) {
 		this.plugin = plugin;
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
+		cConfig = NameManager.cConfig;
 	}
 	
 	private String playerGroupChecker(Player p) {
 		i = 0;
 		for(String s : FileManager.allGroups) {
-			if(p.hasPermission("NameManager." + s)) {
+			if(p.hasPermission("NameManager.group." + s)) {
 				return s;
 			}
 			++i;
@@ -37,14 +41,17 @@ public class EventListener implements Listener {
 		
 		Player p = e.getPlayer();
 		
-		if (plugin.getConfig().getBoolean("HealthBelowName")) 
+		if ( cConfig.getConfig().getBoolean( "HealthBelowName" ) ) 
 			p.setScoreboard(NameManager.board);
 			
-	
-		if( NameManager.board.getTeam(p.getName()) != null ) {
+		if( NameManager.board.getTeam( p.getName() ) != null ) {
+			
 			NameManager.board.getTeam(p.getName()).addPlayer(p);
-		} else if (playerGroupChecker(p) != null) {
+			
+		} else if ( playerGroupChecker(p) != null ) {
+			
 			NameManager.board.getTeam(i + playerGroupChecker(p)).addPlayer(p);
+			
 		} else if( p.hasPermission("NameManager.black") ) {
 			
 		    NameManager.board.getTeam("NM_black").addPlayer(p);
@@ -115,31 +122,60 @@ public class EventListener implements Listener {
         	
         }
 			
-		if(plugin.getConfig().getBoolean("Messages")) {
-			if(plugin.getConfig().getBoolean("CustomNameForMessages")) {
-				e.setJoinMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Join").replaceAll("%player%", NameManagerAPI.getNametag(p))));
+		if( cConfig.getConfig().getBoolean( "Messages" ) ) {
+			if( cConfig.getConfig().getBoolean( "CustomNameForMessages" ) ) {
+				e.setJoinMessage(ChatColor.translateAlternateColorCodes('&', cConfig.getConfig().getString("Join").replaceAll("%player%", NameManagerAPI.getNametag(p))));
 			} else {
-				e.setJoinMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Join").replaceAll("%player%", p.getDisplayName())));
+				e.setJoinMessage(ChatColor.translateAlternateColorCodes('&', cConfig.getConfig().getString("Join").replaceAll("%player%", p.getName())));
 			}
 			
 		}
 		
 	}
 	
-	
 	@EventHandler
 	public void leave(PlayerQuitEvent e) {
 		
 		Player p = e.getPlayer();
 		
-		if(plugin.getConfig().getBoolean("Messages")) {
+		if(cConfig.getConfig().getBoolean("Messages")) {
 			
-			if(plugin.getConfig().getBoolean("CustomNameForMessages")) {
-				e.setQuitMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Leave").replaceAll("%player%", NameManagerAPI.getNametag(p))));
+			if(cConfig.getConfig().getBoolean("CustomNameForMessages")) {
+				e.setQuitMessage(ChatColor.translateAlternateColorCodes('&', cConfig.getConfig().getString("Leave").replaceAll("%player%", NameManagerAPI.getNametag(p))));
 			} else {
-				e.setQuitMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Leave").replaceAll("%player%", p.getDisplayName())));
+				e.setQuitMessage(ChatColor.translateAlternateColorCodes('&', cConfig.getConfig().getString("Leave").replaceAll("%player%", p.getName())));
+			}
+		}
+		
+		if (Commands.map.containsKey(p) || Commands.teams.contains(NameManager.board.getPlayerTeam(p))) {
+			
+			Rainbow.disableRainbow(p);
+			Team team = Commands.map.get(p);
+			
+			if (team != null) {
+				team.addPlayer(p);
+			} else {
+				NameManager.rainbow.removePlayer(p);
 			}
 			
+			Commands.map.remove(p);
+		}
+		
+		if (NameManager.board.getPlayerTeam(p) != null)
+			NameManager.board.getPlayerTeam(p).removePlayer(p);
+	}
+	
+	@EventHandler
+	public void onPlayerKick(PlayerKickEvent e) {
+		Player p = e.getPlayer();
+		
+		if(cConfig.getConfig().getBoolean("Messages")) {
+			
+			if(cConfig.getConfig().getBoolean("CustomNameForMessages")) {
+				e.setLeaveMessage(ChatColor.translateAlternateColorCodes('&', cConfig.getConfig().getString("Leave").replaceAll("%player%", NameManagerAPI.getNametag(p))));
+			} else {
+				e.setLeaveMessage(ChatColor.translateAlternateColorCodes('&', cConfig.getConfig().getString("Leave").replaceAll("%player%", p.getName())));
+			}
 			
 		}
 		
