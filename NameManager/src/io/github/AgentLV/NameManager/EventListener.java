@@ -13,6 +13,9 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scoreboard.Team;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
+
 public class EventListener implements Listener {
 	
 	NameManager plugin;
@@ -39,7 +42,7 @@ public class EventListener implements Listener {
 	@EventHandler
 	public void join(PlayerJoinEvent e) {
 		
-		Player p = e.getPlayer();
+		final Player p = e.getPlayer();
 		
 		if ( cConfig.getConfig().getBoolean( "HealthBelowName" ) ) 
 			p.setScoreboard(NameManager.board);
@@ -131,7 +134,25 @@ public class EventListener implements Listener {
 			
 		}
 		
+		if ( cConfig.getConfig().getBoolean( "Bungee" ) ) {
+			
+			plugin.getServer().getScheduler().runTaskLaterAsynchronously(plugin, new Runnable() {
+				
+				@Override
+				public void run() {
+					
+					ByteArrayDataOutput out = ByteStreams.newDataOutput();
+					out.writeUTF( p.getName() );
+					out.writeUTF( "TablistName" );
+					out.writeUTF( NameManagerAPI.getNametag( p ) );
+
+					p.sendPluginMessage(plugin, "NameManager", out.toByteArray());
+				}
+			}, 60L);
+			
+		}
 	}
+	
 	
 	@EventHandler
 	public void leave(PlayerQuitEvent e) {
