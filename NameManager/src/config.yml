@@ -6,3 +6,4 @@ Join: '&a[+] %player%'
 Leave: '&c[-] %player%'
 HealthBelowName: false
 HealthFormat: '&c❤'
+Bungee: false

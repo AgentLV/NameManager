@@ -50,6 +50,16 @@ public class NameManager extends JavaPlugin {
 				objective.setDisplayName(ChatColor.translateAlternateColorCodes('&', getConfig().getString("HealthFormat")));
 		}
 		
+		registerOutgoingPluginChannel();
+	}
+	
+	private void registerOutgoingPluginChannel() {
+		
+		if ( cConfig.getConfig().getBoolean( "Bungee" ) ) {
+			getServer().getMessenger().registerOutgoingPluginChannel(this, "NameManager");
+			getLogger().info( "Bungeecord mode activated!" );
+		}
+	
 	}
 	
 	private void initConfigs() {
