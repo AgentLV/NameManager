@@ -2,6 +2,7 @@ name: NameManager
 main: io.github.AgentLV.NameManager.NameManager
 version: 1.8.6.1
 author: AgentLV
+
 commands:
   namemanager:
     aliases: nm

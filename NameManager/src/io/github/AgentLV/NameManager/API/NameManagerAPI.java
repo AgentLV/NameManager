@@ -64,25 +64,43 @@ public class NameManagerAPI {
 		String suffix = "";
 		team = NameManager.board.getPlayerTeam(p);
 		
-		if (team.getPrefix() != null) {
-			prefix = team.getPrefix();
-		}
-		if (team.getSuffix() != null) {
-			suffix = team.getSuffix();
+		if ( team != null ) {
+			if (team.getPrefix() != null) {
+				prefix = team.getPrefix();
+			}
+			if (team.getSuffix() != null) {
+				suffix = team.getSuffix();
+			}
 		}
 		return prefix + p.getName() + suffix;
 	}
 	
 	public static String getNametagPrefix(OfflinePlayer p) {
-			team = NameManager.board.getPlayerTeam(p);
-			return team.getPrefix();
-
+		String prefix = "";
+		team = NameManager.board.getPlayerTeam(p);
+		
+		if ( NameManager.board.getPlayerTeam(p) != null ) {
+			
+			if ( team.getPrefix() != null ) {
+				prefix = team.getPrefix();
+			}
+		}
+		
+		return prefix;
 	}
 	
 	public static String getNametagSuffix(OfflinePlayer p) {
-			team = NameManager.board.getPlayerTeam(p);
-			return team.getSuffix();
-
+		String suffix = "";
+		team = NameManager.board.getPlayerTeam(p);
+		
+		if ( NameManager.board.getPlayerTeam(p) != null ) {
+			
+			if ( team.getSuffix() != null ) {
+				suffix = team.getSuffix();
+			}
+		}
+		
+		return suffix;
 	}
 	
 	//Only works for custom prefixes and suffixes

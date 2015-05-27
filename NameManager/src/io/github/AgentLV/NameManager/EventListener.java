@@ -148,7 +148,7 @@ public class EventListener implements Listener {
 
 					p.sendPluginMessage(plugin, "NameManager", out.toByteArray());
 				}
-			}, 60L);
+			}, 1L);
 			
 		}
 	}
