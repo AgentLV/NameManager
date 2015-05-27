@@ -359,10 +359,12 @@ public class Commands implements CommandExecutor {
 			} else if (args[1].equalsIgnoreCase("reload")) {
 				
 				if (sender.hasPermission("namemanager.group.reload")) {
+					
 					Map<Player, Team> reloadMap = new HashMap<Player, Team>();
 					for (Player reloadPlayer : Bukkit.getOnlinePlayers()) {
 						reloadMap.put(reloadPlayer, NameManager.board.getPlayerTeam(reloadPlayer));
 					}
+					
 					FileManager.unloadFromFile();
 					FileManager.loadFromFile(sender);
 					
