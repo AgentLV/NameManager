@@ -40,7 +40,7 @@ public class EventListener implements Listener {
 	public void join(PlayerJoinEvent e) {
 		
 		Player p = e.getPlayer();
-		cd
+
 		if ( cConfig.getConfig().getBoolean( "HealthBelowName" ) ) 
 			p.setScoreboard(NameManager.board);
 			
