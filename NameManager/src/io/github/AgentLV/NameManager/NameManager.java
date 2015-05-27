@@ -44,13 +44,31 @@ public class NameManager extends JavaPlugin {
 		
 		getCommand("namemanager").setExecutor(new Commands(this));
 		
-		if (getConfig().getBoolean("HealthBelowName") && board.getObjective("showhealth") == null) {
-				objective = board.registerNewObjective("showhealth", "health");
-				objective.setDisplaySlot(DisplaySlot.BELOW_NAME);
-				objective.setDisplayName(ChatColor.translateAlternateColorCodes('&', getConfig().getString("HealthFormat")));
-		}
+		activateHealth();
 		
 		registerOutgoingPluginChannel();
+	}
+	
+	@Override
+	public void onDisable() {
+		unregisterTeams();
+		FileManager.unloadFromFile();
+		
+		if (board.getObjective("showhealth") != null) {
+			objective = board.getObjective("showhealth");
+			objective.unregister();
+		}
+		
+		cGroups.saveConfig();
+	}
+	
+	private void activateHealth() {
+		
+		if (getConfig().getBoolean("HealthBelowName") && board.getObjective("showhealth") == null) {
+			objective = board.registerNewObjective("showhealth", "health");
+			objective.setDisplaySlot(DisplaySlot.BELOW_NAME);
+			objective.setDisplayName(ChatColor.translateAlternateColorCodes('&', getConfig().getString("HealthFormat")));
+		}
 	}
 	
 	private void registerOutgoingPluginChannel() {
@@ -70,19 +88,6 @@ public class NameManager extends JavaPlugin {
 		
 		cGroups = new ConfigAccessor(this, "Groups.yml");
 		cGroups.reloadConfig();
-		cGroups.saveConfig();
-	}
-	
-	@Override
-	public void onDisable() {
-		unregisterTeams();
-		FileManager.unloadFromFile();
-		
-		if (board.getObjective("showhealth") != null) {
-			objective = board.getObjective("showhealth");
-			objective.unregister();
-		}
-		
 		cGroups.saveConfig();
 	}
 

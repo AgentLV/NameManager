@@ -37,23 +37,34 @@ public class FileManager {
         
         for (String s : allGroups) {
         	
-        	if (NameManager.board.getTeam(s) != null) {
+        	NameManagerGroupAPI.groups.put(s, NameManagerGroupAPI.groups.size());
+        	
+        	if (NameManager.board.getTeam( NameManagerGroupAPI.groups.get( s ) + s ) != null) {
         		
         		plugin.getLogger().info("§cCould not initalize group " + s);
         		plugin.getLogger().info("§cTrying to unregister group " + s + "...");
-        		NameManager.board.getTeam(s).unregister();
+        		NameManager.board.getTeam( NameManagerGroupAPI.groups.get( s ) + s ).unregister();
+        		plugin.getLogger().info("§cSuccesfully unregistered group " + s + "...");
         		
         	}
         	
-    		NameManagerGroupAPI.groups.put(s, NameManagerGroupAPI.groups.size());
         	NameManager.team = NameManager.board.registerNewTeam(NameManagerGroupAPI.groups.get( s ) + s);
         	
         	try {
-	        	NameManager.team.setPrefix(ChatColor.translateAlternateColorCodes('&', configGroups.getString("Groups." + s + ".Prefix")));
-	            NameManager.team.setSuffix(ChatColor.translateAlternateColorCodes('&', configGroups.getString("Groups." + s + ".Suffix")));
+        		String prefix = ChatColor.translateAlternateColorCodes('&', configGroups.getString("Groups." + s + ".Prefix"));
+        		String suffix = ChatColor.translateAlternateColorCodes('&', configGroups.getString("Groups." + s + ".Suffix"));
+        		
+        		if ( prefix.length() > 16 )
+        			prefix = prefix.substring(0, 16);
+        		
+        		if ( suffix.length() > 16 )
+        			suffix = suffix.substring(0, 16);
+        		
+	        	NameManager.team.setPrefix( prefix );
+	            NameManager.team.setSuffix( suffix );
 	            
         	} catch(NullPointerException e) {
-        		plugin.getLogger().warning("Could not load group '" + s + "', did you set a prefix and a suffix?");
+        		plugin.getLogger().warning("§cCould not load group '" + s + "', did you set a prefix and a suffix?");
         	}
     	}
     }
@@ -70,20 +81,30 @@ public class FileManager {
         
         for (String s : allGroups) {
         	
-        	if (NameManager.board.getTeam(s) != null) {
+        	NameManagerGroupAPI.groups.put(s, NameManagerGroupAPI.groups.size());
+        	
+        	if (NameManager.board.getTeam( NameManagerGroupAPI.groups.get( s ) + s ) != null) {
         		
         		plugin.getLogger().info("§cCould not initalize group " + s);
         		plugin.getLogger().info("§cTrying to unregister group " + s + "...");
-        		NameManager.board.getTeam(s).unregister();
-        		
+        		NameManager.board.getTeam( NameManagerGroupAPI.groups.get( s ) + s ).unregister();
+        		plugin.getLogger().info("§cSuccesfully unregistered group " + s + "...");
         	}
         	
-    		NameManagerGroupAPI.groups.put(s, NameManagerGroupAPI.groups.size());
         	NameManager.team = NameManager.board.registerNewTeam(NameManagerGroupAPI.groups.get( s ) + s);
         	
         	try {
-	        	NameManager.team.setPrefix(ChatColor.translateAlternateColorCodes('&', configGroups.getString("Groups." + s + ".Prefix")));
-	            NameManager.team.setSuffix(ChatColor.translateAlternateColorCodes('&', configGroups.getString("Groups." + s + ".Suffix")));
+        		String prefix = ChatColor.translateAlternateColorCodes('&', configGroups.getString("Groups." + s + ".Prefix"));
+        		String suffix = ChatColor.translateAlternateColorCodes('&', configGroups.getString("Groups." + s + ".Suffix"));
+        		
+        		if ( prefix.length() > 16 )
+        			prefix.substring(0, 16);
+        		
+        		if ( suffix.length() > 16 )
+        			suffix.substring(0, 16);
+        		
+	        	NameManager.team.setPrefix( prefix );
+	            NameManager.team.setSuffix( suffix );
 	            
         	} catch(NullPointerException e) {
         		sender.sendMessage("§cCould not load group '" + s + "', did you set a prefix and a suffix?");
@@ -93,7 +114,6 @@ public class FileManager {
     
     public static void unloadFromFile() {
         
-    	cGroups.reloadConfig();
     	allGroups.clear();
         allGroups = configGroups.getStringList("GroupList");
     	
