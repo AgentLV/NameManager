@@ -27,6 +27,7 @@ public class FileManager {
     
     public static void loadFromFile() {
     	
+    	cGroups.reloadConfig();
     	configGroups = cGroups.getConfig();
         allGroups.clear();
         allGroups = cGroups.getConfig().getStringList("GroupList");
@@ -59,6 +60,7 @@ public class FileManager {
     
     public static void loadFromFile(CommandSender sender) {
     	
+    	cGroups.reloadConfig();
     	configGroups = cGroups.getConfig();
         allGroups.clear();
         allGroups = cGroups.getConfig().getStringList("GroupList");
@@ -91,6 +93,7 @@ public class FileManager {
     
     public static void unloadFromFile() {
         
+    	cGroups.reloadConfig();
     	allGroups.clear();
         allGroups = configGroups.getStringList("GroupList");
     	
