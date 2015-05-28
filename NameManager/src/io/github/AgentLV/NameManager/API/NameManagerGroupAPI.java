@@ -3,7 +3,6 @@ package io.github.AgentLV.NameManager.API;
 import java.util.HashMap;
 
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.scoreboard.Team;
 
 import io.github.AgentLV.NameManager.NameManager;
@@ -62,14 +61,6 @@ public class NameManagerGroupAPI {
 		if ( !groups.containsKey(group) && NameManager.board.getTeam( groups.get( ( group ) ) + group) == null ) {
 			team = NameManager.board.getTeam(groups.get( group ) + group);
 			return team.getPrefix() + group + team.getSuffix();
-		}
-		return null;
-	}
-	
-	public static String getGroupNametagWithPlayer(String group, OfflinePlayer p) {
-		if ( !groups.containsKey(group) && NameManager.board.getTeam( groups.get( ( group ) ) + group) == null && p != null ) {
-			team = NameManager.board.getTeam(groups.get( group ) + group);
-			return team.getPrefix() + p.getName() + team.getSuffix();
 		}
 		return null;
 	}
