@@ -1,6 +1,7 @@
 package io.github.AgentLV.NameManager;
 
 import io.github.AgentLV.NameManager.API.NameManagerAPI;
+import io.github.AgentLV.NameManager.API.NameManagerGroupAPI;
 import io.github.AgentLV.NameManager.Files.ConfigAccessor;
 import io.github.AgentLV.NameManager.Files.FileManager;
 
@@ -144,7 +145,7 @@ public class EventListener implements Listener {
 					ByteArrayDataOutput out = ByteStreams.newDataOutput();
 					out.writeUTF( p.getName() );
 					out.writeUTF( "TablistName" );
-					out.writeUTF( NameManagerAPI.getNametag( p ) );
+					out.writeUTF( NameManagerGroupAPI.getGroupNametagWithPlayer(NameManager.board.getPlayerTeam( p ).toString(), p) );
 
 					p.sendPluginMessage(plugin, "NameManager", out.toByteArray());
 				}
