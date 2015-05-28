@@ -41,9 +41,9 @@ public class EventListener implements Listener {
 	
 	@EventHandler
 	public void join(PlayerJoinEvent e) {
-
-		final Player p = e.getPlayer();
 		
+		final Player p = e.getPlayer();
+
 		if ( cConfig.getConfig().getBoolean( "HealthBelowName" ) ) 
 			p.setScoreboard(NameManager.board);
 			
