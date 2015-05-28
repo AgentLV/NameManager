@@ -41,10 +41,10 @@ public class FileManager {
         	
         	if (NameManager.board.getTeam( NameManagerGroupAPI.groups.get( s ) + s ) != null) {
         		
-        		plugin.getLogger().info("§cCould not initalize group " + s);
-        		plugin.getLogger().info("§cTrying to unregister group " + s + "...");
+        		plugin.getLogger().info("Could not initalize group " + s);
+        		plugin.getLogger().info("Trying to unregister group " + s + "...");
         		NameManager.board.getTeam( NameManagerGroupAPI.groups.get( s ) + s ).unregister();
-        		plugin.getLogger().info("§cSuccesfully unregistered group " + s + "...");
+        		plugin.getLogger().info("Succesfully unregistered group " + s + "...");
         		
         	}
         	
@@ -64,7 +64,7 @@ public class FileManager {
 	            NameManager.team.setSuffix( suffix );
 	            
         	} catch(NullPointerException e) {
-        		plugin.getLogger().warning("§cCould not load group '" + s + "', did you set a prefix and a suffix?");
+        		plugin.getLogger().warning("Could not load group '" + s + "', did you set a prefix and a suffix?");
         	}
     	}
     }
@@ -85,10 +85,10 @@ public class FileManager {
         	
         	if (NameManager.board.getTeam( NameManagerGroupAPI.groups.get( s ) + s ) != null) {
         		
-        		plugin.getLogger().info("§cCould not initalize group " + s);
-        		plugin.getLogger().info("§cTrying to unregister group " + s + "...");
+        		plugin.getLogger().info("Could not initalize group " + s);
+        		plugin.getLogger().info("Trying to unregister group " + s + "...");
         		NameManager.board.getTeam( NameManagerGroupAPI.groups.get( s ) + s ).unregister();
-        		plugin.getLogger().info("§cSuccesfully unregistered group " + s + "...");
+        		plugin.getLogger().info("Succesfully unregistered group " + s + "...");
         	}
         	
         	NameManager.team = NameManager.board.registerNewTeam(NameManagerGroupAPI.groups.get( s ) + s);
@@ -107,15 +107,12 @@ public class FileManager {
 	            NameManager.team.setSuffix( suffix );
 	            
         	} catch(NullPointerException e) {
-        		sender.sendMessage("§cCould not load group '" + s + "', did you set a prefix and a suffix?");
+        		sender.sendMessage("Could not load group '" + s + "', did you set a prefix and a suffix?");
         	}
     	}
     }
     
     public static void unloadFromFile() {
-        
-    	allGroups.clear();
-        allGroups = configGroups.getStringList("GroupList");
     	
     	if ( allGroups.isEmpty() )
         	return;
@@ -124,9 +121,10 @@ public class FileManager {
         	 try {
         		 NameManager.board.getTeam(NameManagerGroupAPI.groups.get( s ) + s).unregister();
         	 } catch(NullPointerException e) {
-        		 plugin.getLogger().warning("§cCould not unregister group '" + s + "', if you are not using this group, you can ignore this. ");
+        		 plugin.getLogger().warning("Could not unregister group '" + s + "', if you are not using this group, you can ignore this. ");
         	 }
          }
+         allGroups.clear();
          NameManagerGroupAPI.groups.clear();
     }
 }
