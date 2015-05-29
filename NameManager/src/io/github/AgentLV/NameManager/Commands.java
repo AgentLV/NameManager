@@ -452,6 +452,8 @@ public class Commands implements CommandExecutor {
 					sender.sendMessage(invalidPermission);
 				}
 				
+			} else {
+				pluginDescription(sender);
 			}
 
 		} else {
