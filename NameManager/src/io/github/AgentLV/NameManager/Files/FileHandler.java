@@ -25,17 +25,15 @@ public class FileHandler {
 	
 	private static void addToGroupList(String group) {
 
-		ex = cGroups.getConfig().getStringList( "GroupList" );
+		ex = cGroups.getConfig().getStringList("GroupList");
 		
-		if ( !ex.contains( group ) ) {
-			
-			ex.add( group );
+		if (!ex.contains(group)) {
+			ex.add(group);
 			cGroups.getConfig().set("GroupList", ex);
-			
 		}
 		
 		cGroups.saveConfig();
-		ex = cGroups.getConfig().getStringList( "GroupList" );
+		ex = cGroups.getConfig().getStringList("GroupList");
 	}
 	
 	public static void writeGroupPrefix(String group, String prefix) {
