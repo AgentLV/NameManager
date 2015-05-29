@@ -28,6 +28,7 @@ public class FileManager {
     public static void loadFromFile() {
     	
     	cGroups.reloadConfig();
+    	
     	configGroups = cGroups.getConfig();
         allGroups.clear();
         allGroups = cGroups.getConfig().getStringList("GroupList");
@@ -72,6 +73,7 @@ public class FileManager {
     public static void loadFromFile(CommandSender sender) {
     	
     	cGroups.reloadConfig();
+    	
     	configGroups = cGroups.getConfig();
         allGroups.clear();
         allGroups = cGroups.getConfig().getStringList("GroupList");
@@ -107,7 +109,7 @@ public class FileManager {
 	            NameManager.team.setSuffix( suffix );
 	            
         	} catch(NullPointerException e) {
-        		sender.sendMessage("Could not load group '" + s + "', did you set a prefix and a suffix?");
+        		sender.sendMessage("§cCould not load group '§b" + s + "§c', did you set a prefix and a suffix?");
         	}
     	}
     }

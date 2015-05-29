@@ -6,10 +6,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.logging.Level;
- 
-
-
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -33,21 +29,24 @@ public class ConfigAccessor {
         this.configFile = new File(plugin.getDataFolder(), fileName);
     }
  
-    public void reloadConfig() {        
-        fileConfiguration = YamlConfiguration.loadConfiguration(configFile);
- 
-        // Look for defaults in the jar
-        InputStream defConfigStream = plugin.getResource(fileName);
-        if (defConfigStream != null) {
-            YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defConfigStream));
-            fileConfiguration.setDefaults(defConfig);
-            fileConfiguration.options().copyDefaults(true);
-        }
+    public void reloadConfig() {
+    	
+		fileConfiguration = YamlConfiguration.loadConfiguration(configFile);
+
+    	
+    	// Look for defaults in the jar
+    	InputStream defConfigStream = plugin.getResource(fileName);
+    	
+    	if (defConfigStream != null) {
+			YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defConfigStream));
+			fileConfiguration.setDefaults(defConfig);
+			fileConfiguration.options().copyDefaults(true);
+      }
     }
  
     public FileConfiguration getConfig() {
         if (fileConfiguration == null) {
-            this.reloadConfig();
+        	this.reloadConfig();
         }
         return fileConfiguration;
     }
@@ -57,7 +56,7 @@ public class ConfigAccessor {
             try {
                 getConfig().save(configFile);
             } catch (IOException ex) {
-                plugin.getLogger().log(Level.SEVERE, "Could not save config to " + configFile, ex);
+                plugin.getLogger().severe("Could not save config to " + configFile + ex);
             }
         }
     }

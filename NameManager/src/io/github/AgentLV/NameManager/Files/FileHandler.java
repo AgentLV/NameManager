@@ -14,22 +14,28 @@ public class FileHandler {
 	
 	private static void createGroup(String group) {
 		
-		if (cGroups.getConfig().get("Groups." + group) == null) {
+		if ( cGroups.getConfig().get( "Groups." + group ) == null ) {
+			
 			cGroups.getConfig().set("Groups." + group + ".Prefix", "");
 			cGroups.getConfig().set("Groups." + group + ".Suffix", "");
+			
+			cGroups.saveConfig();
 		}
 	}
 	
 	private static void addToGroupList(String group) {
 
-		ex = cGroups.getConfig().getStringList("GroupList");
+		ex = cGroups.getConfig().getStringList( "GroupList" );
 		
-		if (!ex.contains(group)) {
-			ex.add(group);
+		if ( !ex.contains( group ) ) {
+			
+			ex.add( group );
 			cGroups.getConfig().set("GroupList", ex);
+			
 		}
 		
-		ex = cGroups.getConfig().getStringList("GroupList");
+		cGroups.saveConfig();
+		ex = cGroups.getConfig().getStringList( "GroupList" );
 	}
 	
 	public static void writeGroupPrefix(String group, String prefix) {

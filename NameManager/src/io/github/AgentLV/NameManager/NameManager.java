@@ -45,7 +45,6 @@ public class NameManager extends JavaPlugin {
 		getCommand("namemanager").setExecutor(new Commands(this));
 		
 		activateHealth();
-		
 		registerOutgoingPluginChannel();
 	}
 	
@@ -59,7 +58,6 @@ public class NameManager extends JavaPlugin {
 			objective.unregister();
 		}
 		
-		cGroups.saveConfig();
 	}
 	
 	private void activateHealth() {

@@ -1,5 +1,5 @@
-# Should NameManager handle join and leave messages?
-# For more information visit: http://www.spigotmc.org/resources/namemanager.5147/
+# For more information and details visit: http://www.spigotmc.org/resources/namemanager.5147/
+
 Messages: false
 CustomNameForMessages: false
 Join: '&a[+] %player%'

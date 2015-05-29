@@ -1,6 +1,6 @@
 name: NameManager
 main: io.github.AgentLV.NameManager.NameManager
-version: 1.8.7
+version: 1.8.7.3
 author: AgentLV
 
 commands:
