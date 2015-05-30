@@ -21,11 +21,13 @@ public class EventListener implements Listener {
 	NameManager plugin;
 	int i;
 	ConfigAccessor cConfig;
+	boolean useVault = false;
 	
 	public EventListener(NameManager plugin) {
 		this.plugin = plugin;
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 		cConfig = NameManager.cConfig;
+		useVault = NameManager.useVault;
 	}
 	
 	private String playerGroupChecker(Player p) {
@@ -125,8 +127,8 @@ public class EventListener implements Listener {
         	
         }
 			
-		if( cConfig.getConfig().getBoolean( "Messages" ) ) {
-			if( cConfig.getConfig().getBoolean( "CustomNameForMessages" ) ) {
+		if(cConfig.getConfig().getBoolean("Messages")) {
+			if(cConfig.getConfig().getBoolean("CustomNameForMessages")) {
 				e.setJoinMessage(ChatColor.translateAlternateColorCodes('&', cConfig.getConfig().getString("Join").replaceAll("%player%", NameManagerAPI.getNametag(p))));
 			} else {
 				e.setJoinMessage(ChatColor.translateAlternateColorCodes('&', cConfig.getConfig().getString("Join").replaceAll("%player%", p.getName())));
@@ -134,7 +136,7 @@ public class EventListener implements Listener {
 			
 		}
 		
-		if ( cConfig.getConfig().getBoolean( "Bungee" ) ) {
+		if (cConfig.getConfig().getBoolean("Bungee")) {
 			
 			plugin.getServer().getScheduler().runTaskLaterAsynchronously(plugin, new Runnable() {
 				
@@ -142,14 +144,20 @@ public class EventListener implements Listener {
 				public void run() {
 					
 					ByteArrayDataOutput out = ByteStreams.newDataOutput();
-					out.writeUTF( p.getName() );
-					out.writeUTF( "TablistName" );
-					out.writeUTF( NameManagerAPI.getNametag( p ) );
+					out.writeUTF(p.getName());
+					out.writeUTF("TablistName");
+					out.writeUTF(NameManagerAPI.getNametag(p));
 
 					p.sendPluginMessage(plugin, "NameManager", out.toByteArray());
 				}
 			}, 1L);
 			
+		}
+		
+		if (useVault) {
+			NameManager.chat.setPlayerPrefix(p, NameManagerAPI.getNametagPrefix(p) + p.getName());
+			NameManager.chat.setPlayerSuffix(p, NameManagerAPI.getNametagSuffix(p) + p.getName());
+			p.sendMessage(NameManager.chat.getPlayerPrefix(p));
 		}
 	}
 	

@@ -5,9 +5,11 @@ import io.github.AgentLV.NameManager.API.NameManagerGroupAPI;
 import io.github.AgentLV.NameManager.Files.ConfigAccessor;
 import io.github.AgentLV.NameManager.Files.FileHandler;
 import io.github.AgentLV.NameManager.Files.FileManager;
+import net.milkbowl.vault.chat.Chat;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -22,6 +24,8 @@ public class NameManager extends JavaPlugin {
 	private static Objective objective;
 	public static ConfigAccessor cConfig;
 	public static ConfigAccessor cGroups;
+	public static Chat chat = null;
+	public static boolean useVault = false;
 	
 	@Override
 	public void onEnable() {
@@ -31,6 +35,7 @@ public class NameManager extends JavaPlugin {
 		rainbow = null;
 		
 		initConfigs();
+		setupChat();
 		
 		new EventListener(this);
 		new NameManagerAPI(this);
@@ -46,6 +51,8 @@ public class NameManager extends JavaPlugin {
 		
 		activateHealth();
 		registerOutgoingPluginChannel();
+		
+		
 	}
 	
 	@Override
@@ -59,6 +66,25 @@ public class NameManager extends JavaPlugin {
 		}
 		
 	}
+	
+	private void setupChat() {
+		
+		if (cConfig.getConfig().getBoolean("Vault")) {
+		
+			if (getServer().getPluginManager().getPlugin("Vault") != null) {
+				
+				RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
+		        if (chatProvider != null) {
+		            chat = chatProvider.getProvider();
+		            getLogger().info("Hooked into Vault");
+		            useVault = true;
+		            return;
+		        }
+
+			}
+	        getLogger().warning("Could not hook into Vault, are you sure Vault is installed?");
+		}
+    }
 	
 	private void activateHealth() {
 		

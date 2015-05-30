@@ -7,3 +7,4 @@ Leave: '&c[-] %player%'
 HealthBelowName: false
 HealthFormat: '&c❤'
 Bungee: false
+Vault: false
