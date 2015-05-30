@@ -40,7 +40,10 @@ public class ConfigAccessor {
     	if (defConfigStream != null) {
 			YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defConfigStream));
 			fileConfiguration.setDefaults(defConfig);
-			fileConfiguration.options().copyDefaults(true);
+			
+			if (fileName == "config.yml")
+				fileConfiguration.options().copyDefaults(true);
+			
       }
     }
  
