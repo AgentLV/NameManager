@@ -45,7 +45,7 @@ public class Rainbow {
 					
 					for(OfflinePlayer rainbowPlayer : rainbowPlayers) {
 						NameManager.rainbow = NameManager.board.getTeam("NM_" + colors[random.nextInt(15)]);
-						NameManager.rainbow.addPlayer(rainbowPlayer);
+						NameManager.rainbow.addEntry(rainbowPlayer.getName());
 					}
 				}
 			//Convert to ticks

@@ -67,6 +67,7 @@ public class NameManager extends JavaPlugin {
 			objective.setDisplaySlot(DisplaySlot.BELOW_NAME);
 			objective.setDisplayName(ChatColor.translateAlternateColorCodes('&', getConfig().getString("HealthFormat")));
 		}
+	
 	}
 	
 	private void registerOutgoingPluginChannel() {

@@ -218,9 +218,8 @@ public class Commands implements CommandExecutor {
 						
 						if (sender instanceof Player) {
 							
-							if (!map.containsKey(p) && !teams.contains(NameManager.board.getPlayerTeam(p))) {
-								
-								map.put(p, NameManager.board.getPlayerTeam(p));
+							if (!map.containsKey(p) && !teams.contains(NameManager.board.getEntryTeam(p.getName()))) {
+								map.put(p, NameManager.board.getEntryTeam(p.getName()));
 								Rainbow.enableRainbow(p);
 								sender.sendMessage("§3Rainbow activated");
 								
@@ -230,9 +229,9 @@ public class Commands implements CommandExecutor {
 								Team team = map.get(p);
 								
 								if (team != null) {
-									team.addPlayer(p);
+									team.addEntry(p.getName());
 								} else {
-									NameManager.rainbow.removePlayer(p);
+									NameManager.rainbow.removeEntry(p.getName());
 								}
 								
 								map.remove(p);
@@ -249,9 +248,9 @@ public class Commands implements CommandExecutor {
 							
 							if (targetPlayer != null && targetPlayer.isOnline()) {
 								
-								if (!map.containsKey(targetPlayer) && !teams.contains(NameManager.board.getPlayerTeam(targetPlayer))) {
+								if (!map.containsKey(targetPlayer) && !teams.contains(NameManager.board.getEntryTeam(targetPlayer.getName()))) {
 									
-									map.put(targetPlayer, NameManager.board.getPlayerTeam(targetPlayer));
+									map.put(targetPlayer, NameManager.board.getEntryTeam(targetPlayer.getName()));
 									Rainbow.enableRainbow(targetPlayer);
 									sender.sendMessage("§3Rainbow activated for §c" + targetPlayer.getName());
 								
@@ -259,9 +258,9 @@ public class Commands implements CommandExecutor {
 									
 									Team team = map.get(targetPlayer);
 									if (team != null) {
-										team.addPlayer(targetPlayer);
+										team.addEntry(targetPlayer.getName());
 									} else {
-										NameManager.rainbow.removePlayer(targetPlayer);
+										NameManager.rainbow.removeEntry(targetPlayer.getName());
 									}
 									
 									Rainbow.disableRainbow(targetPlayer);
@@ -362,7 +361,7 @@ public class Commands implements CommandExecutor {
 					
 					Map<Player, Team> reloadMap = new HashMap<Player, Team>();
 					for (Player reloadPlayer : Bukkit.getOnlinePlayers()) {
-						reloadMap.put(reloadPlayer, NameManager.board.getPlayerTeam(reloadPlayer));
+						reloadMap.put(reloadPlayer, NameManager.board.getEntryTeam(reloadPlayer.getName()));
 					}
 					
 					FileManager.unloadFromFile();
@@ -373,7 +372,7 @@ public class Commands implements CommandExecutor {
 					    Team value = entry.getValue();
 					    
 					    if (key != null && key.isOnline() && value != null) {
-					    	value.addPlayer(key);
+					    	value.addEntry(key.getName());
 					    }
 					}
 					
@@ -414,7 +413,8 @@ public class Commands implements CommandExecutor {
 							
 							if ( !teams.contains(NameManager.board.getTeam(args[2])) ) {
 								
-								for (OfflinePlayer of : NameManager.board.getTeam(args[2]).getPlayers()) {
+								for (String sOf : NameManager.board.getTeam(args[2]).getEntries()) {
+									OfflinePlayer of = Bukkit.getOfflinePlayer(NameManagerAPI.playerToOfflinePlayer(sOf).getUniqueId());
 									Rainbow.enableRainbow(of);
 									map.put(of, NameManager.board.getTeam(args[2]));
 								}
@@ -430,7 +430,7 @@ public class Commands implements CommandExecutor {
 									    
 									    if ( value.equals(NameManager.board.getTeam(args[2])) ) {
 									    	Rainbow.disableRainbow(key);
-											value.addPlayer(key);
+											value.addEntry(key.getName());
 											map.remove(key);
 								    	} 
 									}

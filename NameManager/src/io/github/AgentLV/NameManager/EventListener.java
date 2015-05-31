@@ -44,89 +44,89 @@ public class EventListener implements Listener {
 
 		final Player p = e.getPlayer();
 		
-		if ( cConfig.getConfig().getBoolean( "HealthBelowName" ) ) 
+		if (cConfig.getConfig().getBoolean("HealthBelowName")) 
 			p.setScoreboard(NameManager.board);
 			
-		if( NameManager.board.getTeam( p.getName() ) != null ) {
+		if(NameManager.board.getTeam(p.getName()) != null) {
 			
-			NameManager.board.getTeam(p.getName()).addPlayer(p);
+			NameManager.board.getTeam(p.getName()).addEntry(p.getName());;
 			
-		} else if ( playerGroupChecker(p) != null ) {
+		} else if (playerGroupChecker(p) != null) {
 			
-			NameManager.board.getTeam(i + playerGroupChecker(p)).addPlayer(p);
+			NameManager.board.getTeam(i + playerGroupChecker(p)).addEntry(p.getName());
 			
-		} else if( p.hasPermission("NameManager.black") ) {
+		} else if(p.hasPermission("NameManager.black")) {
 			
-		    NameManager.board.getTeam("NM_black").addPlayer(p);
+		    NameManager.board.getTeam("NM_black").addEntry(p.getName());
 		    
-        } else if( p.hasPermission("NameManager.darkblue") ) {
+        } else if(p.hasPermission("NameManager.darkblue")) {
         	
-        	NameManager.board.getTeam("NM_darkblue").addPlayer(p);
+        	NameManager.board.getTeam("NM_darkblue").addEntry(p.getName());
         	
-        } else if( p.hasPermission("NameManager.darkgreen") ) {
+        } else if(p.hasPermission("NameManager.darkgreen")) {
         	
-        	NameManager.board.getTeam("NM_darkgreen").addPlayer(p);
+        	NameManager.board.getTeam("NM_darkgreen").addEntry(p.getName());
         	
-        } else if( p.hasPermission("NameManager.darkaqua") ) {
+        } else if(p.hasPermission("NameManager.darkaqua")) {
         	
-        	NameManager.board.getTeam("NM_darkaqua").addPlayer(p);
+        	NameManager.board.getTeam("NM_darkaqua").addEntry(p.getName());
         	
-        } else if( p.hasPermission("NameManager.darkred") ) {
+        } else if(p.hasPermission("NameManager.darkred")) {
         	
-        	NameManager.board.getTeam("NM_darkred").addPlayer(p);
+        	NameManager.board.getTeam("NM_darkred").addEntry(p.getName());
         	
-        } else if( p.hasPermission("NameManager.darkpurple") ) {
+        } else if(p.hasPermission("NameManager.darkpurple")) {
         	
-        	NameManager.board.getTeam("NM_darkpurple").addPlayer(p);
+        	NameManager.board.getTeam("NM_darkpurple").addEntry(p.getName());
         	
-        } else if( p.hasPermission("NameManager.gold") ) {
+        } else if(p.hasPermission("NameManager.gold")) {
         	
-        	NameManager.board.getTeam("NM_gold").addPlayer(p);
+        	NameManager.board.getTeam("NM_gold").addEntry(p.getName());
         	
-        } else if( p.hasPermission("NameManager.gray") ) {
+        } else if(p.hasPermission("NameManager.gray")) {
         	
-        	NameManager.board.getTeam("NM_gray").addPlayer(p);
+        	NameManager.board.getTeam("NM_gray").addEntry(p.getName());
         	
-        } else if( p.hasPermission("NameManager.darkgray") ) {
+        } else if(p.hasPermission("NameManager.darkgray")) {
         	
-        	NameManager.board.getTeam("NM_darkgray").addPlayer(p);
+        	NameManager.board.getTeam("NM_darkgray").addEntry(p.getName());
         	
-        } else if( p.hasPermission("NameManager.blue") ) {
+        } else if(p.hasPermission("NameManager.blue")) {
         	
-        	NameManager.board.getTeam("NM_blue").addPlayer(p);
+        	NameManager.board.getTeam("NM_blue").addEntry(p.getName());
         	
-        } else if( p.hasPermission("NameManager.green") ) {
+        } else if(p.hasPermission("NameManager.green")) {
         	
-        	NameManager.board.getTeam("NM_green").addPlayer(p);
+        	NameManager.board.getTeam("NM_green").addEntry(p.getName());
         	
-        } else if( p.hasPermission("NameManager.aqua") ) {
+        } else if(p.hasPermission("NameManager.aqua")) {
         	
-        	NameManager.board.getTeam("NM_aqua").addPlayer(p);
+        	NameManager.board.getTeam("NM_aqua").addEntry(p.getName());
         	
-        } else if( p.hasPermission("NameManager.red") ) {
+        } else if(p.hasPermission("NameManager.red")) {
         	
-        	NameManager.board.getTeam("NM_red").addPlayer(p);
+        	NameManager.board.getTeam("NM_red").addEntry(p.getName());
         	
-        } else if( p.hasPermission("NameManager.lightpurple") ) {
+        } else if(p.hasPermission("NameManager.lightpurple")) {
         	
-        	NameManager.board.getTeam("NM_lightpurple").addPlayer(p);
+        	NameManager.board.getTeam("NM_lightpurple").addEntry(p.getName());
         	
-        } else if( p.hasPermission("NameManager.yellow") ) {
+        } else if(p.hasPermission("NameManager.yellow")) {
         	
-        	NameManager.board.getTeam("NM_yellow").addPlayer(p);
+        	NameManager.board.getTeam("NM_yellow").addEntry(p.getName());
         	
-        } else if( p.hasPermission("NameManager.white") ) {
+        } else if(p.hasPermission("NameManager.white")) {
         	
-        	NameManager.board.getTeam("NM_white").addPlayer(p);
+        	NameManager.board.getTeam("NM_white").addEntry(p.getName());
         	
         } else {
         	
-        	NameManager.board.getTeam("ZZZZZZZZZZZZZZZZ").addPlayer(p);
+        	NameManager.board.getTeam("ZZZZZZZZZZZZZZZZ").addEntry(p.getName());
         	
         }
 			
-		if( cConfig.getConfig().getBoolean( "Messages" ) ) {
-			if( cConfig.getConfig().getBoolean( "CustomNameForMessages" ) ) {
+		if(cConfig.getConfig().getBoolean("Messages")) {
+			if(cConfig.getConfig().getBoolean("CustomNameForMessages")) {
 				e.setJoinMessage(ChatColor.translateAlternateColorCodes('&', cConfig.getConfig().getString("Join").replaceAll("%player%", NameManagerAPI.getNametag(p))));
 			} else {
 				e.setJoinMessage(ChatColor.translateAlternateColorCodes('&', cConfig.getConfig().getString("Join").replaceAll("%player%", p.getName())));
@@ -134,7 +134,7 @@ public class EventListener implements Listener {
 			
 		}
 		
-		if ( cConfig.getConfig().getBoolean( "Bungee" ) ) {
+		if (cConfig.getConfig().getBoolean("Bungee")) {
 			
 			plugin.getServer().getScheduler().runTaskLaterAsynchronously(plugin, new Runnable() {
 				
@@ -142,9 +142,9 @@ public class EventListener implements Listener {
 				public void run() {
 					
 					ByteArrayDataOutput out = ByteStreams.newDataOutput();
-					out.writeUTF( p.getName() );
-					out.writeUTF( "TablistName" );
-					out.writeUTF( NameManagerAPI.getNametag( p ) );
+					out.writeUTF(p.getName());
+					out.writeUTF("TablistName");
+					out.writeUTF(NameManagerAPI.getNametag(p));
 
 					p.sendPluginMessage(plugin, "NameManager", out.toByteArray());
 				}
@@ -168,22 +168,22 @@ public class EventListener implements Listener {
 			}
 		}
 		
-		if (Commands.map.containsKey(p) || Commands.teams.contains(NameManager.board.getPlayerTeam(p))) {
+		if (Commands.map.containsKey(p) || Commands.teams.contains(NameManager.board.getEntryTeam(p.getName()))) {
 			
 			Rainbow.disableRainbow(p);
 			Team team = Commands.map.get(p);
 			
 			if (team != null) {
-				team.addPlayer(p);
+				team.addEntry(p.getName());
 			} else {
-				NameManager.rainbow.removePlayer(p);
+				NameManager.rainbow.removeEntry(p.getName());
 			}
 			
 			Commands.map.remove(p);
 		}
 		
-		if (NameManager.board.getPlayerTeam(p) != null)
-			NameManager.board.getPlayerTeam(p).removePlayer(p);
+		if (NameManager.board.getEntryTeam(p.getName()) != null)
+			NameManager.board.getEntryTeam(p.getName()).removeEntry(p.getName());
 	}
 	
 	@EventHandler
@@ -200,22 +200,22 @@ public class EventListener implements Listener {
 			
 		}
 		
-		if (Commands.map.containsKey(p) || Commands.teams.contains(NameManager.board.getPlayerTeam(p))) {
+		if (Commands.map.containsKey(p) || Commands.teams.contains(NameManager.board.getEntryTeam(p.getName()))) {
 			
 			Rainbow.disableRainbow(p);
 			Team team = Commands.map.get(p);
 			
 			if (team != null) {
-				team.addPlayer(p);
+				team.removeEntry(p.getName());
 			} else {
-				NameManager.rainbow.removePlayer(p);
+				NameManager.rainbow.removeEntry(p.getName());
 			}
 			
 			Commands.map.remove(p);
 		}
 		
-		if (NameManager.board.getPlayerTeam(p) != null)
-			NameManager.board.getPlayerTeam(p).removePlayer(p);
+		if (NameManager.board.getEntryTeam(p.getName()) != null)
+			NameManager.board.getEntryTeam(p.getName()).removeEntry(p.getName());
 	}
 
 }

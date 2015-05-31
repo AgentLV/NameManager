@@ -29,7 +29,7 @@ public class NameManagerAPI {
 		
 		team.setPrefix(ChatColor.translateAlternateColorCodes('&', prefix));
 		team.setSuffix(ChatColor.translateAlternateColorCodes('&', suffix));
-		team.addPlayer(p);
+		team.addEntry(p.getName());
 	}
 
 	public static void setNametagPrefix(OfflinePlayer p, String prefix) {
@@ -40,7 +40,7 @@ public class NameManagerAPI {
 		}
 		
 		team.setPrefix(ChatColor.translateAlternateColorCodes('&', prefix));
-		team.addPlayer(p);
+		team.addEntry(p.getName());
 	}
 	
 	public static void setNametagSuffix(OfflinePlayer p, String suffix) {
@@ -51,18 +51,18 @@ public class NameManagerAPI {
 		}
 		
 		team.setSuffix(ChatColor.translateAlternateColorCodes('&', suffix));
-		team.addPlayer(p);
+		team.addEntry(p.getName());
 	}
 	
 	public static void setNametagColor(OfflinePlayer p, String color) {
 		team = NameManager.board.getTeam("NM_" + color);
-		team.addPlayer(p);
+		team.addEntry(p.getName());
 	}
 	
 	public static String getNametag(OfflinePlayer p) {
 		String prefix = "";
 		String suffix = "";
-		team = NameManager.board.getPlayerTeam(p);
+		team = NameManager.board.getEntryTeam(p.getName());
 		
 		if ( team != null ) {
 			if (team.getPrefix() != null) {
@@ -77,9 +77,9 @@ public class NameManagerAPI {
 	
 	public static String getNametagPrefix(OfflinePlayer p) {
 		String prefix = "";
-		team = NameManager.board.getPlayerTeam(p);
+		team = NameManager.board.getEntryTeam(p.getName());
 		
-		if ( NameManager.board.getPlayerTeam(p) != null ) {
+		if ( NameManager.board.getEntryTeam(p.getName()) != null ) {
 			
 			if ( team.getPrefix() != null ) {
 				prefix = team.getPrefix();
@@ -91,9 +91,9 @@ public class NameManagerAPI {
 	
 	public static String getNametagSuffix(OfflinePlayer p) {
 		String suffix = "";
-		team = NameManager.board.getPlayerTeam(p);
+		team = NameManager.board.getEntryTeam(p.getName());
 		
-		if ( NameManager.board.getPlayerTeam(p) != null ) {
+		if ( NameManager.board.getEntryTeam(p.getName()) != null ) {
 			
 			if ( team.getSuffix() != null ) {
 				suffix = team.getSuffix();
