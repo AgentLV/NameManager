@@ -21,11 +21,13 @@ public class EventListener implements Listener {
 	NameManager plugin;
 	int i;
 	ConfigAccessor cConfig;
+	boolean useVault = false;
 	
 	public EventListener(NameManager plugin) {
 		this.plugin = plugin;
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 		cConfig = NameManager.cConfig;
+		useVault = NameManager.useVault;
 	}
 	
 	private String playerGroupChecker(Player p) {
@@ -150,6 +152,12 @@ public class EventListener implements Listener {
 				}
 			}, 1L);
 			
+		}
+		
+		if (useVault) {
+			NameManager.chat.setPlayerPrefix(p, NameManagerAPI.getNametagPrefix(p));
+			NameManager.chat.setPlayerSuffix(p, NameManagerAPI.getNametagSuffix(p));
+			p.sendMessage(NameManager.chat.getPlayerPrefix(p));
 		}
 	}
 	
