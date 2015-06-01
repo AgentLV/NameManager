@@ -414,7 +414,7 @@ public class Commands implements CommandExecutor {
 							if ( !teams.contains(NameManager.board.getTeam(args[2])) ) {
 								
 								for (String sOf : NameManager.board.getTeam(args[2]).getEntries()) {
-									OfflinePlayer of = Bukkit.getOfflinePlayer(NameManagerAPI.playerToOfflinePlayer(sOf).getUniqueId());
+									OfflinePlayer of = NameManagerAPI.playerToOfflinePlayer(sOf);
 									Rainbow.enableRainbow(of);
 									map.put(of, NameManager.board.getTeam(args[2]));
 								}
@@ -428,7 +428,7 @@ public class Commands implements CommandExecutor {
 										OfflinePlayer key = entry.getKey();
 									    Team value = entry.getValue();
 									    
-									    if ( value.equals(NameManager.board.getTeam(args[2])) ) {
+									    if (value.equals(NameManager.board.getTeam(args[2]))) {
 									    	Rainbow.disableRainbow(key);
 											value.addEntry(key.getName());
 											map.remove(key);
