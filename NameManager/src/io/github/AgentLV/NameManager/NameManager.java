@@ -98,9 +98,9 @@ public class NameManager extends JavaPlugin {
 	
 	private void registerOutgoingPluginChannel() {
 		
-		if ( cConfig.getConfig().getBoolean( "Bungee" ) ) {
+		if (cConfig.getConfig().getBoolean("Bungee")) {
 			getServer().getMessenger().registerOutgoingPluginChannel(this, "NameManager");
-			getLogger().info( "Bungeecord mode activated!" );
+			getLogger().info("Bungeecord mode activated!");
 		}
 	
 	}
