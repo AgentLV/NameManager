@@ -118,6 +118,14 @@ public class NameManager extends JavaPlugin {
 
 	private void initTeams() {
 		
+		String[] colors = { "black", "darkblue", "darkgreen", "darkaqua", "darkred", "darkpurple", "gold", "gray", "darkgray", "blue", "green", "aqua", "red", "lightpurple", "yellow", "white"};
+		
+		for (String s : colors) {
+			
+			if (board.getTeam("NM_" + s) != null)
+				board.getTeam("NM_" + s).unregister();
+		}
+		
 		board.registerNewTeam("NM_black");
 		board.getTeam("NM_black").setPrefix("§0");
 		
