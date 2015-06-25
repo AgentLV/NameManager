@@ -157,7 +157,6 @@ public class EventListener implements Listener {
 		if (useVault) {
 			NameManager.chat.setPlayerPrefix(p, NameManagerAPI.getNametagPrefix(p));
 			NameManager.chat.setPlayerSuffix(p, NameManagerAPI.getNametagSuffix(p));
-			p.sendMessage(NameManager.chat.getPlayerPrefix(p));
 		}
 	}
 	
