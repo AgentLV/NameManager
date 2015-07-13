@@ -1,4 +1,4 @@
-package io.github.AgentLV.NameManager;
+package io.github.AgentLV.NameManager.utils;
 
 import com.google.common.collect.ImmutableList;
 import org.json.simple.JSONArray;

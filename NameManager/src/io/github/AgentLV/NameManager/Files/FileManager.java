@@ -1,7 +1,7 @@
 package io.github.AgentLV.NameManager.Files;
 
-import io.github.AgentLV.NameManager.NameManager;
 import io.github.AgentLV.NameManager.API.NameManagerGroupAPI;
+import io.github.AgentLV.NameManager.NameManager;
 
 import java.util.ArrayList;
 import java.util.List;

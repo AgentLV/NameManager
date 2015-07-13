@@ -5,8 +5,8 @@ import java.util.HashMap;
 import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Team;
 
-import io.github.AgentLV.NameManager.NameManager;
 import io.github.AgentLV.NameManager.Files.FileHandler;
+import io.github.AgentLV.NameManager.NameManager;
 
 public class NameManagerGroupAPI {
 	
