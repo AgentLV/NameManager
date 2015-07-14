@@ -5,6 +5,8 @@ import io.github.AgentLV.NameManager.API.NameManagerGroupAPI;
 import io.github.AgentLV.NameManager.Files.ConfigAccessor;
 import io.github.AgentLV.NameManager.Files.FileHandler;
 import io.github.AgentLV.NameManager.Files.FileManager;
+import io.github.AgentLV.NameManager.listener.PlayerJoinListener;
+import io.github.AgentLV.NameManager.listener.PlayerKickListener;
 import net.milkbowl.vault.chat.Chat;
 
 import org.bukkit.Bukkit;
@@ -37,7 +39,9 @@ public class NameManager extends JavaPlugin {
 		initConfigs();
 		setupChat();
 		
-		new EventListener(this);
+		new PlayerJoinListener(this);
+		new PlayerKickListener(this);
+		new PlayerKickListener(this);
 		new NameManagerAPI(this);
 		new NameManagerGroupAPI(this);
 		new Rainbow(this);
