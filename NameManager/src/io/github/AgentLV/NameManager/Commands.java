@@ -32,14 +32,14 @@ public class Commands implements CommandExecutor {
 		String pluginName = plugin.getDescription().getName();
 		String pluginVersion = plugin.getDescription().getVersion();
 		
-		sender.sendMessage("§3" + pluginName + "§7 v" + pluginVersion + " by §3" + mainAuthor);
-		sender.sendMessage("§7Commands: /nm help");
+		sender.sendMessage("Â§3" + pluginName + "Â§7 v" + pluginVersion + " by Â§3" + mainAuthor);
+		sender.sendMessage("Â§7Commands: /nm help");
 	}
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		
-		String invalidPermission = "§cYou don't have permission.";
+		String invalidPermission = "Â§cYou don't have permission.";
 		
 		//Sender -> Player
 		Player p = null;
@@ -59,16 +59,16 @@ public class Commands implements CommandExecutor {
 				if(sender.hasPermission("namemanager.help")) {
 					
 					sender.sendMessage("");
-					sender.sendMessage("§3---- §b§lNameManager commands §r§3----");
+					sender.sendMessage("Â§3---- Â§bÂ§lNameManager commands Â§rÂ§3----");
 					sender.sendMessage("");
-					sender.sendMessage("§3/nm prefix <player> <prefix>  §7»  §bSets a prefix for a player");
-					sender.sendMessage("§3/nm suffix <player> <suffix>  §7»  §bSets a suffix for a player");
-					sender.sendMessage("§3/nm clear [player]  §7»  §bResets a name");
-					sender.sendMessage("§3/nm rainbow [player]  §7»  §bRainbow name §c(could cause lag)");
-					sender.sendMessage("§3/nm uuid [player]  §7»  §bShows the UUID of a player");
-					sender.sendMessage("§3/nm group  §7»  §bDisplay group commands");
+					sender.sendMessage("Â§3/nm prefix <player> <prefix>  Â§7Â§  Â§bSets a prefix for a player");
+					sender.sendMessage("Â§3/nm suffix <player> <suffix>  Â§7Â§  Â§bSets a suffix for a player");
+					sender.sendMessage("Â§3/nm clear [player]  Â§7Â§  Â§bResets a name");
+					sender.sendMessage("Â§3/nm rainbow [player]  Â§7Â§  Â§bRainbow name Â§c(could cause lag)");
+					sender.sendMessage("Â§3/nm uuid [player]  Â§7Â§  Â§bShows the UUID of a player");
+					sender.sendMessage("Â§3/nm group  Â§7Â§  Â§bDisplay group commands");
 					sender.sendMessage("");
-					sender.sendMessage("§3All names are §ncase sensitive§r§3!");
+					sender.sendMessage("Â§3All names are Â§ncase sensitiveÂ§rÂ§3!");
 					sender.sendMessage("");
 					
 				} else {
@@ -89,22 +89,22 @@ public class Commands implements CommandExecutor {
 						}
 	
 						if (prefix.length() > 16) {
-							sender.sendMessage("§3The prefix can only contain 16 Characters.");
+							sender.sendMessage("Â§3The prefix can only contain 16 Characters.");
 						} else {
 						
 							if (offlinePlayer != null && offlinePlayer.hasPlayedBefore()) {
 								
 								NameManagerAPI.setNametagPrefix(offlinePlayer, prefix);
-								sender.sendMessage("§3Prefix '§c" + prefix + "§3' set for §c" + args[1]);
+								sender.sendMessage("Â§3Prefix 'Â§c" + prefix + "Â§3' set for Â§c" + args[1]);
 								
 							} else {
-								sender.sendMessage("§cPlayer §3" + args[1] + "§c not found.");
+								sender.sendMessage("Â§cPlayer Â§3" + args[1] + "Â§c not found.");
 							}
 						
 						} 
 					
 					} else {
-						sender.sendMessage("§cUsage: /nm prefix <player> <prefix>");
+						sender.sendMessage("Â§cUsage: /nm prefix <player> <prefix>");
 					}
 					
 				} else {
@@ -125,20 +125,20 @@ public class Commands implements CommandExecutor {
 						}
 						
 						if (suffix.length() > 16) {
-							sender.sendMessage("§3The suffix can only contain 16 Characters.");
+							sender.sendMessage("Â§3The suffix can only contain 16 Characters.");
 						} else {
 							
 							if (offlinePlayer != null && offlinePlayer.hasPlayedBefore()) {
 								NameManagerAPI.setNametagSuffix(offlinePlayer, suffix);
-								sender.sendMessage("§3Suffix '§c" + suffix + "§3' set for §c" + args[1]);
+								sender.sendMessage("Â§3Suffix 'Â§c" + suffix + "Â§3' set for Â§c" + args[1]);
 								
 							} else {
-								sender.sendMessage("§cPlayer §3" + args[1] + "§c not found.");
+								sender.sendMessage("Â§cPlayer Â§3" + args[1] + "Â§c not found.");
 							}
 						}
 						
 					} else {
-						sender.sendMessage("§cUsage: /nm suffix <player> <suffix>");
+						sender.sendMessage("Â§cUsage: /nm suffix <player> <suffix>");
 					}
 				} else {
 					sender.sendMessage(invalidPermission);
@@ -153,10 +153,10 @@ public class Commands implements CommandExecutor {
 						if (sender instanceof Player) {
 							
 							NameManagerAPI.clearNametag(NameManagerAPI.playerToOfflinePlayer(p.getName()));
-							sender.sendMessage("§3Your name was cleared.");
+							sender.sendMessage("Â§3Your name was cleared.");
 							
 						} else {
-							sender.sendMessage("§3A player is required.");
+							sender.sendMessage("Â§3A player is required.");
 						}
 					} else if (args.length == 2) {
 						
@@ -164,14 +164,14 @@ public class Commands implements CommandExecutor {
 						
 						if (offlinePlayer != null && offlinePlayer.hasPlayedBefore()) {
 							NameManagerAPI.clearNametag(offlinePlayer);
-							sender.sendMessage("§3Name cleared for §c" + args[1]);
+							sender.sendMessage("Â§3Name cleared for Â§c" + args[1]);
 							
 						} else {
-							sender.sendMessage("§cPlayer §3" + args[1] + "§c not found.");
+							sender.sendMessage("Â§cPlayer Â§3" + args[1] + "Â§c not found.");
 						}
 						
 					} else {
-						sender.sendMessage("§cUsage: /nm clear <player>");
+						sender.sendMessage("Â§cUsage: /nm clear <player>");
 					}
 					
 				} else {
@@ -186,10 +186,10 @@ public class Commands implements CommandExecutor {
 						
 						if (sender instanceof Player) {
 							
-							sender.sendMessage("§3Your UUID: §c" + p.getUniqueId());
+							sender.sendMessage("Â§3Your UUID: Â§c" + p.getUniqueId());
 							
 						} else {
-							sender.sendMessage("§cA player is required.");
+							sender.sendMessage("Â§cA player is required.");
 						}
 						
 					} else if (args.length == 2) {
@@ -197,13 +197,13 @@ public class Commands implements CommandExecutor {
 						offlinePlayer = NameManagerAPI.playerToOfflinePlayer(args[1]);
 						
 						if (offlinePlayer != null) {
-							sender.sendMessage("§3UUID of §c" + args[1] + "§3: §c" + offlinePlayer.getUniqueId());
+							sender.sendMessage("Â§3UUID of Â§c" + args[1] + "Â§3: Â§c" + offlinePlayer.getUniqueId());
 						} else {
-							sender.sendMessage("§cPlayer §3" + args[1] + "§c not found.");
+							sender.sendMessage("Â§cPlayer Â§3" + args[1] + "Â§c not found.");
 						}
 						
 					} else {
-						sender.sendMessage("§cUsage: /nm uuid <player>");
+						sender.sendMessage("Â§cUsage: /nm uuid <player>");
 					}
 					
 				} else {
@@ -221,7 +221,7 @@ public class Commands implements CommandExecutor {
 							if (!map.containsKey(p) && !teams.contains(NameManager.board.getEntryTeam(p.getName()))) {
 								map.put(p, NameManager.board.getEntryTeam(p.getName()));
 								Rainbow.enableRainbow(p);
-								sender.sendMessage("§3Rainbow activated");
+								sender.sendMessage("Â§3Rainbow activated");
 								
 							} else {
 								
@@ -235,11 +235,11 @@ public class Commands implements CommandExecutor {
 								}
 								
 								map.remove(p);
-								sender.sendMessage("§3Rainbow deactivated");
+								sender.sendMessage("Â§3Rainbow deactivated");
 							}
 							
 						} else {
-							sender.sendMessage("§cA player is required.");
+							sender.sendMessage("Â§cA player is required.");
 						}
 						
 						} else if (args.length == 2) {
@@ -252,7 +252,7 @@ public class Commands implements CommandExecutor {
 									
 									map.put(targetPlayer, NameManager.board.getEntryTeam(targetPlayer.getName()));
 									Rainbow.enableRainbow(targetPlayer);
-									sender.sendMessage("§3Rainbow activated for §c" + targetPlayer.getName());
+									sender.sendMessage("Â§3Rainbow activated for Â§c" + targetPlayer.getName());
 								
 								} else {
 									
@@ -265,14 +265,14 @@ public class Commands implements CommandExecutor {
 									
 									Rainbow.disableRainbow(targetPlayer);
 									map.remove(targetPlayer);
-									sender.sendMessage("§3Rainbow deactivated for §c" + targetPlayer.getName());
+									sender.sendMessage("Â§3Rainbow deactivated for Â§c" + targetPlayer.getName());
 								}
 								
 							} else {
-								sender.sendMessage("§cPlayer §3" + args[1] + "§c not found.");
+								sender.sendMessage("Â§cPlayer Â§3" + args[1] + "Â§c not found.");
 							}
 						} else {
-							sender.sendMessage("§c§cUsage: /nm rainbow <player>");
+							sender.sendMessage("Â§cÂ§cUsage: /nm rainbow <player>");
 						}
 					
 				} else {
@@ -289,14 +289,14 @@ public class Commands implements CommandExecutor {
 					
 					if(sender.hasPermission("namemanager.group.help")) {
 						sender.sendMessage("");
-						sender.sendMessage("§3---- §b§lNameManager group commands §r§3----");
+						sender.sendMessage("Â§3---- Â§bÂ§lNameManager group commands Â§rÂ§3----");
 						sender.sendMessage("");
-						sender.sendMessage("§3/nm group prefix <group> <prefix>  §7»  §bSets a prefix for a group");
-						sender.sendMessage("§3/nm group suffix <group> <suffix>  §7»  §bSets a suffix for a group");
-						sender.sendMessage("§3/nm group remove <group>  §7»  §bRemoves a group");
-						sender.sendMessage("§3/nm group list  §7»  §bDisplays all valid groups");
-						sender.sendMessage("§3/nm group rainbow <group>  §7»  §bToggles rainbow name for all group members §c(could cause lag)");
-						sender.sendMessage("§3/nm group reload  §7»  §bReloads groups from Groups.yml");
+						sender.sendMessage("Â§3/nm group prefix <group> <prefix>  Â§7Â§  Â§bSets a prefix for a group");
+						sender.sendMessage("Â§3/nm group suffix <group> <suffix>  Â§7Â§  Â§bSets a suffix for a group");
+						sender.sendMessage("Â§3/nm group remove <group>  Â§7Â§  Â§bRemoves a group");
+						sender.sendMessage("Â§3/nm group list  Â§7Â§  Â§bDisplays all valid groups");
+						sender.sendMessage("Â§3/nm group rainbow <group>  Â§7Â§  Â§bToggles rainbow name for all group members Â§c(could cause lag)");
+						sender.sendMessage("Â§3/nm group reload  Â§7Â§  Â§bReloads groups from Groups.yml");
 						sender.sendMessage("");
 					} else {
 						sender.sendMessage(invalidPermission);
@@ -315,13 +315,13 @@ public class Commands implements CommandExecutor {
 							}
 		
 							if (prefix.length() > 16) {
-								sender.sendMessage("§3The prefix can only contain 16 Characters.");
+								sender.sendMessage("Â§3The prefix can only contain 16 Characters.");
 							} else {
 								NameManagerGroupAPI.setGroupNametagPrefix(args[2], prefix);
-								sender.sendMessage("§3Set prefix '§c" + prefix + "§3' for group §c" + args[2]);
+								sender.sendMessage("Â§3Set prefix 'Â§c" + prefix + "Â§3' for group Â§c" + args[2]);
 							}
 						} else {
-							sender.sendMessage("§cUsage: /nm group prefix <group> <prefix>");
+							sender.sendMessage("Â§cUsage: /nm group prefix <group> <prefix>");
 						}
 						
 					} else {
@@ -341,13 +341,13 @@ public class Commands implements CommandExecutor {
 							}
 		
 							if (suffix.length() > 16) {
-								sender.sendMessage("§3The suffix can only contain 16 Characters.");
+								sender.sendMessage("Â§3The suffix can only contain 16 Characters.");
 							} else {
 								NameManagerGroupAPI.setGroupNametagSuffix(args[2], suffix);
-								sender.sendMessage("§3Set suffix '§c" + suffix + "§3' for group §c" + args[2]);
+								sender.sendMessage("Â§3Set suffix 'Â§c" + suffix + "Â§3' for group Â§c" + args[2]);
 							}
 						} else {
-							sender.sendMessage("§cUsage: /nm group suffix <group> <prefix>");
+							sender.sendMessage("Â§cUsage: /nm group suffix <group> <prefix>");
 						}
 						
 					} else {
@@ -376,7 +376,7 @@ public class Commands implements CommandExecutor {
 					    }
 					}
 					
-					sender.sendMessage("§3Reloaded Groups!");
+					sender.sendMessage("Â§3Reloaded Groups!");
 				} else {
 					sender.sendMessage(invalidPermission);
 				}
@@ -386,7 +386,7 @@ public class Commands implements CommandExecutor {
 				
 				if (sender.hasPermission("namemanager.group.remove")) {
 					NameManagerGroupAPI.removeGroup(args[2]);
-					sender.sendMessage("§3Succesfully removed group '§c" + args[2] + "§3'");
+					sender.sendMessage("Â§3Succesfully removed group 'Â§c" + args[2] + "Â§3'");
 				} else {
 					sender.sendMessage(invalidPermission);
 				}
@@ -396,7 +396,7 @@ public class Commands implements CommandExecutor {
 				
 				if (sender.hasPermission("namemanager.group.list")) {
 					for (String s : FileManager.allGroups) {
-			        	sender.sendMessage("§3" + s);
+			        	sender.sendMessage("Â§3" + s);
 			        }
 				} else {
 					sender.sendMessage(invalidPermission);
@@ -420,7 +420,7 @@ public class Commands implements CommandExecutor {
 								}
 								
 								teams.add(NameManager.board.getTeam(args[2]));
-								sender.sendMessage("§3Rainbow activated for group §c" + args[2]);
+								sender.sendMessage("Â§3Rainbow activated for group Â§c" + args[2]);
 								
 							} else {
 								
@@ -436,16 +436,16 @@ public class Commands implements CommandExecutor {
 									}
 									
 									teams.remove(NameManager.board.getTeam(args[2]));
-									sender.sendMessage("§3Rainbow deactivated for group §c" + args[2]);
+									sender.sendMessage("Â§3Rainbow deactivated for group Â§c" + args[2]);
 								
 							}
 							
 						} else {
-							sender.sendMessage("§3Group '§c" + args[2] + "§3' is not a valid group.");
+							sender.sendMessage("Â§3Group 'Â§c" + args[2] + "Â§3' is not a valid group.");
 						}
 						
 					} else {
-						sender.sendMessage("§cUsage: /nm rainbow <group>");
+						sender.sendMessage("Â§cUsage: /nm rainbow <group>");
 					}
 				
 				} else {
