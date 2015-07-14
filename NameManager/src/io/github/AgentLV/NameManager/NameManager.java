@@ -52,7 +52,6 @@ public class NameManager extends JavaPlugin {
 		activateHealth();
 		registerOutgoingPluginChannel();
 		
-		
 	}
 	
 	@Override

@@ -2,8 +2,8 @@ package io.github.AgentLV.NameManager.API;
 
 import java.util.HashMap;
 
-import io.github.AgentLV.NameManager.utils.UUIDFetcher;
 import io.github.AgentLV.NameManager.NameManager;
+import io.github.AgentLV.NameManager.utils.UUIDFetcher;
 
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
