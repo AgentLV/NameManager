@@ -1,4 +1,4 @@
-package io.github.AgentLV.NameManager.Files;
+package de.agentlv.namemanager.files;
 
 import java.util.List;
 

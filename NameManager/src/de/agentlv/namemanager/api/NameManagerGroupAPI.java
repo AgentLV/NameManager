@@ -1,12 +1,12 @@
-package io.github.AgentLV.NameManager.API;
+package de.agentlv.namemanager.api;
 
 import java.util.HashMap;
 
 import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Team;
 
-import io.github.AgentLV.NameManager.NameManager;
-import io.github.AgentLV.NameManager.Files.FileHandler;
+import de.agentlv.namemanager.NameManager;
+import de.agentlv.namemanager.files.FileHandler;
 
 public class NameManagerGroupAPI {
 	

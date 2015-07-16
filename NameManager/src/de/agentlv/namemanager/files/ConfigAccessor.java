@@ -1,6 +1,4 @@
-package io.github.AgentLV.NameManager.Files;
-
-import io.github.AgentLV.NameManager.NameManager;
+package de.agentlv.namemanager.files;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,6 +7,8 @@ import java.io.InputStreamReader;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+
+import de.agentlv.namemanager.NameManager;
  
 public class ConfigAccessor {
  

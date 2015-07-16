@@ -1,7 +1,4 @@
-package io.github.AgentLV.NameManager.Files;
-
-import io.github.AgentLV.NameManager.NameManager;
-import io.github.AgentLV.NameManager.API.NameManagerGroupAPI;
+package de.agentlv.namemanager.files;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +6,9 @@ import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+
+import de.agentlv.namemanager.NameManager;
+import de.agentlv.namemanager.api.NameManagerGroupAPI;
 
 public class FileManager {
 	
@@ -109,7 +109,7 @@ public class FileManager {
 	            NameManager.team.setSuffix(suffix);
 	            
         	} catch(NullPointerException e) {
-        		sender.sendMessage("§cCould not load group '§b" + s + "§c', did you set a prefix and a suffix?");
+        		sender.sendMessage("ï¿½cCould not load group 'ï¿½b" + s + "ï¿½c', did you set a prefix and a suffix?");
         	}
     	}
     }

@@ -1,10 +1,4 @@
-package io.github.AgentLV.NameManager.listener;
-
-import io.github.AgentLV.NameManager.Commands;
-import io.github.AgentLV.NameManager.NameManager;
-import io.github.AgentLV.NameManager.Rainbow;
-import io.github.AgentLV.NameManager.API.NameManagerAPI;
-import io.github.AgentLV.NameManager.Files.ConfigAccessor;
+package de.agentlv.namemanager.listener;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -12,6 +6,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.scoreboard.Team;
+
+import de.agentlv.namemanager.Commands;
+import de.agentlv.namemanager.NameManager;
+import de.agentlv.namemanager.Rainbow;
+import de.agentlv.namemanager.api.NameManagerAPI;
+import de.agentlv.namemanager.files.ConfigAccessor;
 
 public class PlayerKickListener implements Listener {
 

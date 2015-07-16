@@ -1,9 +1,4 @@
-package io.github.AgentLV.NameManager.listener;
-
-import io.github.AgentLV.NameManager.NameManager;
-import io.github.AgentLV.NameManager.API.NameManagerAPI;
-import io.github.AgentLV.NameManager.Files.ConfigAccessor;
-import io.github.AgentLV.NameManager.Files.FileManager;
+package de.agentlv.namemanager.listener;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -13,6 +8,11 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+
+import de.agentlv.namemanager.NameManager;
+import de.agentlv.namemanager.api.NameManagerAPI;
+import de.agentlv.namemanager.files.ConfigAccessor;
+import de.agentlv.namemanager.files.FileManager;
 
 public class PlayerJoinListener implements Listener {
 	

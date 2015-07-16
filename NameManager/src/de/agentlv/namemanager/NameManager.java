@@ -1,12 +1,5 @@
-package io.github.AgentLV.NameManager;
+package de.agentlv.namemanager;
 
-import io.github.AgentLV.NameManager.API.NameManagerAPI;
-import io.github.AgentLV.NameManager.API.NameManagerGroupAPI;
-import io.github.AgentLV.NameManager.Files.ConfigAccessor;
-import io.github.AgentLV.NameManager.Files.FileHandler;
-import io.github.AgentLV.NameManager.Files.FileManager;
-import io.github.AgentLV.NameManager.listener.PlayerJoinListener;
-import io.github.AgentLV.NameManager.listener.PlayerKickListener;
 import net.milkbowl.vault.chat.Chat;
 
 import org.bukkit.Bukkit;
@@ -17,6 +10,14 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
+
+import de.agentlv.namemanager.api.NameManagerAPI;
+import de.agentlv.namemanager.api.NameManagerGroupAPI;
+import de.agentlv.namemanager.files.ConfigAccessor;
+import de.agentlv.namemanager.files.FileHandler;
+import de.agentlv.namemanager.files.FileManager;
+import de.agentlv.namemanager.listener.PlayerJoinListener;
+import de.agentlv.namemanager.listener.PlayerKickListener;
 
 public class NameManager extends JavaPlugin {
 	
