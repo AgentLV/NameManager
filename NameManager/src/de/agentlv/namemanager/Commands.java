@@ -294,7 +294,6 @@ public class Commands implements CommandExecutor {
 						sender.sendMessage("§3/nm group remove <group>  §7§  §bRemoves a group");
 						sender.sendMessage("§3/nm group list  §7§  §bDisplays all valid groups");
 						sender.sendMessage("§3/nm group rainbow <group>  §7§  §bToggles rainbow name for all group members §c(could cause lag)");
-						sender.sendMessage("§3/nm group reload  §7§  §bReloads groups from Groups.yml");
 						sender.sendMessage("");
 					} else {
 						sender.sendMessage(invalidPermission);
