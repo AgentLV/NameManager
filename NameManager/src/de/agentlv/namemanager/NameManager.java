@@ -4,6 +4,7 @@ import net.milkbowl.vault.chat.Chat;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -13,32 +14,34 @@ import org.bukkit.scoreboard.Team;
 
 import de.agentlv.namemanager.api.NameManagerAPI;
 import de.agentlv.namemanager.api.NameManagerGroupAPI;
-import de.agentlv.namemanager.files.ConfigAccessor;
-import de.agentlv.namemanager.files.FileHandler;
+import de.agentlv.namemanager.files.FileAccessor;
+import de.agentlv.namemanager.files.GroupsFileHandler;
 import de.agentlv.namemanager.files.FileManager;
+import de.agentlv.namemanager.files.PlayersFileHandler;
 import de.agentlv.namemanager.listener.PlayerJoinListener;
 import de.agentlv.namemanager.listener.PlayerKickListener;
+import de.agentlv.namemanager.utils.PlayerGroupHandler;
 
 public class NameManager extends JavaPlugin {
 	
 	public static Scoreboard board;
-	public static Team team;
-	public static Team rainbow;
 	private static Objective objective;
-	public static ConfigAccessor cConfig;
-	public static ConfigAccessor cGroups;
+	public static FileAccessor groupsFile;
+	public static FileAccessor playerFile;
 	public static Chat chat = null;
 	public static boolean useVault = false;
+	
+	public static String[] colors = { "BLACK", "DARK_BLUE", "DARK_GREEN", "DARK_AQUA", "DARK_RED", "DARK_PURPLE", "GOLD",
+		"GRAY", "DARK_GRAY", "BLUE", "GREEN", "AQUA", "RED", "LIGHT_PURPLE", "YELLOW", "WHITE"};
+	
 	
 	@Override
 	public void onEnable() {
 		
 		board = Bukkit.getScoreboardManager().getMainScoreboard();
-		team = null;
-		rainbow = null;
 		
 		initConfigs();
-		setupChat();
+		setupVaultChat();
 		
 		new PlayerJoinListener(this);
 		new PlayerKickListener(this);
@@ -47,7 +50,8 @@ public class NameManager extends JavaPlugin {
 		new NameManagerGroupAPI(this);
 		new Rainbow(this);
 		new FileManager(this);
-		new FileHandler(cGroups);
+		new GroupsFileHandler(groupsFile);
+		new PlayersFileHandler(playerFile);
 		
 		FileManager.loadFromFile();
 		initTeams();
@@ -57,31 +61,36 @@ public class NameManager extends JavaPlugin {
 		activateHealth();
 		registerOutgoingPluginChannel();
 		
+		//Support for /reload
+		for (Player p : Bukkit.getOnlinePlayers())
+			PlayerGroupHandler.add(p);
+		
 	}
 	
 	@Override
 	public void onDisable() {
+		
 		unregisterTeams();
 		FileManager.unloadFromFile();
 		
-		if (board.getObjective("showhealth") != null) {
-			objective = board.getObjective("showhealth");
+		if (objective != null) 
 			objective.unregister();
-		}
 		
 	}
 	
-	private void setupChat() {
+	private void setupVaultChat() {
 		
-		if (cConfig.getConfig().getBoolean("Vault")) {
+		if (this.getConfig().getBoolean("Vault")) {
 		
 			if (getServer().getPluginManager().getPlugin("Vault") != null) {
 				
 				RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
 		        if (chatProvider != null) {
+		        	
 		            chat = chatProvider.getProvider();
-		            getLogger().info("Hooked into Vault");
 		            useVault = true;
+		            getLogger().info("Hooked into Vault");
+		            
 		            return;
 		        }
 
@@ -92,7 +101,13 @@ public class NameManager extends JavaPlugin {
 	
 	private void activateHealth() {
 		
-		if (getConfig().getBoolean("HealthBelowName") && board.getObjective("showhealth") == null) {
+		if (getConfig().getBoolean("HealthBelowName")) {
+			
+			objective = board.getObjective("showhealth");
+			
+			if (objective != null)
+				objective.unregister();
+			
 			objective = board.registerNewObjective("showhealth", "health");
 			objective.setDisplaySlot(DisplaySlot.BELOW_NAME);
 			objective.setDisplayName(ChatColor.translateAlternateColorCodes('&', getConfig().getString("HealthFormat")));
@@ -102,7 +117,7 @@ public class NameManager extends JavaPlugin {
 	
 	private void registerOutgoingPluginChannel() {
 		
-		if (cConfig.getConfig().getBoolean("Bungee")) {
+		if (this.getConfig().getBoolean("Bungee")) {
 			getServer().getMessenger().registerOutgoingPluginChannel(this, "NameManager");
 			getLogger().info("Bungeecord mode activated!");
 		}
@@ -110,112 +125,63 @@ public class NameManager extends JavaPlugin {
 	}
 	
 	private void initConfigs() {
-		cConfig = new ConfigAccessor(this, "config.yml");
-		cConfig.saveDefaultConfig();
-		cConfig.reloadConfig();
-		cConfig.saveConfig();
+		this.saveDefaultConfig();
 		
-		cGroups = new ConfigAccessor(this, "Groups.yml");
-		cGroups.reloadConfig();
-		cGroups.saveConfig();
+		groupsFile = new FileAccessor(this, "groups.yml");
+		groupsFile.saveDefaultConfig();
+		
+		playerFile = new FileAccessor(this, "players.yml");
+		playerFile.saveDefaultConfig();
 	}
 
-	private void initTeams() {
+	public static void initTeams() {
+		Team team;
 		
-		String[] colors = { "black", "darkblue", "darkgreen", "darkaqua", "darkred", "darkpurple", "gold", "gray", "darkgray", "blue", "green", "aqua", "red", "lightpurple", "yellow", "white"};
-		
-		for (String s : colors) {
+		for (String color : colors) {
 			
-			if (board.getTeam("NM_" + s) != null)
-				board.getTeam("NM_" + s).unregister();
+			team = board.getTeam("NM_" + color);
+			
+			if (team != null)
+				team.unregister();
+			
+			team = board.registerNewTeam("NM_" + color);
+			team.setPrefix(ChatColor.valueOf(color).toString());
+			
 		}
 		
-		board.registerNewTeam("NM_black");
-		board.getTeam("NM_black").setPrefix("§0");
+		//Default team
+		team = board.getTeam("ZZZZZZZZZZZZZZZZ");
 		
-		board.registerNewTeam("NM_darkblue");
-		board.getTeam("NM_darkblue").setPrefix("§1");
-		
-		board.registerNewTeam("NM_darkgreen");
-		board.getTeam("NM_darkgreen").setPrefix("§2");
-		
-		board.registerNewTeam("NM_darkaqua");
-		board.getTeam("NM_darkaqua").setPrefix("§3");
-		
-		board.registerNewTeam("NM_darkred");
-		board.getTeam("NM_darkred").setPrefix("§4");
-		
-		board.registerNewTeam("NM_darkpurple");
-		board.getTeam("NM_darkpurple").setPrefix("§5");
-		
-		board.registerNewTeam("NM_gold");
-		board.getTeam("NM_gold").setPrefix("§6");
-		
-		board.registerNewTeam("NM_gray");
-		board.getTeam("NM_gray").setPrefix("§7");
-		
-		board.registerNewTeam("NM_darkgray");
-		board.getTeam("NM_darkgray").setPrefix("§8");
-		
-		board.registerNewTeam("NM_blue");
-		board.getTeam("NM_blue").setPrefix("§9");
-		
-		board.registerNewTeam("NM_green");
-		board.getTeam("NM_green").setPrefix("§a");
-	
-		board.registerNewTeam("NM_aqua");
-		board.getTeam("NM_aqua").setPrefix("§b");
-		
-		board.registerNewTeam("NM_red");
-		board.getTeam("NM_red").setPrefix("§c");
-		
-		board.registerNewTeam("NM_lightpurple");
-		board.getTeam("NM_lightpurple").setPrefix("§d");
-		
-		board.registerNewTeam("NM_yellow");
-		board.getTeam("NM_yellow").setPrefix("§e");
-		
-		board.registerNewTeam("NM_white");
-		board.getTeam("NM_white").setPrefix("§f");
+		if (team != null)
+			team.unregister();
 		
 		board.registerNewTeam("ZZZZZZZZZZZZZZZZ");
 	}
 	
-	private void unregisterTeams() {
+	public static void unregisterTeams() {
+		Team team;
 		
-		board.getTeam("NM_black").unregister();
+		for (String color : colors) {
+			
+			team = board.getTeam("NM_" + color);
+			
+			if (team != null)
+				team.unregister();
+		}
 		
-		board.getTeam("NM_darkblue").unregister();
+		for (String s : PlayerGroupHandler.createdPlayerTeams) {
+			
+			team = board.getTeam(s);
+			
+			if (team != null)
+				team.unregister();
+		}
+		PlayerGroupHandler.createdPlayerTeams.clear();
 		
-		board.getTeam("NM_darkgreen").unregister();
+		team = board.getTeam("ZZZZZZZZZZZZZZZZ");
 		
-		board.getTeam("NM_darkaqua").unregister();
-		
-		board.getTeam("NM_darkred").unregister();
-		
-		board.getTeam("NM_darkpurple").unregister();
-		
-		board.getTeam("NM_gold").unregister();
-		
-		board.getTeam("NM_gray").unregister();
-		
-		board.getTeam("NM_darkgray").unregister();
-		
-		board.getTeam("NM_blue").unregister();
-		
-		board.getTeam("NM_green").unregister();
-		
-		board.getTeam("NM_aqua").unregister();
-		
-		board.getTeam("NM_red").unregister();
-		
-		board.getTeam("NM_lightpurple").unregister();
-		
-		board.getTeam("NM_yellow").unregister();
-		
-		board.getTeam("NM_white").unregister();
-		
-		board.getTeam("ZZZZZZZZZZZZZZZZ").unregister();
+		if (team != null)
+			team.unregister();
 	}
 
 }

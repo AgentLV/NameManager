@@ -1,10 +1,5 @@
 package de.agentlv.namemanager;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -16,15 +11,14 @@ import org.bukkit.scoreboard.Team;
 import de.agentlv.namemanager.api.NameManagerAPI;
 import de.agentlv.namemanager.api.NameManagerGroupAPI;
 import de.agentlv.namemanager.files.FileManager;
+import de.agentlv.namemanager.utils.PlayerGroupHandler;
 
 public class Commands implements CommandExecutor {
 
-	static NameManager plugin;
-	public static Map<OfflinePlayer, Team> map = new HashMap<OfflinePlayer, Team>();
-	public static ArrayList<Team> teams = new ArrayList<Team>();
+	private NameManager plugin;
 	
 	public Commands(NameManager plugin) {
-		Commands.plugin = plugin;
+		this.plugin = plugin;
 	}
 	
 	private void pluginDescription(CommandSender sender) {
@@ -43,12 +37,11 @@ public class Commands implements CommandExecutor {
 		
 		//Sender -> Player
 		Player p = null;
-		if(sender instanceof Player)
+		if (sender instanceof Player)
 			p = (Player) sender;
 			
 		OfflinePlayer offlinePlayer = null;
 	
-		//Command /namemanager
 		if (cmd.getName().equalsIgnoreCase("namemanager")) {
 			
 			if (args.length == 0) {
@@ -56,7 +49,7 @@ public class Commands implements CommandExecutor {
 				
 			} else if (args[0].equalsIgnoreCase("help")) {
 				
-				if(sender.hasPermission("namemanager.help")) {
+				if (sender.hasPermission("namemanager.help")) {
 					
 					sender.sendMessage("");
 					sender.sendMessage("§3---- §b§lNameManager commands §r§3----");
@@ -66,6 +59,7 @@ public class Commands implements CommandExecutor {
 					sender.sendMessage("§3/nm clear [player]  §7§  §bResets a name");
 					sender.sendMessage("§3/nm rainbow [player]  §7§  §bRainbow name §c(could cause lag)");
 					sender.sendMessage("§3/nm uuid [player]  §7§  §bShows the UUID of a player");
+					sender.sendMessage("§3/nm reload  §7§  §bReloads NameManager");
 					sender.sendMessage("§3/nm group  §7§  §bDisplay group commands");
 					sender.sendMessage("");
 					sender.sendMessage("§3All names are §ncase sensitive§r§3!");
@@ -197,7 +191,7 @@ public class Commands implements CommandExecutor {
 						offlinePlayer = NameManagerAPI.playerToOfflinePlayer(args[1]);
 						
 						if (offlinePlayer != null) {
-							sender.sendMessage("§3UUID of §c" + args[1] + "§3: §c" + offlinePlayer.getUniqueId());
+							sender.sendMessage("§3UUID of §c" + args[1] + "§3: §c" + offlinePlayer.getUniqueId().toString());
 						} else {
 							sender.sendMessage("§cPlayer §3" + args[1] + "§c not found.");
 						}
@@ -218,23 +212,13 @@ public class Commands implements CommandExecutor {
 						
 						if (sender instanceof Player) {
 							
-							if (!map.containsKey(p) && !teams.contains(NameManager.board.getEntryTeam(p.getName()))) {
-								map.put(p, NameManager.board.getEntryTeam(p.getName()));
-								Rainbow.enableRainbow(p);
+							if (!Rainbow.enableRainbow(p.getName())) {
+								
 								sender.sendMessage("§3Rainbow activated");
 								
 							} else {
 								
-								Rainbow.disableRainbow(p);
-								Team team = map.get(p);
-								
-								if (team != null) {
-									team.addEntry(p.getName());
-								} else {
-									NameManager.rainbow.removeEntry(p.getName());
-								}
-								
-								map.remove(p);
+								Rainbow.disableRainbow(p.getName());
 								sender.sendMessage("§3Rainbow deactivated");
 							}
 							
@@ -248,23 +232,13 @@ public class Commands implements CommandExecutor {
 							
 							if (targetPlayer != null && targetPlayer.isOnline()) {
 								
-								if (!map.containsKey(targetPlayer) && !teams.contains(NameManager.board.getEntryTeam(targetPlayer.getName()))) {
+								if (!Rainbow.enableRainbow(targetPlayer.getName())) {
 									
-									map.put(targetPlayer, NameManager.board.getEntryTeam(targetPlayer.getName()));
-									Rainbow.enableRainbow(targetPlayer);
 									sender.sendMessage("§3Rainbow activated for §c" + targetPlayer.getName());
 								
 								} else {
 									
-									Team team = map.get(targetPlayer);
-									if (team != null) {
-										team.addEntry(targetPlayer.getName());
-									} else {
-										NameManager.rainbow.removeEntry(targetPlayer.getName());
-									}
-									
-									Rainbow.disableRainbow(targetPlayer);
-									map.remove(targetPlayer);
+									Rainbow.disableRainbow(targetPlayer.getName());
 									sender.sendMessage("§3Rainbow deactivated for §c" + targetPlayer.getName());
 								}
 								
@@ -278,6 +252,30 @@ public class Commands implements CommandExecutor {
 				} else {
 					sender.sendMessage(invalidPermission);
 				}
+				
+			}  else if (args[0].equalsIgnoreCase("reload")) {
+				
+				if (sender.hasPermission("namemanager.reload")) {
+					
+					for (Player reloadPlayer : Bukkit.getOnlinePlayers())
+						PlayerGroupHandler.remove(reloadPlayer.getName());
+					
+					FileManager.unloadFromFile();
+					FileManager.loadFromFile(sender);
+					NameManager.unregisterTeams();
+					NameManager.initTeams();
+					
+					plugin.reloadConfig();
+					NameManager.playerFile.reloadConfig();
+					
+					for (Player reloadPlayer : Bukkit.getOnlinePlayers()) 
+						PlayerGroupHandler.add(reloadPlayer);
+					
+					sender.sendMessage("§3Reloaded NameManager!");
+				} else {
+					sender.sendMessage(invalidPermission);
+				}
+			
 			}
 			
 			
@@ -355,33 +353,6 @@ public class Commands implements CommandExecutor {
 					}
 				
 				//nm group reload
-			} else if (args[1].equalsIgnoreCase("reload")) {
-				
-				if (sender.hasPermission("namemanager.group.reload")) {
-					
-					Map<Player, Team> reloadMap = new HashMap<Player, Team>();
-					for (Player reloadPlayer : Bukkit.getOnlinePlayers()) {
-						reloadMap.put(reloadPlayer, NameManager.board.getEntryTeam(reloadPlayer.getName()));
-					}
-					
-					FileManager.unloadFromFile();
-					FileManager.loadFromFile(sender);
-					
-					for(Entry<Player, Team> entry : reloadMap.entrySet()) {
-						Player key = entry.getKey();
-					    Team value = entry.getValue();
-					    
-					    if (key != null && key.isOnline() && value != null) {
-					    	value.addEntry(key.getName());
-					    }
-					}
-					
-					sender.sendMessage("§3Reloaded Groups!");
-				} else {
-					sender.sendMessage(invalidPermission);
-				}
-			
-				//nm group remove
 			} else if (args[1].equalsIgnoreCase("remove")) {
 				
 				if (sender.hasPermission("namemanager.group.remove")) {
@@ -395,7 +366,7 @@ public class Commands implements CommandExecutor {
 			} else if (args[1].equalsIgnoreCase("list")) {
 				
 				if (sender.hasPermission("namemanager.group.list")) {
-					for (String s : FileManager.allGroups) {
+					for (String s : NameManagerGroupAPI.groups) {
 			        	sender.sendMessage("§3" + s);
 			        }
 				} else {
@@ -408,44 +379,38 @@ public class Commands implements CommandExecutor {
 				if (sender.hasPermission("namemanager.group.rainbow")) {
 				
 					if (args.length == 3) {
+						String teamName = args[2];
 						
-						if (NameManager.board.getTeam(args[2]) != null) {
+						if (NameManagerGroupAPI.groups.contains(teamName)) {
 							
-							if ( !teams.contains(NameManager.board.getTeam(args[2])) ) {
+							Team team = NameManager.board.getTeam(NameManagerGroupAPI.groups.indexOf(teamName) + teamName);
+							
+							if (!Rainbow.rainbowTeams.containsKey(team)) {
 								
-								for (String sOf : NameManager.board.getTeam(args[2]).getEntries()) {
-									OfflinePlayer of = NameManagerAPI.playerToOfflinePlayer(sOf);
-									Rainbow.enableRainbow(of);
-									map.put(of, NameManager.board.getTeam(args[2]));
-								}
+								Rainbow.rainbowTeams.put(team, team.getEntries());
 								
-								teams.add(NameManager.board.getTeam(args[2]));
-								sender.sendMessage("§3Rainbow activated for group §c" + args[2]);
+								for (String playerName : team.getEntries())
+									Rainbow.enableRainbow(playerName);
+								
+								sender.sendMessage("§3Rainbow activated for group §c" + teamName);
 								
 							} else {
 								
-									for (Entry<OfflinePlayer, Team> entry : map.entrySet()) {
-										OfflinePlayer key = entry.getKey();
-									    Team value = entry.getValue();
-									    
-									    if (value.equals(NameManager.board.getTeam(args[2]))) {
-									    	Rainbow.disableRainbow(key);
-											value.addEntry(key.getName());
-											map.remove(key);
-								    	} 
+									for (String playerName : Rainbow.rainbowTeams.get(team)) {
+										Rainbow.disableRainbow(playerName); 
 									}
 									
-									teams.remove(NameManager.board.getTeam(args[2]));
-									sender.sendMessage("§3Rainbow deactivated for group §c" + args[2]);
+									Rainbow.rainbowTeams.remove(team);
+									sender.sendMessage("§3Rainbow deactivated for group §c" + teamName);
 								
 							}
 							
 						} else {
-							sender.sendMessage("§3Group '§c" + args[2] + "§3' is not a valid group.");
+							sender.sendMessage("§3Group '§c" + teamName + "§3' is not a valid group.");
 						}
 						
 					} else {
-						sender.sendMessage("§cUsage: /nm rainbow <group>");
+						sender.sendMessage("§cUsage: /nm group rainbow <group>");
 					}
 				
 				} else {

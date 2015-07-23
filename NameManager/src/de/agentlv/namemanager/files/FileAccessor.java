@@ -10,15 +10,15 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import de.agentlv.namemanager.NameManager;
  
-public class ConfigAccessor {
+public class FileAccessor {
  
     private final String fileName;
     private NameManager plugin;
     
-    private File configFile;
+    private File file;
     private FileConfiguration fileConfiguration;
  
-    public ConfigAccessor(NameManager plugin, String fileName) {
+    public FileAccessor(NameManager plugin, String fileName) {
         if (plugin == null)
             throw new IllegalArgumentException("plugin cannot be null");
         this.plugin = plugin;
@@ -26,25 +26,18 @@ public class ConfigAccessor {
         File dataFolder = plugin.getDataFolder();
         if (dataFolder == null)
             throw new IllegalStateException();
-        this.configFile = new File(plugin.getDataFolder(), fileName);
+        this.file = new File(plugin.getDataFolder(), fileName);
     }
  
-    public void reloadConfig() {
-    	
-		fileConfiguration = YamlConfiguration.loadConfiguration(configFile);
-
-    	
-    	// Look for defaults in the jar
-    	InputStream defConfigStream = plugin.getResource(fileName);
-    	
-    	if (defConfigStream != null) {
-			YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defConfigStream));
-			fileConfiguration.setDefaults(defConfig);
-			
-			if (fileName == "config.yml")
-				fileConfiguration.options().copyDefaults(true);
-			
-      }
+    public void reloadConfig() {        
+        fileConfiguration = YamlConfiguration.loadConfiguration(file);
+ 
+        // Look for defaults in the jar
+        InputStream defConfigStream = plugin.getResource(fileName);
+        if (defConfigStream != null) {
+            YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defConfigStream));
+            fileConfiguration.setDefaults(defConfig);
+        }
     }
  
     public FileConfiguration getConfig() {
@@ -55,17 +48,17 @@ public class ConfigAccessor {
     }
  
     public void saveConfig() {
-        if (fileConfiguration != null && configFile != null) {
+        if (fileConfiguration != null && file != null) {
             try {
-                getConfig().save(configFile);
+                getConfig().save(file);
             } catch (IOException ex) {
-                plugin.getLogger().severe("Could not save config to " + configFile + ex);
+                plugin.getLogger().severe("Could not save config to " + file + ex);
             }
         }
     }
     
     public void saveDefaultConfig() {
-        if (!configFile.exists()) {            
+        if (!file.exists()) {            
             this.plugin.saveResource(fileName, false);
         }
     }

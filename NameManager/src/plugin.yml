@@ -1,6 +1,6 @@
 name: NameManager
-main: io.github.AgentLV.NameManager.NameManager
-version: 1.8.10
+main: de.agentlv.namemanager.NameManager
+version: 2.0
 author: AgentLV
 softdepend: [Vault]
 
@@ -8,64 +8,4 @@ commands:
   namemanager:
     aliases: nm
     usage: /namemanager
-    description: Shows the author and the version of the plugin.
-
-permissions:
-  NameManager.help:
-    description: Allows the usage of /nm help.
-  NameManager.prefix:
-    description: Allows the usage of /nm prefix.
-  NameManager.suffix:
-    description: Allows the usage of /nm suffix.
-  NameManager.clear:
-    description: Allows the usage of /nm clear.
-  NameManager.uuid:
-    description: Allows the usage of /nm uuid.
-  NameManager.rainbow:
-    description: Allows the usage of /nm rainbow.
-  NameManager.group.help:
-    description: Allows the usage of /nm group.
-  NameManager.group.prefix:
-    description: Allows the usage of /nm group prefix.
-  NameManager.group.suffix:
-    description: Allows the usage of /nm group suffix.
-  NameManager.group.reload:
-    description: Allows the usage of /nm group reload.
-  NameManager.group.remove:
-    description: Allows the usage of /nm group remove.
-  NameManager.group.list:
-    description: Allows the usage of /nm group list.
-  NameManager.group.rainbow:
-    description: Allows the usage of /nm group rainbow.
-  NameManager.black:
-    description: Changes the displayname to black.
-  NameManager.darkblue:
-    description: Changes the displayname to darkblue.
-  NameManager.darkgreen:
-    description: Changes the displayname to darkgreen.
-  NameManager.darkaqua:
-    description: Changes the displayname to darkaqua.
-  NameManager.darkred:
-    description: Changes the displayname to darkred.
-  NameManager.darkpurple:
-    description: Changes the displayname to darkpurple.
-  NameManager.gold:
-    description: Changes the displayname to gold.
-  NameManager.gray:
-    description: Changes the displayname to gray.
-  NameManager.darkgray:
-    description: Changes the displayname to darkgray.
-  NameManager.blue:
-    description: Changes the displayname to blue.
-  NameManager.green:
-    description: Changes the displayname to green.
-  NameManager.aqua:
-    description: Changes the displayname to aqua.
-  NameManager.red:
-    description: Changes the displayname to red.
-  NameManager.lightpurple:
-    description: Changes the displayname to lightpurple.
-  NameManager.yellow:
-    description: Changes the displayname to yellow.
-  NameManager.white:
-    description: Changes the displayname to white.    
+    description: Displays the author and the version of the plugin.

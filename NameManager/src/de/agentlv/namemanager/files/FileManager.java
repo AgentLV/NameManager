@@ -6,50 +6,42 @@ import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.scoreboard.Team;
 
 import de.agentlv.namemanager.NameManager;
 import de.agentlv.namemanager.api.NameManagerGroupAPI;
 
 public class FileManager {
 	
-	static NameManager plugin;
-	static ConfigAccessor cGroups;
+	private static List<String> allGroups = new ArrayList<String>();
+	private static NameManager plugin;
+	private static FileAccessor groupsFile;
+    private static FileConfiguration configGroups;
 	
 	public FileManager(NameManager plugin) {
 		FileManager.plugin = plugin;
-		cGroups = NameManager.cGroups;
+		groupsFile = NameManager.groupsFile;
 	}
 	
-	//Groups.yml
-	
-    public static List<String> allGroups = new ArrayList<>();
-    public static FileConfiguration configGroups;
-    
     public static void loadFromFile() {
     	
-    	cGroups.reloadConfig();
+    	groupsFile.reloadConfig();
     	
-    	configGroups = cGroups.getConfig();
-        allGroups.clear();
-        allGroups = cGroups.getConfig().getStringList("GroupList");
+    	configGroups = groupsFile.getConfig();
+        allGroups = groupsFile.getConfig().getStringList("GroupList");
         
         if (allGroups.isEmpty())
         	return;
         
         for (String s : allGroups) {
         	
-        	NameManagerGroupAPI.groups.put(s, NameManagerGroupAPI.groups.size());
+        	NameManagerGroupAPI.groups.add(s);
+        	String teamName = NameManagerGroupAPI.groups.indexOf(s) + s;
         	
-        	if (NameManager.board.getTeam(NameManagerGroupAPI.groups.get(s) + s) != null) {
-        		
-        		plugin.getLogger().info("Could not initalize group " + s);
-        		plugin.getLogger().info("Trying to unregister group " + s + "...");
-        		NameManager.board.getTeam(NameManagerGroupAPI.groups.get(s) + s).unregister();
-        		plugin.getLogger().info("Succesfully unregistered group " + s + "...");
-        		
-        	}
+        	if (NameManager.board.getTeam(teamName) != null)
+        		NameManager.board.getTeam(teamName).unregister();
         	
-        	NameManager.team = NameManager.board.registerNewTeam(NameManagerGroupAPI.groups.get(s) + s);
+        	Team team = NameManager.board.registerNewTeam(teamName);
         	
         	try {
         		String prefix = ChatColor.translateAlternateColorCodes('&', configGroups.getString("Groups." + s + ".Prefix"));
@@ -61,39 +53,35 @@ public class FileManager {
         		if (suffix.length() > 16)
         			suffix = suffix.substring(0, 16);
         		
-	        	NameManager.team.setPrefix(prefix);
-	            NameManager.team.setSuffix(suffix);
+	        	team.setPrefix(prefix);
+	            team.setSuffix(suffix);
 	            
         	} catch(NullPointerException e) {
         		plugin.getLogger().warning("Could not load group '" + s + "', did you set a prefix and a suffix?");
         	}
     	}
+        
     }
     
     public static void loadFromFile(CommandSender sender) {
     	
-    	cGroups.reloadConfig();
+    	groupsFile.reloadConfig();
     	
-    	configGroups = cGroups.getConfig();
-        allGroups.clear();
-        allGroups = cGroups.getConfig().getStringList("GroupList");
+    	configGroups = groupsFile.getConfig();
+        allGroups = groupsFile.getConfig().getStringList("GroupList");
         
         if ( allGroups.isEmpty() )
         	return;
         
         for (String s : allGroups) {
         	
-        	NameManagerGroupAPI.groups.put(s, NameManagerGroupAPI.groups.size());
+        	NameManagerGroupAPI.groups.add(s);
+        	String teamName = NameManagerGroupAPI.groups.indexOf(s) + s;
         	
-        	if (NameManager.board.getTeam(NameManagerGroupAPI.groups.get(s) + s) != null) {
-        		
-        		plugin.getLogger().info("Could not initalize group " + s);
-        		plugin.getLogger().info("Trying to unregister group " + s + "...");
-        		NameManager.board.getTeam(NameManagerGroupAPI.groups.get(s) + s).unregister();
-        		plugin.getLogger().info("Succesfully unregistered group " + s + "...");
-        	}
+        	if (NameManager.board.getTeam(teamName) != null)
+        		NameManager.board.getTeam(teamName).unregister();
         	
-        	NameManager.team = NameManager.board.registerNewTeam(NameManagerGroupAPI.groups.get(s) + s);
+        	Team team = NameManager.board.registerNewTeam(teamName);
         	
         	try {
         		String prefix = ChatColor.translateAlternateColorCodes('&', configGroups.getString("Groups." + s + ".Prefix"));
@@ -105,11 +93,11 @@ public class FileManager {
         		if (suffix.length() > 16)
         			suffix.substring(0, 16);
         		
-	        	NameManager.team.setPrefix(prefix);
-	            NameManager.team.setSuffix(suffix);
+	        	team.setPrefix(prefix);
+	            team.setSuffix(suffix);
 	            
         	} catch(NullPointerException e) {
-        		sender.sendMessage("�cCould not load group '�b" + s + "�c', did you set a prefix and a suffix?");
+        		sender.sendMessage("§cCould not load group '§b" + s + "§c', did you set a prefix and a suffix?");
         	}
     	}
     }
@@ -120,11 +108,12 @@ public class FileManager {
         	return;
     	
          for (String s : allGroups) {
-        	 try {
-        		 NameManager.board.getTeam(NameManagerGroupAPI.groups.get(s) + s).unregister();
-        	 } catch(NullPointerException e) {
-        		 plugin.getLogger().warning("Could not unregister group '" + s + "', if you are not using this group, you can ignore this. ");
-        	 }
+        	 
+        	 Team team = NameManager.board.getTeam(NameManagerGroupAPI.groups.indexOf(s) + s);
+        	 
+        	 if (team != null)
+        		 team.unregister();
+        	 
          }
          allGroups.clear();
          NameManagerGroupAPI.groups.clear();

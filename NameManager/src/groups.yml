@@ -1,11 +1,19 @@
-# Only groups listed here are valid!
-# After setting a group, give the group the permission "namemanager.group.group". If you are unsure, just use the ingame commands /nm group
+# If you are unsure how to configure this, just use the ingame commands /nm group
+# After setting a group, give the group the permission "namemanager.group.group". 
 # Example: You create a group called Admin, the permission would be namemanager.group.admin
-# The order should be ascending!
-# lowest group at the bottom, highest group at the top.
+# Only groups listed under GroupList are valid!
+# The order is descending
 GroupList:
+- Admin
 - Developer
+- VIP
 Groups:
-  Developer:
-    Prefix: '&b[Dev] '
+  Admin:
+    Prefix: '&4Admin &8| &7'
     Suffix: ''
+  Developer:
+    Prefix: '&bDev &8| &7'
+    Suffix: ''
+  VIP:
+    Prefix: ''
+    Suffix: ' &8[&eVIP&8]'

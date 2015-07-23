@@ -1,10 +1,20 @@
-# For more information and details visit: http://www.spigotmc.org/resources/namemanager.5147/
+# For more information visit https://www.spigotmc.org/resources/namemanager.5147/
+# Want to use NameManager for Bungeecord? http://www.spigotmc.org/resources/namemanagerbungee.7552/
 
+# Should NameManager handle join and leave messages?
 Messages: false
+
+# Should NameManager include the prefixes and suffixes in the join & leave messages?
 CustomNameForMessages: false
 Join: '&a[+] %player%'
 Leave: '&c[-] %player%'
+
+# Should NameManager display the health of a player below their name?
 HealthBelowName: false
 HealthFormat: '&c❤'
+
+# If you are using a global tablist in Bungeecord and want the tablist to be modified by NameManager, set this to true
 Bungee: false
+
+# Should NameManager hook into Vault?
 Vault: false

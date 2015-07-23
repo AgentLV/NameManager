@@ -1,57 +1,42 @@
 package de.agentlv.namemanager.listener;
 
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.scoreboard.Team;
 
-import de.agentlv.namemanager.Commands;
 import de.agentlv.namemanager.NameManager;
 import de.agentlv.namemanager.Rainbow;
 import de.agentlv.namemanager.api.NameManagerAPI;
-import de.agentlv.namemanager.files.ConfigAccessor;
 
 public class PlayerQuitListener implements Listener {
 
-	ConfigAccessor cConfig;
+	private FileConfiguration config;
 	
 	public PlayerQuitListener(NameManager plugin) {
+		config = plugin.getConfig();
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
-		cConfig = NameManager.cConfig;
 	}
 	
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent e) {
 		
-		Player p = e.getPlayer();
+		String playerName = e.getPlayer().getName();
 		
-		if(cConfig.getConfig().getBoolean("Messages")) {
+		if(config.getBoolean("Messages")) {
 			
-			if(cConfig.getConfig().getBoolean("CustomNameForMessages")) {
-				e.setQuitMessage(ChatColor.translateAlternateColorCodes('&', cConfig.getConfig().getString("Leave").replaceAll("%player%", NameManagerAPI.getNametag(p))));
+			if(config.getBoolean("CustomNameForMessages")) {
+				e.setQuitMessage(ChatColor.translateAlternateColorCodes('&', config.getString("Leave").replaceAll("%player%", NameManagerAPI.getNametag(playerName))));
 			} else {
-				e.setQuitMessage(ChatColor.translateAlternateColorCodes('&', cConfig.getConfig().getString("Leave").replaceAll("%player%", p.getName())));
+				e.setQuitMessage(ChatColor.translateAlternateColorCodes('&', config.getString("Leave").replaceAll("%player%", playerName)));
 			}
 		}
 		
-		if (Commands.map.containsKey(p) || Commands.teams.contains(NameManager.board.getEntryTeam(p.getName()))) {
-			
-			Rainbow.disableRainbow(p);
-			Team team = Commands.map.get(p);
-			
-			if (team != null) {
-				team.addEntry(p.getName());
-			} else {
-				NameManager.rainbow.removeEntry(p.getName());
-			}
-			
-			Commands.map.remove(p);
-		}
+		Rainbow.disableRainbow(playerName);
 		
-		if (NameManager.board.getEntryTeam(p.getName()) != null)
-			NameManager.board.getEntryTeam(p.getName()).removeEntry(p.getName());
+		if (NameManager.board.getEntryTeam(playerName) != null)
+			NameManager.board.getEntryTeam(playerName).removeEntry(playerName);
 	}
 	
 }

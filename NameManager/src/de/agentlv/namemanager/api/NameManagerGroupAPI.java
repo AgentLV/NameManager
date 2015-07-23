@@ -1,92 +1,111 @@
 package de.agentlv.namemanager.api;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Team;
 
 import de.agentlv.namemanager.NameManager;
-import de.agentlv.namemanager.files.FileHandler;
+import de.agentlv.namemanager.files.FileManager;
+import de.agentlv.namemanager.files.GroupsFileHandler;
+import de.agentlv.namemanager.utils.PlayerGroupHandler;
 
 public class NameManagerGroupAPI {
 	
-	static NameManager plugin;
-	private static Team team = null;
-	public static HashMap<String, Integer> groups = new HashMap<String, Integer>();
+	public static List<String> groups = new ArrayList<String>();
+	private static NameManager plugin;
 	
 	public NameManagerGroupAPI(NameManager plugin) {
-		NameManagerAPI.plugin = plugin;
+		NameManagerGroupAPI.plugin = plugin;
 	}
 	
 	public static void setGroupNametag(String prefix, String group, String suffix) {
-		if ( !groups.containsKey(group) && NameManager.board.getTeam( groups.get( ( group ) ) + group) == null ) {
+		Team team;
+		
+		if (!groups.contains(group) && NameManager.board.getTeam(groups.indexOf((group)) + group) == null) {
 			team = NameManager.board.registerNewTeam(groups.size() + group);
-			groups.put(group, groups.size());
+			groups.add(group);
 		} else {
-			team = NameManager.board.getTeam(groups.get( group ) + group);
+			team = NameManager.board.getTeam(groups.indexOf(group) + group);
 		}
 
 		team.setPrefix(ChatColor.translateAlternateColorCodes('&', prefix));
 		team.setSuffix(ChatColor.translateAlternateColorCodes('&', suffix));
 		
-		FileHandler.writeGroupPrefix(group, prefix);
-		FileHandler.writeGroupSuffix(group, suffix);
+		GroupsFileHandler.writeGroup(group, prefix, suffix);
 	}
 	
 	public static void setGroupNametagPrefix(String group, String prefix) {
-		if ( !groups.containsKey(group) && NameManager.board.getTeam( groups.get( ( group ) ) + group) == null ) {
+		Team team;
+		
+		if (!groups.contains(group) && NameManager.board.getTeam(groups.indexOf((group)) + group) == null) {
 			team = NameManager.board.registerNewTeam(groups.size() + group);
-			groups.put(group, groups.size());
+			groups.add(group);
 		} else {
-			team = NameManager.board.getTeam(groups.get( group ) + group);
+			team = NameManager.board.getTeam(groups.indexOf(group) + group);
 		}
 		
 		team.setPrefix(ChatColor.translateAlternateColorCodes('&', prefix));
-		FileHandler.writeGroupPrefix(group, prefix);
+		GroupsFileHandler.writeGroupPrefix(group, prefix);
 	}
 	
 	public static void setGroupNametagSuffix(String group, String suffix) {
-		if ( !groups.containsKey(group) && NameManager.board.getTeam( groups.get( ( group ) ) + group) == null ) {
+		Team team;
+		
+		if (!groups.contains(group) && NameManager.board.getTeam(groups.indexOf((group)) + group) == null) {
 			team = NameManager.board.registerNewTeam(groups.size() + group);
-			groups.put(group, groups.size());
+			groups.add(group);
 		} else {
-			team = NameManager.board.getTeam(groups.get( group ) + group);
+			team = NameManager.board.getTeam(groups.indexOf(group) + group);
 		}
 		
 		team.setSuffix(ChatColor.translateAlternateColorCodes('&', suffix));
-		FileHandler.writeGroupSuffix(group, suffix);
+		GroupsFileHandler.writeGroupSuffix(group, suffix);
 	}
 	
 	public static String getGroupNametag(String group) {
-		if ( !groups.containsKey(group) && NameManager.board.getTeam( groups.get( ( group ) ) + group) == null ) {
-			team = NameManager.board.getTeam(groups.get( group ) + group);
+		
+		if (!groups.contains(group) && NameManager.board.getTeam(groups.indexOf((group)) + group) == null) {
+			Team team = NameManager.board.getTeam(groups.indexOf(group) + group);
 			return team.getPrefix() + group + team.getSuffix();
 		}
+		
 		return null;
 	}
 	
 	public static String getGroupNametagPrefix(String group) {
-		if ( !groups.containsKey(group) && NameManager.board.getTeam( groups.get( ( group ) ) + group) == null ) {
-			return NameManager.board.getTeam(groups.get( group ) + group).getPrefix();
+		
+		if (!groups.contains(group) && NameManager.board.getTeam(groups.indexOf((group)) + group) == null) {
+			return NameManager.board.getTeam(groups.indexOf(group) + group).getPrefix();
 		}
+		
 		return null;
 	}
 	
 	public static String getGroupNametagSuffix(String group) {
-		if ( !groups.containsKey(group) && NameManager.board.getTeam( groups.get( ( group ) ) + group) == null ) {
-			return NameManager.board.getTeam(groups.get( group ) + group).getSuffix();
+		
+		if (!groups.contains(group) && NameManager.board.getTeam(groups.indexOf((group)) + group) == null) {
+			return NameManager.board.getTeam(groups.indexOf(group) + group).getSuffix();
 		}
+		
 		return null;
 	}
 	
 	public static void removeGroup(String group) {
-		team = NameManager.board.getTeam(groups.get( group ) + group);
+		Team team = NameManager.board.getTeam(groups.indexOf(group) + group);
+		Set<String> players = team.getEntries();
+		
 		if(team != null)
 			team.unregister();
 		
-		FileHandler.removeGroup(group);
-		groups.remove(group);
+		GroupsFileHandler.removeGroup(group);
+		FileManager.unloadFromFile();
+		FileManager.loadFromFile();
+		
+		for (String player : players)
+			PlayerGroupHandler.add(plugin.getServer().getPlayer(player));
 	}
-	
 	
 }
