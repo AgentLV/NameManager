@@ -24,9 +24,9 @@ public class PlayerQuitListener implements Listener {
 		
 		String playerName = e.getPlayer().getName();
 		
-		if(config.getBoolean("Messages")) {
+		if (config.getBoolean("Messages")) {
 			
-			if(config.getBoolean("CustomNameForMessages")) {
+			if (config.getBoolean("CustomNameForMessages")) {
 				e.setQuitMessage(ChatColor.translateAlternateColorCodes('&', config.getString("Leave").replaceAll("%player%", NameManagerAPI.getNametag(playerName))));
 			} else {
 				e.setQuitMessage(ChatColor.translateAlternateColorCodes('&', config.getString("Leave").replaceAll("%player%", playerName)));

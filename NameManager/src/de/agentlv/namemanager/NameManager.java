@@ -20,6 +20,7 @@ import de.agentlv.namemanager.files.FileManager;
 import de.agentlv.namemanager.files.PlayersFileHandler;
 import de.agentlv.namemanager.listener.PlayerJoinListener;
 import de.agentlv.namemanager.listener.PlayerKickListener;
+import de.agentlv.namemanager.listener.PlayerQuitListener;
 import de.agentlv.namemanager.utils.PlayerGroupHandler;
 
 public class NameManager extends JavaPlugin {
@@ -44,7 +45,7 @@ public class NameManager extends JavaPlugin {
 		setupVaultChat();
 		
 		new PlayerJoinListener(this);
-		new PlayerKickListener(this);
+		new PlayerQuitListener(this);
 		new PlayerKickListener(this);
 		new NameManagerAPI(this);
 		new NameManagerGroupAPI(this);

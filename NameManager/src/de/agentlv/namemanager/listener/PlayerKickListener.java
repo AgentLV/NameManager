@@ -7,7 +7,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerKickEvent;
 
 import de.agentlv.namemanager.NameManager;
-import de.agentlv.namemanager.Rainbow;
 import de.agentlv.namemanager.api.NameManagerAPI;
 
 public class PlayerKickListener implements Listener {
@@ -24,9 +23,9 @@ public class PlayerKickListener implements Listener {
 		
 		String playerName = e.getPlayer().getName();
 		
-		if(config.getBoolean("Messages")) {
+		if (config.getBoolean("Messages")) {
 			
-			if(config.getBoolean("CustomNameForMessages")) {
+			if (config.getBoolean("CustomNameForMessages")) {
 				e.setLeaveMessage(ChatColor.translateAlternateColorCodes('&', config.getString("Leave").replaceAll("%player%", NameManagerAPI.getNametag(playerName))));
 			} else {
 				e.setLeaveMessage(ChatColor.translateAlternateColorCodes('&', config.getString("Leave").replaceAll("%player%", playerName)));
@@ -34,10 +33,6 @@ public class PlayerKickListener implements Listener {
 			
 		}
 		
-		Rainbow.disableRainbow(playerName);
-		
-		if (NameManager.board.getEntryTeam(playerName) != null)
-			NameManager.board.getEntryTeam(playerName).removeEntry(playerName);
 	}
 	
 	

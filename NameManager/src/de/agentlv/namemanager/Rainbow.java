@@ -62,21 +62,25 @@ public class Rainbow {
 	
 	public static void disableRainbow(String playerName) {
 		
-		Team team = rainbowPlayers.get(playerName).getTeam();
+		if (playerName != null && rainbowPlayers.containsKey(playerName)) {
+			
+			Team team = rainbowPlayers.get(playerName).getTeam();
+			
+			if (team == null) {
+				NameManager.board.getTeam(playerName).unregister();
+			} else if (team.getName().equals(playerName)) {
+				NameManager.board.getEntryTeam(playerName).setPrefix(rainbowPlayers.get(playerName).getPrefix());
+			} else {
+				team.addEntry(playerName);
+				NameManager.board.getTeam(playerName).unregister();
+			}
 		
-		if (team == null) {
-			NameManager.board.getTeam(playerName).unregister();
-		} else if (team.getName().equals(playerName)) {
-			NameManager.board.getEntryTeam(playerName).setPrefix(rainbowPlayers.get(playerName).getPrefix());
-		} else {
-			team.addEntry(playerName);
-			NameManager.board.getTeam(playerName).unregister();
+			rainbowPlayers.remove(playerName);
+			
+			if (rainbowPlayers.size() == 0) 
+				plugin.getServer().getScheduler().cancelTask(rainbowTask.getTaskId());
+		
 		}
-		
-		rainbowPlayers.remove(playerName);
-		
-		if (rainbowPlayers.size() == 0) 
-			plugin.getServer().getScheduler().cancelTask(rainbowTask.getTaskId());
 		
 	}
 
