@@ -146,8 +146,12 @@ public class Commands implements CommandExecutor {
 						
 						if (sender instanceof Player) {
 							
-							NameManagerAPI.clearNametag(NameManagerAPI.playerToOfflinePlayer(p.getName()));
-							sender.sendMessage("§3Your name was cleared.");
+							if (!Rainbow.rainbowEnabled(p.getName())) {
+								NameManagerAPI.clearNametag(NameManagerAPI.playerToOfflinePlayer(p.getName()));
+								sender.sendMessage("§3Your name was cleared.");
+							} else {
+								sender.sendMessage("§cTo clear your nametag, please turn off your rainbow");
+							}
 							
 						} else {
 							sender.sendMessage("§3A player is required.");
@@ -157,8 +161,13 @@ public class Commands implements CommandExecutor {
 						offlinePlayer = NameManagerAPI.playerToOfflinePlayer(args[1]);
 						
 						if (offlinePlayer != null && offlinePlayer.hasPlayedBefore()) {
-							NameManagerAPI.clearNametag(offlinePlayer);
-							sender.sendMessage("§3Name cleared for §c" + args[1]);
+							
+							if (!Rainbow.rainbowEnabled(offlinePlayer.getName())) {
+								NameManagerAPI.clearNametag(offlinePlayer);
+								sender.sendMessage("§3Name cleared for §c" + args[1]);
+							} else {
+								sender.sendMessage("§cTo clear the nametag, please turn off the rainbow of §3" + p.getName());
+							}
 							
 						} else {
 							sender.sendMessage("§cPlayer §3" + args[1] + "§c not found.");

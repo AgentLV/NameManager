@@ -25,7 +25,7 @@ public class Rainbow {
 	
 	public static boolean enableRainbow(String playerName) {
 		
-		if (rainbowPlayers.containsKey(playerName))
+		if (rainbowEnabled(playerName))
 			return true;
 		
 		//Does a team with the players name already exist?
@@ -110,4 +110,7 @@ public class Rainbow {
 		
 	}
 	
+	public static boolean rainbowEnabled(String playerName) {
+		return rainbowPlayers.containsKey(playerName);
+	}
 }
