@@ -1,0 +1,11 @@
+name: NameManager
+main: net.agentlv.namemanager.NameManager
+version: 2.1
+author: AgentLV
+softdepend: [Vault]
+
+commands:
+  namemanager:
+    aliases: nm
+    usage: /namemanager
+    description: Displays the author and the version of the plugin.
