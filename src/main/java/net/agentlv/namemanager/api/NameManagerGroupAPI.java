@@ -99,6 +99,4 @@ public class NameManagerGroupAPI {
         return NameManager.getGroupConfig().getGroupSuffix(group);
     }
 
-
-
 }
