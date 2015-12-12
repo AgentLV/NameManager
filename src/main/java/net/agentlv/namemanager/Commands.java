@@ -342,7 +342,6 @@ public class Commands implements CommandExecutor {
                         sender.sendMessage("§3/nm group suffix <group> <suffix>  §7§  §bSets a suffix for a group");
                         sender.sendMessage("§3/nm group remove <group>  §7§  §bRemoves a group");
                         sender.sendMessage("§3/nm group list  §7§  §bDisplays all valid groups");
-                        sender.sendMessage("§3/nm group rainbow <group>  §7§  §bToggles rainbow name for all group members §c(could cause lag)");
                         sender.sendMessage("§3/nm group add <player> <group>  §7§  §bTemporarily add a player to a group");
                         sender.sendMessage("");
                     } else {
