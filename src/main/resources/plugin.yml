@@ -1,6 +1,6 @@
 name: NameManager
 main: net.agentlv.namemanager.NameManager
-version: 2.1
+version: ${project.version}
 author: AgentLV
 softdepend: [Vault]
 
