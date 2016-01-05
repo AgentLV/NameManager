@@ -1,6 +1,7 @@
 package net.agentlv.namemanager;
 
 import net.agentlv.namemanager.api.NameManagerGroupAPI;
+import net.agentlv.namemanager.util.PlayerGroupHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -55,6 +56,10 @@ public class MultiScoreboard {
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (player != p) {
                 Team orginal = p.getScoreboard().getEntryTeam(p.getName());
+
+                if (orginal == null)
+                    orginal = PlayerGroupHandler.getTeam(p);
+
                 Team copy = getTeam(board, orginal.getName());
 
                 copy.setPrefix(orginal.getPrefix());
