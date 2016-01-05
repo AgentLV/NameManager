@@ -27,7 +27,7 @@ public class PlayerJoinListener implements Listener {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
         final String playerName = player.getName();

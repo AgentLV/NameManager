@@ -1,7 +1,13 @@
 # If you are unsure how to configure this, just use the ingame commands /nm group
 # After setting a group, give the group the permission "namemanager.group.group".
 # Example: You create a group called Admin, the permission would be namemanager.group.admin
+# Only groups listed under GroupList are valid!
 # The order is descending
+GroupList:
+- Admin
+- Developer
+- VIP
+
 Groups:
   Admin:
     Prefix: '&4Admin &8| &7'

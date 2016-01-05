@@ -51,6 +51,7 @@ public class MultiScoreboard {
 
     public void init(Player player) {
         Scoreboard board = player.getScoreboard();
+
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (player != p) {
                 Team orginal = p.getScoreboard().getEntryTeam(p.getName());

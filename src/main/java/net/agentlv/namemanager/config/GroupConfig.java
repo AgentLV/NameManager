@@ -6,6 +6,7 @@ import net.agentlv.namemanager.api.NameManagerGroupAPI;
 import net.md_5.bungee.api.ChatColor;
 
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * @author AgentLV
@@ -78,7 +79,8 @@ public class GroupConfig {
     }
 
     public void initGroups() {
-        Iterator<String> iterator = groupConfig.getConfig().getConfigurationSection("Groups").getValues(false).keySet().iterator();
+        Iterator<String> iterator = groupConfig.getConfig().getStringList("GroupList").listIterator();
+
         for (int i = 0; iterator.hasNext(); ++i) {
             String group = iterator.next();
             NameManagerGroupAPI.getGroups().put(group.substring(0, group.length() >= 16 ? 14 : group.length()), new Group(i));

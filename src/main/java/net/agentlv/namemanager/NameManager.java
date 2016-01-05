@@ -49,7 +49,7 @@ public class NameManager extends JavaPlugin {
         activateHealth();
         registerOutgoingPluginChannel();
 
-        //Support for /reload
+        // Support for /reload
         for (Player p : Bukkit.getOnlinePlayers())
             PlayerGroupHandler.add(p);
 
@@ -57,6 +57,11 @@ public class NameManager extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        // Prevent false leave message
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            player.kickPlayer(Bukkit.getShutdownMessage());
+        }
+
         multiScoreboard.removeGroups();
         multiScoreboard.unregisterHealthObjective();
     }

@@ -32,7 +32,7 @@ public class PlayerGroupHandler {
         }
 
         // Custom groups
-        for (String group : NameManagerGroupAPI.getGroups().navigableKeySet()) {
+        for (String group : NameManager.getGroupConfig().getGroupConfig().getConfig().getStringList("GroupList")) {
             if (player.hasPermission("NameManager.group." + group)) {
                 NameManagerGroupAPI.addPlayer(group, playerName);
 
