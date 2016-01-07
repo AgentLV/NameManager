@@ -57,11 +57,6 @@ public class NameManager extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Prevent false leave message
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            player.kickPlayer(Bukkit.getShutdownMessage());
-        }
-
         multiScoreboard.removeGroups();
         multiScoreboard.unregisterHealthObjective();
     }
