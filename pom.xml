@@ -45,7 +45,7 @@
     </dependencies>
 
     <build>
-        <finalName>NameManager-${version}</finalName>
+        <finalName>NameManager-${project.version}</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -67,6 +67,5 @@
             </plugin>
         </plugins>
     </build>
-
 
 </project>
