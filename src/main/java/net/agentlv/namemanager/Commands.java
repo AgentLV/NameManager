@@ -41,10 +41,8 @@ public class Commands implements CommandExecutor {
             player = (Player) sender;
 
         if (cmd.getName().equalsIgnoreCase("namemanager")) {
-
             if (args.length == 0) {
                 pluginDescription(sender);
-
             } else if (args[0].equalsIgnoreCase("help")) {
 
                 if (sender.hasPermission("namemanager.help")) {
@@ -68,32 +66,26 @@ public class Commands implements CommandExecutor {
                 }
 
             } else if (args[0].equalsIgnoreCase("prefix")) {
-
                 if (sender.hasPermission("namemanager.prefix")) {
-
                     if (args.length >= 3) {
-
                         NameManagerAPI.getOfflinePlayer(args[1], new UUIDCallback() {
                             @Override
                             public void done(OfflinePlayer offlinePlayer) {
-                                String prefix = args[2];
-                                for(int i = 3; i < args.length; ++i) {
-                                    prefix += " " + args[i];
+                                StringBuilder prefixBuilder = new StringBuilder(args[2]);
+                                for (int i = 3; i < args.length; ++i) {
+                                    prefixBuilder.append(" ").append(args[i]);
                                 }
+                                String prefix = prefixBuilder.toString();
 
                                 if (prefix.length() > 16) {
                                     sender.sendMessage("§3The prefix can only contain 16 Characters.");
                                 } else {
-
-                                    if (offlinePlayer.hasPlayedBefore()) {
-
+                                    if (offlinePlayer.hasPlayedBefore() || offlinePlayer.isOnline()) {
                                         NameManagerAPI.setNametagPrefix(offlinePlayer, prefix);
                                         sender.sendMessage("§3Prefix '§c" + prefix + "§3' set for §c" + args[1]);
-
                                     } else {
                                         sender.sendMessage("§cPlayer §3" + args[1] + "§c not found.");
                                     }
-
                                 }
                             }
 
@@ -102,15 +94,12 @@ public class Commands implements CommandExecutor {
                                 sender.sendMessage("§cPlayer §3" + args[1] + "§c not found.");
                             }
                         });
-
                     } else {
                         sender.sendMessage("§cUsage: /nm prefix <player> <prefix>");
                     }
-
                 } else {
                     sender.sendMessage(invalidPermission);
                 }
-
             } else if (args[0].equalsIgnoreCase("suffix")) {
 
                 if (sender.hasPermission("namemanager.suffix")) {
@@ -129,7 +118,7 @@ public class Commands implements CommandExecutor {
                                     sender.sendMessage("§3The suffix can only contain 16 Characters.");
                                 } else {
 
-                                    if (offlinePlayer.hasPlayedBefore()) {
+                                    if (offlinePlayer.hasPlayedBefore() || offlinePlayer.isOnline()) {
                                         NameManagerAPI.setNametagSuffix(offlinePlayer, suffix);
                                         sender.sendMessage("§3Suffix '§c" + suffix + "§3' set for §c" + args[1]);
 
@@ -186,7 +175,7 @@ public class Commands implements CommandExecutor {
                         NameManagerAPI.getOfflinePlayer(args[1], new UUIDCallback() {
                             @Override
                             public void done(OfflinePlayer offlinePlayer) {
-                                if (offlinePlayer.hasPlayedBefore()) {
+                                if (offlinePlayer.hasPlayedBefore() || offlinePlayer.isOnline()) {
 
                                     if (!Rainbow.rainbowEnabled(offlinePlayer.getName())) {
                                         NameManagerAPI.clearNametag(offlinePlayer);

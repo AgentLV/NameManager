@@ -3,10 +3,9 @@ package net.agentlv.namemanager.config;
 import lombok.Getter;
 import net.agentlv.namemanager.Group;
 import net.agentlv.namemanager.api.NameManagerGroupAPI;
-import net.md_5.bungee.api.ChatColor;
+import org.bukkit.ChatColor;
 
 import java.util.Iterator;
-import java.util.Map;
 
 /**
  * @author AgentLV

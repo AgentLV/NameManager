@@ -55,17 +55,17 @@ public class MultiScoreboard {
 
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (player != p) {
-                Team orginal = p.getScoreboard().getEntryTeam(p.getName());
+                Team original = p.getScoreboard().getEntryTeam(p.getName());
 
-                if (orginal == null)
-                    orginal = PlayerGroupHandler.getTeam(p);
+                if (original == null)
+                    original = PlayerGroupHandler.getTeam(p);
 
-                Team copy = getTeam(board, orginal.getName());
+                Team copy = getTeam(board, original.getName());
 
-                copy.setPrefix(orginal.getPrefix());
-                copy.setSuffix(orginal.getSuffix());
+                copy.setPrefix(original.getPrefix());
+                copy.setSuffix(original.getSuffix());
 
-                for (String entry : orginal.getEntries()) {
+                for (String entry : original.getEntries()) {
                     copy.addEntry(entry);
                 }
             }
