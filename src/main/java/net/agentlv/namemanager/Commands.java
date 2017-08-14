@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
  */
 public class Commands implements CommandExecutor {
 
-    private NameManager plugin;
+    private final NameManager plugin;
 
     public Commands(NameManager plugin) {
         this.plugin = plugin;
@@ -109,10 +109,11 @@ public class Commands implements CommandExecutor {
                         NameManagerAPI.getOfflinePlayer(args[1], new UUIDCallback() {
                             @Override
                             public void done(OfflinePlayer offlinePlayer) {
-                                String suffix = args[2];
+                                StringBuilder suffixBuilder = new StringBuilder(args[2]);
                                 for(int i = 3; i < args.length; ++i) {
-                                    suffix += " " + args[i];
+                                    suffixBuilder.append(" ").append(args[i]);
                                 }
+                                String suffix = suffixBuilder.toString();
 
                                 if (suffix.length() > 16) {
                                     sender.sendMessage("§3The suffix can only contain 16 Characters.");
@@ -338,42 +339,36 @@ public class Commands implements CommandExecutor {
                     }
 
                     //Command /nm group prefix
-                } else if(args[1].equalsIgnoreCase("prefix")) {
-
+                } else if (args[1].equalsIgnoreCase("prefix")) {
                     if (sender.hasPermission("namemanager.group.prefix")) {
-
                         if (args.length >= 4) {
-
-                            String prefix = args[3];
+                            StringBuilder prefix = new StringBuilder(args[3]);
                             for(int i = 4; i < args.length; ++i) {
-                                prefix += " " + args[i];
+                                prefix.append(" ").append(args[i]);
                             }
 
                             if (prefix.length() > 16) {
                                 sender.sendMessage("§3The prefix can only contain 16 Characters.");
                             } else {
-                                NameManagerGroupAPI.setGroupPrefix(args[2], prefix);
+                                NameManagerGroupAPI.setGroupPrefix(args[2], prefix.toString());
                                 sender.sendMessage("§3Set prefix '§c" + prefix + "§3' for group §c" + args[2]);
                             }
                         } else {
                             sender.sendMessage("§cUsage: /nm group prefix <group> <prefix>");
                         }
-
                     } else {
                         sender.sendMessage(invalidPermission);
                     }
 
                     //Command /nm group suffix
-                } else if(args[1].equalsIgnoreCase("suffix")) {
-
+                } else if (args[1].equalsIgnoreCase("suffix")) {
                     if (sender.hasPermission("namemanager.group.suffix")) {
-
                         if (args.length >= 4) {
-
-                            String suffix = args[3];
+                            StringBuilder suffixBuilder = new StringBuilder(args[3]);
                             for(int i = 4; i < args.length; ++i) {
-                                suffix += " " + args[i];
+                                suffixBuilder.append(" ").append(args[i]);
                             }
+                            String suffix = suffixBuilder.toString();
 
                             if (suffix.length() > 16) {
                                 sender.sendMessage("§3The suffix can only contain 16 Characters.");
@@ -384,7 +379,6 @@ public class Commands implements CommandExecutor {
                         } else {
                             sender.sendMessage("§cUsage: /nm group suffix <group> <prefix>");
                         }
-
                     } else {
                         sender.sendMessage(invalidPermission);
                     }

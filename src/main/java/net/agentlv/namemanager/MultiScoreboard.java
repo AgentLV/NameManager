@@ -1,7 +1,6 @@
 package net.agentlv.namemanager;
 
 import net.agentlv.namemanager.api.NameManagerGroupAPI;
-import net.agentlv.namemanager.util.PlayerGroupHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -54,11 +53,13 @@ public class MultiScoreboard {
         Scoreboard board = player.getScoreboard();
 
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if (player != p) {
+            if (!player.getUniqueId().equals(p.getUniqueId())) {
                 Team original = p.getScoreboard().getEntryTeam(p.getName());
 
-                if (original == null)
-                    original = PlayerGroupHandler.getTeam(p);
+                if (original == null) {
+                    NameManager.getInstance().getLogger().warning("No ScoreBoard Team found for: " + p.getName());
+                    continue;
+                }
 
                 Team copy = getTeam(board, original.getName());
 
@@ -102,8 +103,14 @@ public class MultiScoreboard {
     }
 
     public void setPlayer(String playerName, String prefix, String suffix) {
-        setPlayerPrefix(playerName, prefix);
-        setPlayerSuffix(playerName, suffix);
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            Scoreboard board = p.getScoreboard();
+
+            Team team = getTeam(board, playerName);
+            team.addEntry(playerName);
+            team.setPrefix(prefix);
+            team.setSuffix(suffix);
+        }
     }
 
     public void unregisterPlayerTeam(String playerName) {

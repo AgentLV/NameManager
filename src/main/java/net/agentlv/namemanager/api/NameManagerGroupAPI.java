@@ -28,7 +28,6 @@ public class NameManagerGroupAPI {
             groups.get(group).getPlayers().add(playerName);
             NameManager.getMultiScoreboard().setPlayerGroup(playerName, group);
         }
-
     }
 
     public static void removePlayer(String group, String playerName) {

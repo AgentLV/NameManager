@@ -39,13 +39,11 @@ public class PlayerJoinListener implements Listener {
         PlayerGroupHandler.add(player);
 
         if (config.getBoolean("Messages")) {
-
             if (config.getBoolean("CustomNameForMessages")) {
                 event.setJoinMessage(ChatColor.translateAlternateColorCodes('&', config.getString("Join").replaceAll("%player%", NameManagerAPI.getNametag(player))));
             } else {
                 event.setJoinMessage(ChatColor.translateAlternateColorCodes('&', config.getString("Join").replaceAll("%player%", playerName)));
             }
-
         }
 
         if (config.getBoolean("Bungee")) {
@@ -63,7 +61,6 @@ public class PlayerJoinListener implements Listener {
                     }
                 }
             }, 1L);
-
         }
 
         if (NameManager.useVault()) {
