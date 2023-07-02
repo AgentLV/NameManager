@@ -3,6 +3,7 @@ main: net.agentlv.namemanager.NameManager
 version: ${version}
 author: AgentLV
 softdepend: [Vault]
+api-version: 1.19
 
 commands:
   namemanager:
